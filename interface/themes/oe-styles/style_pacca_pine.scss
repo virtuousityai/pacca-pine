@@ -380,5 +380,735 @@ a {
   }
 }
 
+/* ------------------------------------------------------------------
+ * Inner-page modernization — Calendar, Tables, Patient Finder
+ * ------------------------------------------------------------------ */
+
+/* ── Calendar View ───────────────────────────────────────────────── */
+
+/* Top toolbar - clean bottom border */
+#topToolbarRight {
+  border-bottom: 1px solid $gray-300;
+  background: #ffffff;
+  padding: 0.5rem 0.25rem;
+}
+
+/* Date navigation - larger, bolder */
+#dateNAV {
+  font-weight: 700;
+  color: $body-color;
+}
+
+/* View picker buttons (Day / Week / Month) */
+#printview,
+#dayview,
+#weekview,
+#monthview {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.82rem;
+  border: 1.5px solid $gray-300;
+  background: #ffffff;
+  color: $gray-600;
+  margin-left: 2px;
+  transition: all 0.15s;
+
+  &:hover {
+    background: $gray-100;
+    color: $body-color;
+  }
+
+  &.currentview {
+    background: $primary;
+    color: #ffffff;
+    border-color: $primary;
+  }
+}
+
+.currentview {
+  background: $primary !important;
+  color: #ffffff !important;
+  border-color: $primary !important;
+}
+
+/* Left sidebar - date picker & providers */
+#bottomLeft {
+  background: #ffffff;
+  border-right: 1px solid $gray-300;
+  padding-top: 0.75rem;
+}
+
+/* Small date picker calendar */
+#datePicker {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.5rem;
+  margin: 0.5rem;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 2px;
+  }
+
+  .tdMonthName-small {
+    background: transparent;
+    color: $body-color;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+
+  .tdDOW-small {
+    background: transparent;
+    color: $gray-500;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.25rem;
+  }
+
+  .tdMonthDay-small,
+  .tdWeekend-small,
+  .tdOtherMonthDay-small,
+  .tdHoliday-small {
+    border-radius: 6px;
+    padding: 0.3rem;
+    transition: background 0.1s;
+
+    &:hover {
+      background: $gray-200;
+    }
+  }
+
+  .tdOtherMonthDay-small {
+    color: $gray-400;
+  }
+
+  .currentDate,
+  .tdDatePickerHighlightCurrent {
+    background: $primary !important;
+    color: #ffffff !important;
+    border-radius: 50%;
+    font-weight: 600;
+  }
+
+  .currentWeek {
+    background: $gray-100;
+  }
+
+  .tdDatePickerHighlight {
+    background: rgba(139, 108, 193, 0.15);
+    color: $primary;
+    border-radius: 50%;
+  }
+}
+
+/* Provider picker */
+#providerPicker {
+  margin: 0.5rem;
+
+  #pc_facility,
+  #pc_username {
+    border-radius: 8px;
+    border: 1.5px solid $gray-300;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.82rem;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.12);
+    }
+  }
+}
+
+/* Facility color legend */
+#facilityColor {
+  margin: 0.5rem;
+
+  table {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  td {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.78rem;
+    border-bottom: 1px solid $gray-200;
+  }
+}
+
+/* Main calendar grid */
+#bigCal {
+  background: #ffffff;
+  border-left: 1px solid $gray-300;
+  border-radius: 0;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  td {
+    padding: 0.35rem;
+  }
+
+  .providerday {
+    border: 1px solid $gray-200;
+  }
+}
+
+/* Provider header row */
+.providerheader {
+  background: linear-gradient(135deg, $primary, darken($primary, 8%));
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: 6px 6px 0 0;
+  border-bottom: none;
+}
+
+/* Time slots */
+#times {
+  background: $gray-100;
+  border-right: 1px solid $gray-300;
+
+  table {
+    background: transparent;
+
+    td {
+      color: $gray-500;
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.timeslot {
+  border-bottom: 1px solid $gray-200;
+}
+
+/* Schedule cells */
+.schedule {
+  background: #ffffff;
+  border: 1px solid $gray-200;
+  transition: background 0.1s;
+
+  &:hover {
+    background: $gray-100;
+  }
+}
+
+/* Calendar day container */
+.calendar_day {
+  min-height: 20px;
+}
+
+/* Event cards — modernized */
+.event_appointment {
+  background: #ffffff !important;
+  border: none !important;
+  border-left: 3px solid $primary !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 0.25rem 0.4rem;
+  font-size: 0.78rem;
+  transition: box-shadow 0.15s;
+
+  &:hover,
+  &.event_highlight {
+    box-shadow: 0 2px 8px rgba(139, 108, 193, 0.18);
+    background: $gray-100 !important;
+  }
+}
+
+.event_in {
+  border: none;
+  border-left: 3px solid $green;
+  border-radius: 6px;
+  background: rgba(106, 171, 123, 0.08);
+  padding: 0.2rem 0.4rem;
+}
+
+.event_noshow {
+  border-left: 3px solid $red !important;
+  background: rgba(212, 97, 94, 0.06) !important;
+  border-radius: 6px !important;
+  opacity: 0.7;
+}
+
+.event_reserved {
+  border-left: 3px solid $gray-400 !important;
+  background: $gray-100 !important;
+  border-radius: 6px !important;
+}
+
+.event_holiday {
+  border-left: 3px solid $yellow !important;
+  background: rgba(242, 192, 120, 0.1) !important;
+  border-radius: 6px !important;
+}
+
+/* Week view header */
+.week_dateheader {
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.5rem;
+  background: $gray-100;
+  border-bottom: 2px solid $gray-300;
+  border-left: 1px solid $gray-200;
+  border-right: 1px solid $gray-200;
+
+  a, a:link, a:visited {
+    color: $body-color;
+    text-decoration: none;
+  }
+}
+
+.week_currday {
+  background: rgba(139, 108, 193, 0.12);
+  border-bottom: 2px solid $primary;
+
+  a, a:link, a:visited {
+    color: $primary;
+    font-weight: 700;
+  }
+}
+
+/* Month view */
+.month_daylink {
+  background: #ffffff;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+}
+
+.month_event {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  margin-bottom: 1px;
+}
+
+/* ── Tables — Global modernization ───────────────────────────────── */
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid $gray-300;
+
+  thead th {
+    background: $gray-100;
+    border-bottom: 2px solid $gray-300;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: $gray-600;
+    padding: 0.65rem 0.75rem;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid $gray-200;
+    vertical-align: middle;
+    font-size: 0.82rem;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: $gray-100;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(139, 108, 193, 0.06) !important;
+  transition: background 0.1s;
+}
+
+/* Legacy OpenEMR table classes */
+.showborder,
+.showborder_long {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid $gray-300;
+  overflow: hidden;
+
+  td {
+    border-bottom: 1px solid $gray-200;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  th {
+    background: $gray-100;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: $gray-600;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid $gray-300;
+  }
+}
+
+.showborder_head th {
+  background: $gray-100;
+  font-weight: 600;
+  border-bottom: 2px solid $gray-300;
+  color: $gray-600;
+}
+
+/* ── Patient Finder ──────────────────────────────────────────────── */
+
+/* Search criteria bar */
+#searchCriteria {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid $gray-300;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+
+  .form-control,
+  select {
+    border-radius: 8px;
+    border: 1.5px solid $gray-300;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.75rem;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.12);
+    }
+  }
+}
+
+/* Search results */
+#searchResults,
+#searchResultsHeader {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid $gray-300;
+  overflow: hidden;
+
+  td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid $gray-200;
+    font-size: 0.82rem;
+  }
+
+  th {
+    background: $gray-100;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: $gray-600;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid $gray-300;
+  }
+}
+
+/* Patient finder result rows */
+.oneresult {
+  transition: background 0.1s;
+  cursor: pointer;
+
+  &:hover,
+  &.highlight {
+    background-color: rgba(139, 108, 193, 0.06) !important;
+  }
+}
+
+/* Patient finder container */
+#container_div {
+  padding: 1rem;
+}
+
+/* Patient finder tabs */
+#finderTabsNav {
+  .nav-tabs {
+    border-bottom: 2px solid $gray-300;
+  }
+
+  .nav-link {
+    border-radius: 8px 8px 0 0;
+    font-weight: 500;
+    font-size: 0.82rem;
+    color: $gray-600;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+
+    &:hover {
+      color: $primary;
+      background: $gray-100;
+    }
+
+    &.active {
+      color: $primary;
+      border-bottom-color: $primary;
+      font-weight: 600;
+      background: transparent;
+    }
+  }
+}
+
+/* ── DataTables modernization ────────────────────────────────────── */
+
+.dataTables_wrapper {
+  .dataTables_length {
+    select {
+      border-radius: 6px;
+      border: 1.5px solid $gray-300;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.82rem;
+
+      &:focus {
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.12);
+      }
+    }
+  }
+
+  .dataTables_filter {
+    input {
+      border-radius: 8px;
+      border: 1.5px solid $gray-300;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.82rem;
+
+      &:focus {
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.12);
+      }
+    }
+  }
+
+  .dataTables_info {
+    font-size: 0.78rem;
+    color: $gray-500;
+  }
+
+  .dataTables_paginate {
+    .paginate_button {
+      border-radius: 6px !important;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.6rem !important;
+      margin: 0 2px;
+      border: 1px solid $gray-300 !important;
+      background: #ffffff !important;
+      color: $gray-600 !important;
+      transition: all 0.15s;
+
+      &:hover {
+        background: $gray-100 !important;
+        color: $body-color !important;
+        border-color: $gray-400 !important;
+      }
+
+      &.current {
+        background: $primary !important;
+        color: #ffffff !important;
+        border-color: $primary !important;
+        font-weight: 600;
+      }
+
+      &.disabled {
+        opacity: 0.4;
+      }
+    }
+  }
+}
+
+/* DataTable sort icons */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+  background-position: right 0.5rem center;
+  background-size: 0.65rem;
+  padding-right: 1.5rem;
+}
+
+/* ── Patient Demographics & Summary ──────────────────────────────── */
+
+/* Patient stats panels */
+#patient_stats_summary {
+  .card {
+    border-radius: 10px;
+    border: 1px solid $gray-300;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    margin-bottom: 0.75rem;
+
+    .card-header {
+      background: $gray-100;
+      border-bottom: 1px solid $gray-300;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .card-body {
+      padding: 0.75rem 1rem;
+    }
+  }
+}
+
+/* ── Nav tabs (global) ───────────────────────────────────────────── */
+
+.nav-tabs {
+  border-bottom: 2px solid $gray-300;
+
+  .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    border-radius: 0;
+    font-weight: 500;
+    color: $gray-600;
+    transition: all 0.15s;
+
+    &:hover {
+      color: $primary;
+      border-bottom-color: rgba(139, 108, 193, 0.3);
+      background: transparent;
+    }
+
+    &.active {
+      color: $primary;
+      border-bottom-color: $primary;
+      font-weight: 600;
+      background: transparent;
+    }
+  }
+}
+
+/* Tab strip legacy */
+ul.tabNav {
+  border-bottom: 2px solid $gray-300;
+
+  a {
+    color: $gray-600;
+    font-weight: 500;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.15s;
+
+    &:hover {
+      color: $primary;
+      background: $gray-100;
+    }
+
+    &.current {
+      color: $primary;
+      font-weight: 600;
+      border-bottom: 2px solid $primary;
+    }
+  }
+}
+
+/* ── Scrollbar styling ───────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: $gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $gray-400;
+  border-radius: 3px;
+
+  &:hover {
+    background: $gray-500;
+  }
+}
+
+/* ── Dropdown menus ──────────────────────────────────────────────── */
+
+.dropdown-menu {
+  border-radius: 10px;
+  border: 1px solid $gray-300;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 0.35rem;
+
+  .dropdown-item {
+    border-radius: 6px;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.75rem;
+    transition: background 0.1s;
+
+    &:hover {
+      background: $gray-100;
+      color: $body-color;
+    }
+
+    &.active,
+    &:active {
+      background: $primary;
+      color: #ffffff;
+    }
+  }
+}
+
+/* ── Modals ──────────────────────────────────────────────────────── */
+
+.modal-content {
+  border-radius: 14px;
+  border: 1px solid $gray-300;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.modal-header {
+  border-bottom: 1px solid $gray-200;
+  padding: 1rem 1.25rem;
+}
+
+.modal-footer {
+  border-top: 1px solid $gray-200;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ── Popups (calendar popup etc) ─────────────────────────────────── */
+
+.pop-up {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid $gray-300;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+}
+
+/* ── Breadcrumb / page headers ───────────────────────────────────── */
+
+.breadcrumb {
+  background: transparent;
+  font-size: 0.82rem;
+  padding: 0.5rem 0;
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: $gray-400;
+  }
+
+  .breadcrumb-item.active {
+    color: $gray-600;
+  }
+}
+
 /* Last: BS4/OpenEMR helper overrides */
 @import "../oe-bootstrap";
