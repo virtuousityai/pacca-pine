@@ -463,6 +463,121 @@ div.menuLabel:hover {
   }
 }
 
+/* ── Theme-aware overrides (uses CSS custom properties set by themes) ─ */
+
+#mainBox > nav.navbar {
+  height: auto !important;
+  min-height: 42px !important;
+}
+
+#mainBox .appMenu > span:hover,
+#mainBox .appMenu .appMenu > span:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+}
+
+#mainBox .appMenu > span > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel {
+  color: var(--oe-navbar-color, var(--dark)) !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  padding: 6px 12px !important;
+  margin: 4px 2px !important;
+  border-radius: 8px !important;
+  transition: all 0.15s ease !important;
+  width: auto !important;
+}
+
+#mainBox .appMenu > span > .menuLabel:hover,
+#mainBox .appMenu > span:hover > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel:hover,
+#mainBox .appMenu > span:hover > .menuSection > .menuLabel {
+  background: var(--oe-navbar-link-hover-bg, var(--gray200)) !important;
+  background-color: var(--oe-navbar-link-hover-bg, var(--gray200)) !important;
+  color: var(--oe-navbar-link-hover-color, var(--dark)) !important;
+}
+
+#mainBox .appMenu > span > .menuSection:hover > .menuLabel {
+  background: var(--oe-navbar-link-active-bg, var(--primary)) !important;
+  background-color: var(--oe-navbar-link-active-bg, var(--primary)) !important;
+  color: var(--oe-navbar-link-active-color, var(--white)) !important;
+}
+
+#mainBox .menuSection:hover {
+  background-color: transparent !important;
+}
+
+#mainBox .menuSection > .menuEntries {
+  background: var(--white) !important;
+  border: 1px solid var(--gray300, #ddd) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  padding: 6px !important;
+  top: 100% !important;
+  min-width: 210px !important;
+}
+
+#mainBox .menuSection > .menuEntries .menuEntries {
+  background: var(--white) !important;
+  border: 1px solid var(--gray300, #ddd) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  padding: 6px !important;
+  top: -6px !important;
+  #{$left}: 100% !important;
+}
+
+#mainBox .appMenu li:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+  text-shadow: none !important;
+}
+
+#mainBox .appMenu li {
+  padding-#{$left}: 0 !important;
+}
+
+#mainBox .menuEntries .menuLabel {
+  color: var(--dark) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  padding: 7px 12px !important;
+  border-radius: 6px !important;
+  width: 100% !important;
+  transition: all 0.12s ease !important;
+}
+
+#mainBox .menuEntries .menuLabel:hover,
+#mainBox .menuEntries li:hover > .menuLabel,
+#mainBox .menuEntries li:hover > .menuSection > .menuLabel {
+  background: var(--oe-navbar-link-hover-bg, var(--gray200)) !important;
+  background-color: var(--oe-navbar-link-hover-bg, var(--gray200)) !important;
+  color: var(--dark) !important;
+}
+
+#mainBox .tabControls {
+  background: var(--gray100, #f8f9fa) !important;
+  border-bottom: 1px solid var(--gray300, #ddd);
+  padding: 4px 8px 0 !important;
+  margin-top: 0 !important;
+}
+
+#mainBox .tabSpan {
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0 !important;
+  padding: 5px 14px !important;
+  font-size: 12px;
+}
+
+#mainBox .tabNotchosen {
+  border-top: 1px solid transparent !important;
+  opacity: 0.7;
+}
+
 @include if-rtl {
   #mainBox {
     padding: 0 5px 0 0 !important;

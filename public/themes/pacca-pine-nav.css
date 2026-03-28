@@ -1,0 +1,285 @@
+/**
+ * Pacca PINE - Navigation Bar Override
+ * Loads AFTER all other stylesheets to guarantee cascade priority.
+ * NOTE: OpenEMR menu uses <div> children inside .appMenu, not <span>.
+ *
+ * @package   OpenEMR
+ * @link      https://www.open-emr.org
+ * @author    Pacca PINE Team
+ * @copyright Copyright (c) 2026 Pacca PINE
+ * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+ */
+
+/* ── Navbar container ──────────────────────────────────────────── */
+
+#mainBox > nav.navbar,
+#mainBox_vertical > nav.navbar {
+  height: auto !important;
+  min-height: 42px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e6ddf2 !important;
+  padding: 0 1.25rem !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+/* ── Kill ALL rectangular backgrounds on wrapper elements ──────── */
+
+#mainBox .appMenu > div,
+#mainBox .appMenu > div:hover,
+#mainBox .appMenu > div:focus,
+#mainBox .appMenu > span,
+#mainBox .appMenu > span:hover,
+#mainBox .appMenu > span:focus,
+#mainBox .appMenu .appMenu > div:hover,
+#mainBox .appMenu .appMenu > span:hover,
+#mainBox .appMenu li:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+}
+
+#mainBox .menuSection:hover,
+#mainBox .appMenu > div > .menuSection:hover,
+#mainBox .appMenu > span > .menuSection:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ── Top-level menu labels — muted text, pill shape ────────────── */
+
+#mainBox .appMenu > div > .menuLabel,
+#mainBox .appMenu > div > .menuSection > .menuLabel,
+#mainBox .appMenu > span > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel {
+  color: #7e7394 !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  padding: 6px 12px !important;
+  margin: 4px 2px !important;
+  border-radius: 8px !important;
+  width: auto !important;
+  transition: all 0.15s ease !important;
+}
+
+/* Hover — lavender pill */
+#mainBox .appMenu > div > .menuLabel:hover,
+#mainBox .appMenu > div:hover > .menuLabel,
+#mainBox .appMenu > div > .menuSection > .menuLabel:hover,
+#mainBox .appMenu > div:hover > .menuSection > .menuLabel,
+#mainBox .appMenu > span > .menuLabel:hover,
+#mainBox .appMenu > span:hover > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel:hover,
+#mainBox .appMenu > span:hover > .menuSection > .menuLabel {
+  background: #f5f0fb !important;
+  background-color: #f5f0fb !important;
+  color: #2d2440 !important;
+}
+
+/* Open dropdown parent — primary purple pill */
+#mainBox .appMenu > div > .menuSection:hover > .menuLabel,
+#mainBox .appMenu > span > .menuSection:hover > .menuLabel {
+  background: #8b6cc1 !important;
+  background-color: #8b6cc1 !important;
+  color: #ffffff !important;
+}
+
+/* ── Dropdown panels ───────────────────────────────────────────── */
+
+#mainBox .menuSection > .menuEntries,
+#mainBox .menuSection > ul.menuEntries {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e6ddf2 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14),
+              0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  padding: 6px !important;
+  margin-top: 0 !important;
+  top: 100% !important;
+  min-width: 210px !important;
+}
+
+/* Nested sub-menus */
+#mainBox .menuSection > .menuEntries .menuEntries,
+#mainBox .menuSection > ul.menuEntries ul.menuEntries {
+  background: #ffffff !important;
+  border: 1px solid #e6ddf2 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14),
+              0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  padding: 6px !important;
+  top: -6px !important;
+  left: 100% !important;
+  margin-left: 4px;
+}
+
+/* Dropdown list items — kill hover bg */
+#mainBox .menuEntries li,
+#mainBox .menuEntries li:hover {
+  padding-left: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  text-shadow: none !important;
+  list-style: none;
+}
+
+/* Dropdown item labels */
+#mainBox .menuEntries .menuLabel,
+#mainBox .menuEntries li .menuLabel {
+  color: #2d2440 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  padding: 7px 12px !important;
+  border-radius: 6px !important;
+  transition: all 0.12s ease !important;
+  margin: 1px 0;
+  width: 100% !important;
+  display: block !important;
+}
+
+#mainBox .menuEntries .menuLabel:hover,
+#mainBox .menuEntries li .menuLabel:hover,
+#mainBox .menuEntries li:hover > .menuLabel,
+#mainBox .menuEntries li:hover > .menuSection > .menuLabel {
+  background: #f5f0fb !important;
+  background-color: #f5f0fb !important;
+  color: #2d2440 !important;
+}
+
+#mainBox .menuEntries .menuLabel:active {
+  background: #8b6cc1 !important;
+  color: #ffffff !important;
+}
+
+/* ── Disabled items ────────────────────────────────────────────── */
+
+#mainBox .menuDisabled {
+  color: #b8a4d8 !important;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Logo ──────────────────────────────────────────────────────── */
+
+#mainBox .logo {
+  height: 22px !important;
+  width: 22px !important;
+  margin-right: 6px;
+}
+
+/* ── User profile ──────────────────────────────────────────────── */
+
+#mainBox #username-container .menuLabel {
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+}
+
+#mainBox #username-container .menuLabel:hover {
+  background: #f5f0fb !important;
+}
+
+#mainBox #username-container .fa-circle {
+  color: #e6ddf2 !important;
+}
+
+#mainBox #username-container .fa-user {
+  color: #7e7394 !important;
+}
+
+#mainBox #userdropdown {
+  background: #ffffff !important;
+  border: 1px solid #e6ddf2 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14) !important;
+  padding: 6px !important;
+  min-width: 180px;
+}
+
+/* ── Search box ────────────────────────────────────────────────── */
+
+#mainBox > nav .form-inline .form-control {
+  background: #f8f5fc !important;
+  border: 1px solid #e6ddf2 !important;
+  color: #2d2440 !important;
+  font-size: 12.5px !important;
+  border-radius: 8px 0 0 8px !important;
+  padding: 4px 12px !important;
+  height: 30px !important;
+}
+
+#mainBox > nav .form-inline .form-control:focus {
+  background: #ffffff !important;
+  border-color: #b8a4d8 !important;
+  box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.1) !important;
+}
+
+#mainBox > nav .form-inline .btn-secondary {
+  background: #f8f5fc !important;
+  border: 1px solid #e6ddf2 !important;
+  border-left: none !important;
+  color: #7e7394 !important;
+  font-size: 12px !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 4px 10px !important;
+  height: 30px !important;
+}
+
+#mainBox > nav .form-inline .btn-secondary:hover {
+  background: #f0eaf8 !important;
+  color: #2d2440 !important;
+}
+
+/* ── Tab bar ───────────────────────────────────────────────────── */
+
+#mainBox .tabControls {
+  background: #f8f5fc !important;
+  border-bottom: 1px solid #e6ddf2;
+  padding: 4px 8px 0 !important;
+  margin-top: 0 !important;
+}
+
+#mainBox .tabSpan {
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0 !important;
+  padding: 5px 14px !important;
+  font-size: 12px;
+  color: #7e7394;
+}
+
+#mainBox .tabSpan:hover {
+  background: #f0eaf8;
+  color: #2d2440;
+}
+
+#mainBox .tabNotchosen {
+  border-top: 1px solid transparent !important;
+  opacity: 0.7;
+}
+
+#mainBox .tabSpan:not(.tabNotchosen) {
+  background: #ffffff;
+  border-color: #e6ddf2 !important;
+  color: #2d2440;
+  font-weight: 500;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.03);
+}
+
+#mainBox .tabsNoHover {
+  background: transparent !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: 3px solid transparent !important;
+}
+
+#mainBox #framesDisplay > div {
+  border-left: 1px solid #e6ddf2 !important;
+  border-right: 1px solid #e6ddf2 !important;
+}

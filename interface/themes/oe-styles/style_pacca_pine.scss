@@ -190,24 +190,294 @@ input[type="password"]:focus {
   background-color: $gray-200;
 }
 
-/* App menu */
-.appMenu .appMenu > span:hover,
-.appMenu li:hover,
-.appMenu > span:hover {
-  background-color: #f0eaf8 !important;
-  color: $black !important;
+/* ── Top Navigation Bar (matching pacca-pine.html mockup) ──────── */
+
+/* Main navbar — white, subtle shadow */
+#mainBox > nav.navbar,
+#mainBox_vertical > nav.navbar {
+  height: auto !important;
+  min-height: 42px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-bottom: 1px solid $gray-300 !important;
+  padding: 0 1.25rem !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  z-index: 1100 !important;
 }
 
-.menuDisabled {
-  color: $gray-400;
-}
-
-/* Navbar brand styling */
+/* Logo */
 #mainBox .logo,
 #mainBox_vertical .logo {
+  height: 22px !important;
+  width: 22px !important;
+  margin-right: 6px;
+
   .emr-menu-logo > #blue-color {
-    fill: #8b6cc1;
+    fill: $primary;
   }
+}
+
+/* ── Top-level menu items ──────────────────────────────────────── */
+
+/* Reset the span wrappers — kill ALL bg/color from compact/navbar CSS */
+#mainBox .appMenu > span,
+#mainBox .appMenu > span:hover,
+#mainBox .appMenu > span:focus,
+#mainBox .appMenu .appMenu > span:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  padding: 0 !important;
+  float: left;
+  white-space: nowrap;
+}
+
+/* menuLabel inside top-level items — muted text, pill shape */
+#mainBox .appMenu > span > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel.dropdown-toggle {
+  color: $gray-500 !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.1px;
+  padding: 6px 12px !important;
+  margin: 4px 2px !important;
+  transition: all 0.15s ease !important;
+  border-radius: 8px !important;
+  display: inline-block;
+}
+
+/* Hover — light lavender pill */
+#mainBox .appMenu > span > .menuLabel:hover,
+#mainBox .appMenu > span:hover > .menuLabel,
+#mainBox .appMenu > span > .menuSection > .menuLabel.dropdown-toggle:hover,
+#mainBox .appMenu > span:hover > .menuSection > .menuLabel.dropdown-toggle {
+  color: $gray-800 !important;
+  background: $gray-100 !important;
+  background-color: $gray-100 !important;
+}
+
+/* Open dropdown parent — primary purple pill */
+#mainBox .appMenu > span > .menuSection:hover > .menuLabel.dropdown-toggle {
+  background: $primary !important;
+  background-color: $primary !important;
+  color: #ffffff !important;
+}
+
+/* ── Dropdown panels ───────────────────────────────────────────── */
+
+/* Override Bootstrap's .rounded-0 and .border-0 on .menuEntries */
+#mainBox .menuSection > ul.menuEntries {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid $gray-300 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14),
+              0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  padding: 6px !important;
+  margin-top: 0 !important;
+  top: 100% !important;
+  min-width: 210px !important;
+}
+
+/* Nested sub-menus */
+#mainBox .menuSection > ul.menuEntries ul.menuEntries {
+  background: #ffffff !important;
+  border: 1px solid $gray-300 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14),
+              0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  padding: 6px !important;
+  top: -6px !important;
+  left: 100% !important;
+  margin-left: 4px;
+}
+
+/* Dropdown list items — kill default hovers */
+#mainBox .appMenu li,
+#mainBox .menuEntries li {
+  padding-left: 0 !important;
+  list-style: none;
+}
+
+#mainBox .appMenu li:hover,
+#mainBox .menuEntries li:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+}
+
+/* Dropdown item labels — dark text, rounded hover */
+#mainBox .menuEntries .menuLabel {
+  color: $gray-800 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  padding: 7px 12px !important;
+  border-radius: 6px !important;
+  transition: all 0.12s ease !important;
+  margin: 1px 0;
+  width: 100%;
+}
+
+#mainBox .menuEntries .menuLabel:hover,
+#mainBox .menuEntries li:hover > .menuLabel,
+#mainBox .menuEntries li:hover > .menuSection > .menuLabel {
+  background: $gray-100 !important;
+  background-color: $gray-100 !important;
+  color: $gray-900 !important;
+}
+
+#mainBox .menuEntries .menuLabel:active {
+  background: $primary !important;
+  color: #ffffff !important;
+}
+
+#mainBox .menuDisabled {
+  color: $gray-400 !important;
+  opacity: 0.5;
+}
+
+/* ── User profile area ─────────────────────────────────────────── */
+
+#userData {
+  float: right;
+  position: relative;
+}
+
+#mainBox #username-container {
+  .menuLabel {
+    padding: 4px 8px !important;
+    border-radius: 8px !important;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $gray-100 !important;
+    }
+  }
+
+  .fa-stack {
+    .fa-circle {
+      color: $gray-300 !important;
+    }
+    .fa-user {
+      color: $gray-500 !important;
+    }
+  }
+
+  #userdropdown {
+    background: #ffffff !important;
+    border: 1px solid $gray-300 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14) !important;
+    padding: 6px !important;
+    min-width: 180px;
+  }
+}
+
+/* ── Search box ────────────────────────────────────────────────── */
+
+#mainBox > nav .form-inline {
+  .form-control {
+    background: $gray-100 !important;
+    border: 1px solid $gray-300 !important;
+    color: $gray-800 !important;
+    font-size: 12.5px !important;
+    border-radius: 8px 0 0 8px !important;
+    padding: 4px 12px !important;
+    height: 30px !important;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: $gray-400;
+    }
+
+    &:focus {
+      background: #ffffff !important;
+      border-color: rgba(139, 108, 193, 0.4) !important;
+      box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.1) !important;
+    }
+  }
+
+  .btn-secondary {
+    background: $gray-100 !important;
+    border: 1px solid $gray-300 !important;
+    border-left: none !important;
+    color: $gray-500 !important;
+    font-size: 12px !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 4px 10px !important;
+    height: 30px !important;
+
+    &:hover {
+      background: $gray-200 !important;
+      color: $gray-800 !important;
+    }
+  }
+}
+
+/* ── Tab bar (below navbar) ────────────────────────────────────── */
+
+#mainBox .tabControls {
+  background: $gray-100 !important;
+  border-bottom: 1px solid $gray-300;
+  padding: 4px 8px 0 !important;
+  margin-top: 0 !important;
+  gap: 2px;
+}
+
+#mainBox .tabSpan {
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0 !important;
+  padding: 5px 14px !important;
+  font-size: 12px;
+  color: $gray-500;
+  background: transparent;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: $gray-200;
+    color: $gray-800;
+  }
+
+  .fa {
+    color: $gray-400 !important;
+    font-size: 10px;
+    margin-left: 4px;
+  }
+}
+
+#mainBox .tabNotchosen {
+  border-bottom: none !important;
+  background: transparent;
+}
+
+/* Active tab */
+#mainBox .tabSpan:not(.tabNotchosen) {
+  background: #ffffff;
+  border-color: $gray-300 !important;
+  color: $gray-800;
+  font-weight: 500;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.03);
+}
+
+#mainBox .tabsNoHover {
+  background: transparent !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: 3px solid transparent !important;
+}
+
+/* Frame borders */
+#mainBox #framesDisplay > div {
+  border-left: 1px solid $gray-300 !important;
+  border-right: 1px solid $gray-300 !important;
 }
 
 /* Cards, panels, modals */
@@ -1055,23 +1325,27 @@ ul.tabNav {
   }
 }
 
-/* ── Dropdown menus ──────────────────────────────────────────────── */
+/* ── Dropdown menus (Bootstrap .dropdown-menu instances) ────────── */
 
 .dropdown-menu {
-  border-radius: 10px;
+  background: #ffffff;
+  border-radius: 8px;
   border: 1px solid $gray-300;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 0.35rem;
+  box-shadow: 0 8px 32px rgba(45, 36, 64, 0.18),
+              0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 6px;
+  margin-top: 2px;
 
   .dropdown-item {
-    border-radius: 6px;
-    font-size: 0.82rem;
-    padding: 0.45rem 0.75rem;
-    transition: background 0.1s;
+    border-radius: 5px;
+    font-size: 12.5px;
+    padding: 6px 12px;
+    color: $gray-800;
+    transition: background 0.12s ease;
 
     &:hover {
       background: $gray-100;
-      color: $body-color;
+      color: $gray-900;
     }
 
     &.active,
@@ -1079,6 +1353,11 @@ ul.tabNav {
       background: $primary;
       color: #ffffff;
     }
+  }
+
+  .dropdown-divider {
+    border-top-color: $gray-200;
+    margin: 4px 8px;
   }
 }
 

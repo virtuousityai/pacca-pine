@@ -302,6 +302,12 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
     </script>
 
     <?php Header::setupHeader(['knockout', 'tabs-theme', 'i18next', 'hotkeys', 'i18formatting']); ?>
+    <?php // Pacca PINE nav override — must load AFTER all other stylesheets
+    $cssHeader = OEGlobalsBag::getInstance()->getString('css_header');
+    if (str_contains($cssHeader, 'pacca_pine')) {
+        echo '<link rel="stylesheet" href="' . attr($GLOBALS['webroot']) . '/public/themes/pacca-pine-nav.css?v=' . attr($GLOBALS['v_js_includes']) . '">';
+    }
+    ?>
     <script>
         // set up global translations for js
         function setupI18n(lang_id) {
