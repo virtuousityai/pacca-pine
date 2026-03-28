@@ -545,13 +545,14 @@ a {
   border-left: 1px solid $gray-300;
   border-radius: 0;
 
+  /* Keep default collapse for calendar - separate breaks absolute positioning */
   table {
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
   }
 
   td {
-    padding: 0.35rem;
+    padding: 0.3125rem;
+    vertical-align: top;
   }
 
   .providerday {
@@ -559,21 +560,23 @@ a {
   }
 }
 
-/* Provider header row */
+/* Provider header — sticky at top of schedule column */
 .providerheader {
   background: linear-gradient(135deg, $primary, darken($primary, 8%));
   color: #ffffff;
   font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.5rem;
-  border-radius: 6px 6px 0 0;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.75rem;
   border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 /* Time slots */
 #times {
   background: $gray-100;
-  border-right: 1px solid $gray-300;
+  border-right: 1px solid $gray-200;
 
   table {
     background: transparent;
@@ -582,73 +585,85 @@ a {
       color: $gray-500;
       font-weight: 500;
       font-size: 0.75rem;
+      padding: 0 0.3rem;
     }
   }
 }
 
 .timeslot {
-  border-bottom: 1px solid $gray-200;
+  border-bottom: 1px dotted $gray-200;
 }
 
-/* Schedule cells */
+/* Schedule cells — must be vertical-align top so provider header stays at top */
 .schedule {
   background: #ffffff;
   border: 1px solid $gray-200;
-  transition: background 0.1s;
-
-  &:hover {
-    background: $gray-100;
-  }
+  vertical-align: top !important;
+  padding: 0 !important;
 }
 
-/* Calendar day container */
+/* Calendar day container — holds absolutely-positioned events */
 .calendar_day {
   min-height: 20px;
+  position: relative;
+  width: 100%;
 }
 
-/* Event cards — modernized */
+/* Event cards — modernized with left-border color coding */
 .event_appointment {
   background: #ffffff !important;
   border: none !important;
   border-left: 3px solid $primary !important;
-  border-radius: 6px !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem 0.4rem;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 0.15rem 0.35rem;
   font-size: 0.78rem;
-  transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s, background 0.15s;
+  overflow: hidden;
 
   &:hover,
   &.event_highlight {
-    box-shadow: 0 2px 8px rgba(139, 108, 193, 0.18);
-    background: $gray-100 !important;
+    box-shadow: 0 2px 8px rgba(139, 108, 193, 0.2);
+    background: rgba(139, 108, 193, 0.06) !important;
+  }
+
+  /* Event text links */
+  a {
+    color: $body-color;
+    text-decoration: none;
+  }
+
+  .event_time a {
+    color: $primary;
+    font-weight: 600;
   }
 }
 
 .event_in {
   border: none;
   border-left: 3px solid $green;
-  border-radius: 6px;
-  background: rgba(106, 171, 123, 0.08);
-  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(106, 171, 123, 0.06);
+  padding: 0.15rem 0.35rem;
 }
 
 .event_noshow {
   border-left: 3px solid $red !important;
-  background: rgba(212, 97, 94, 0.06) !important;
-  border-radius: 6px !important;
-  opacity: 0.7;
+  background: rgba(212, 97, 94, 0.04) !important;
+  border-radius: 4px !important;
+  opacity: 0.75;
 }
 
 .event_reserved {
   border-left: 3px solid $gray-400 !important;
   background: $gray-100 !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
 }
 
 .event_holiday {
   border-left: 3px solid $yellow !important;
-  background: rgba(242, 192, 120, 0.1) !important;
-  border-radius: 6px !important;
+  background: rgba(242, 192, 120, 0.08) !important;
+  border-radius: 4px !important;
 }
 
 /* Week view header */
@@ -693,7 +708,8 @@ a {
 
 /* ── Tables — Global modernization ───────────────────────────────── */
 
-.table {
+/* Only style non-calendar tables — calendar uses .table internally */
+.table:not(#bigCal .table):not(#times .table):not(#datePicker .table) {
   border-collapse: separate;
   border-spacing: 0;
   background: #ffffff;
