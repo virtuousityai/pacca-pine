@@ -1091,11 +1091,11 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
         <!-- Pacca PINE AI Summary -->
         <div class="card mx-2 mb-2" id="pine-ai-summary-card" style="border: 1px solid #e6ddf2; border-radius: 12px; overflow: hidden;">
             <div class="card-header d-flex justify-content-between align-items-center px-3 py-2" style="background: linear-gradient(135deg, #f8f5fc 0%, #f0eaf8 100%); border-bottom: 2px solid #8b6cc1;">
-                <span style="color: #6b4fa0; font-weight: 600; font-size: 0.95rem;">
+                <span style="color: #6b4fa0; font-weight: 600;">
                     <i class="fas fa-brain mr-1"></i> AI Patient Summary
                 </span>
                 <div>
-                    <small id="pine-ai-cache-status" class="text-muted mr-2" style="font-size: 0.75rem;"></small>
+                    <small id="pine-ai-cache-status" class="text-muted mr-2" style="font-size: 0.85rem;"></small>
                     <button class="btn btn-sm btn-outline-secondary" onclick="pineLoadSummary(true)" title="Refresh (force new AI analysis)" style="border-radius: 8px; padding: 2px 8px;">
                         <i class="fas fa-sync-alt" id="pine-ai-refresh-icon"></i>
                     </button>
@@ -1109,29 +1109,29 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
                     <div class="row no-gutters">
                         <!-- Synopsis -->
                         <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
-                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #6b4fa0; text-transform: uppercase; letter-spacing: 0.5px;">Synopsis</div>
-                            <p id="pine-ai-synopsis" class="mb-0" style="font-size: 0.85rem; color: #2d2440; line-height: 1.5;"></p>
+                            <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #6b4fa0; text-transform: uppercase; letter-spacing: 0.5px;">Synopsis</div>
+                            <p id="pine-ai-synopsis" class="mb-0" style="color: #2d2440; line-height: 1.5;"></p>
                         </div>
                         <!-- Care Gaps -->
                         <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
-                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #d4615e; text-transform: uppercase; letter-spacing: 0.5px;">
-                                <i class="fas fa-exclamation-triangle mr-1" style="font-size: 0.7rem;"></i>Care Gaps
+                            <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #d4615e; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>Care Gaps
                             </div>
-                            <ul id="pine-ai-care-gaps-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                            <ul id="pine-ai-care-gaps-list" class="mb-0 pl-3" style="color: #2d2440; line-height: 1.6;"></ul>
                         </div>
                         <!-- Recent Events -->
                         <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
-                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #f2c078; text-transform: uppercase; letter-spacing: 0.5px;">
-                                <i class="fas fa-clock mr-1" style="font-size: 0.7rem;"></i>Recent Events
+                            <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #f2c078; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-clock mr-1"></i>Recent Events
                             </div>
-                            <ul id="pine-ai-recent-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                            <ul id="pine-ai-recent-list" class="mb-0 pl-3" style="color: #2d2440; line-height: 1.6;"></ul>
                         </div>
                         <!-- Suggested Actions -->
                         <div class="col-md-3 p-3">
-                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #6aab7b; text-transform: uppercase; letter-spacing: 0.5px;">
-                                <i class="fas fa-check-circle mr-1" style="font-size: 0.7rem;"></i>Suggested Actions
+                            <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #6aab7b; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-check-circle mr-1"></i>Suggested Actions
                             </div>
-                            <ul id="pine-ai-actions-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                            <ul id="pine-ai-actions-list" class="mb-0 pl-3" style="color: #2d2440; line-height: 1.6;"></ul>
                         </div>
                     </div>
                 </div>
