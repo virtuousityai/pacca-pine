@@ -62,6 +62,7 @@ use OpenEMR\Reminder\BirthdayReminder;
 use OpenEMR\Services\AllergyIntoleranceService;
 use OpenEMR\Services\PatientIssuesService;
 use OpenEMR\Services\PatientService;
+use OpenEMR\Common\Uuid\UuidRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
@@ -1082,6 +1083,193 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
         if (OEGlobalsBag::getInstance()->getString('patient_id_category_name')) {
             $idcard_doc_id = get_document_by_catg($pid, OEGlobalsBag::getInstance()->getString('patient_id_category_name'), 3);
         }
+        // --- Pacca PINE: AI Patient Summary (full-width) ---
+        $patientService = new PatientService();
+        $patientUuidBin = $patientService->getUuid($pid);
+        $patientUuid = $patientUuidBin ? UuidRegistry::uuidToString($patientUuidBin) : '';
+        ?>
+        <!-- Pacca PINE AI Summary -->
+        <div class="card mx-2 mb-2" id="pine-ai-summary-card" style="border: 1px solid #e6ddf2; border-radius: 12px; overflow: hidden;">
+            <div class="card-header d-flex justify-content-between align-items-center px-3 py-2" style="background: linear-gradient(135deg, #f8f5fc 0%, #f0eaf8 100%); border-bottom: 2px solid #8b6cc1;">
+                <span style="color: #6b4fa0; font-weight: 600; font-size: 0.95rem;">
+                    <i class="fas fa-brain mr-1"></i> AI Patient Summary
+                </span>
+                <div>
+                    <small id="pine-ai-cache-status" class="text-muted mr-2" style="font-size: 0.75rem;"></small>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="pineLoadSummary(true)" title="Refresh (force new AI analysis)" style="border-radius: 8px; padding: 2px 8px;">
+                        <i class="fas fa-sync-alt" id="pine-ai-refresh-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0" id="pine-ai-summary-body">
+                <div class="text-center text-muted py-3" id="pine-ai-loading">
+                    <i class="fas fa-spinner fa-spin mr-1"></i> Generating AI summary&hellip;
+                </div>
+                <div id="pine-ai-content" style="display:none;">
+                    <div class="row no-gutters">
+                        <!-- Synopsis -->
+                        <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
+                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #6b4fa0; text-transform: uppercase; letter-spacing: 0.5px;">Synopsis</div>
+                            <p id="pine-ai-synopsis" class="mb-0" style="font-size: 0.85rem; color: #2d2440; line-height: 1.5;"></p>
+                        </div>
+                        <!-- Care Gaps -->
+                        <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
+                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #d4615e; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-exclamation-triangle mr-1" style="font-size: 0.7rem;"></i>Care Gaps
+                            </div>
+                            <ul id="pine-ai-care-gaps-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                        </div>
+                        <!-- Recent Events -->
+                        <div class="col-md-3 p-3" style="border-right: 1px solid #e6ddf2;">
+                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #f2c078; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-clock mr-1" style="font-size: 0.7rem;"></i>Recent Events
+                            </div>
+                            <ul id="pine-ai-recent-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                        </div>
+                        <!-- Suggested Actions -->
+                        <div class="col-md-3 p-3">
+                            <div class="mb-1" style="font-size: 0.75rem; font-weight: 600; color: #6aab7b; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fas fa-check-circle mr-1" style="font-size: 0.7rem;"></i>Suggested Actions
+                            </div>
+                            <ul id="pine-ai-actions-list" class="mb-0 pl-3" style="font-size: 0.82rem; color: #2d2440; line-height: 1.7;"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="pine-ai-error" style="display:none;" class="text-danger small p-3"></div>
+            </div>
+        </div>
+        <script>
+        var pinePatientUuid = <?php echo json_encode($patientUuid ?: ''); ?>;
+        var PINE_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+        function pineCacheKey() {
+            return 'pine_ai_summary_' + pinePatientUuid;
+        }
+
+        function pineGetCache() {
+            try {
+                var raw = localStorage.getItem(pineCacheKey());
+                if (!raw) return null;
+                var cached = JSON.parse(raw);
+                if (Date.now() - cached.timestamp > PINE_CACHE_TTL) {
+                    localStorage.removeItem(pineCacheKey());
+                    return null;
+                }
+                return cached;
+            } catch(e) { return null; }
+        }
+
+        function pineSetCache(data) {
+            try {
+                localStorage.setItem(pineCacheKey(), JSON.stringify({
+                    data: data,
+                    timestamp: Date.now()
+                }));
+            } catch(e) {}
+        }
+
+        function pineUpdateCacheStatus(timestamp) {
+            var el = document.getElementById('pine-ai-cache-status');
+            if (!timestamp) { el.textContent = ''; return; }
+            var mins = Math.round((Date.now() - timestamp) / 60000);
+            if (mins < 1) el.textContent = '\u2713 Just now';
+            else el.textContent = '\u2713 Cached ' + mins + ' min ago';
+        }
+
+        function pineRenderSummary(data) {
+            document.getElementById('pine-ai-synopsis').textContent = data.synopsis || 'No summary available.';
+
+            var gapsList = document.getElementById('pine-ai-care-gaps-list');
+            gapsList.innerHTML = '';
+            (data.care_gaps || []).forEach(function(g) {
+                var li = document.createElement('li');
+                li.textContent = g;
+                gapsList.appendChild(li);
+            });
+
+            var recentList = document.getElementById('pine-ai-recent-list');
+            recentList.innerHTML = '';
+            (data.recent_changes || []).forEach(function(r) {
+                var li = document.createElement('li');
+                li.textContent = r;
+                recentList.appendChild(li);
+            });
+
+            var actionsList = document.getElementById('pine-ai-actions-list');
+            actionsList.innerHTML = '';
+            (data.suggested_actions || []).forEach(function(a) {
+                var li = document.createElement('li');
+                li.textContent = a;
+                actionsList.appendChild(li);
+            });
+        }
+
+        function pineLoadSummary(forceRefresh) {
+            var loading = document.getElementById('pine-ai-loading');
+            var content = document.getElementById('pine-ai-content');
+            var errorDiv = document.getElementById('pine-ai-error');
+            var refreshIcon = document.getElementById('pine-ai-refresh-icon');
+
+            if (!pinePatientUuid) {
+                loading.style.display = 'none';
+                errorDiv.style.display = '';
+                errorDiv.textContent = 'Patient UUID not available.';
+                return;
+            }
+
+            // Check cache first (unless forced refresh)
+            if (!forceRefresh) {
+                var cached = pineGetCache();
+                if (cached) {
+                    loading.style.display = 'none';
+                    content.style.display = '';
+                    errorDiv.style.display = 'none';
+                    pineRenderSummary(cached.data);
+                    pineUpdateCacheStatus(cached.timestamp);
+                    return;
+                }
+            }
+
+            loading.style.display = '';
+            content.style.display = 'none';
+            errorDiv.style.display = 'none';
+            pineUpdateCacheStatus(null);
+            refreshIcon.classList.add('fa-spin');
+
+            fetch('http://localhost:8888/api/summary/' + encodeURIComponent(pinePatientUuid))
+                .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                .then(function(data) {
+                    loading.style.display = 'none';
+                    content.style.display = '';
+                    refreshIcon.classList.remove('fa-spin');
+                    pineRenderSummary(data);
+                    pineSetCache(data);
+                    pineUpdateCacheStatus(Date.now());
+                })
+                .catch(function(err) {
+                    loading.style.display = 'none';
+                    refreshIcon.classList.remove('fa-spin');
+                    // Fall back to stale cache if available
+                    try {
+                        var raw = localStorage.getItem(pineCacheKey());
+                        if (raw) {
+                            var stale = JSON.parse(raw);
+                            content.style.display = '';
+                            pineRenderSummary(stale.data);
+                            pineUpdateCacheStatus(stale.timestamp);
+                            return;
+                        }
+                    } catch(e) {}
+                    errorDiv.style.display = '';
+                    errorDiv.textContent = 'AI summary unavailable. (' + err.message + ')';
+                });
+        }
+
+        // Auto-load on page render
+        pineLoadSummary(false);
+        </script>
+        <?php
+        // --- End Pacca PINE AI Summary ---
         ?>
         <div class="main mb-1">
             <!-- start main content div -->
@@ -1590,6 +1778,8 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
                     $sectionCards = $sectionRenderEvents->getCards();
 
                     $t = $twig->getTwig();
+
+                    // AI Summary card moved to full-width position above main content
 
                     foreach ($sectionCards as $card) {
                         $_auth = $card->getAcl();
