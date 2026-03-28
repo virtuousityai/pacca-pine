@@ -77,6 +77,8 @@ if (isset($_GET['iSortCol_0'])) {
             //
             if ($aColumns[$iSortCol] == 'name') {
                 $orderby .= "lname $sSortDir, fname $sSortDir, mname $sSortDir";
+            } elseif ($aColumns[$iSortCol] == 'soap_count') {
+                $orderby .= "soap_count $sSortDir";
             } else {
                 $orderby .= escape_sql_column_name($aColumns[$iSortCol], ['patient_data']) . " $sSortDir";
             }
@@ -138,6 +140,9 @@ $srch_bind = [];
 if (isset($_GET['sSearch']) && $_GET['sSearch'] !== "") {
     $sSearch = trim((string) $_GET['sSearch']);
     foreach ($aColumns as $colname) {
+        if ($colname == 'soap_count') {
+            continue; // virtual column, skip in global search
+        }
         $where .= $where ? " OR " : " ( ";
         if ($colname == 'name') {
             $where .=
@@ -176,6 +181,9 @@ $columnFilters = [];
 for ($i = 0; $i < count($aColumns); ++$i) {
     $colname = $aColumns[$i];
     if (isset($_GET["bSearchable_$i"]) && $_GET["bSearchable_$i"] == "true" && $_GET["sSearch_$i"] != '') {
+        if ($colname == 'soap_count') {
+            continue; // virtual column, skip in column-specific search
+        }
         $where .= $where ? ' AND ' : '';
         $sSearch = $_GET["sSearch_$i"];
         $columnFilters[] = new ColumnFilter($colname, $sSearch);
@@ -221,10 +229,19 @@ $srch_bind = array_merge($boundFilter->getBoundValues(), $srch_bind);
 if ($searchAny) {
     $aColumns = explode(',', (string) $_GET['sColumns']);
 }
+
+// Track whether the virtual soap_count column is requested
+$hasSoapColumn = false;
+
 $sellist = 'pid';
 foreach ($aColumns as $colname) {
     if ($colname == 'pid') {
         continue;
+    }
+
+    if ($colname == 'soap_count') {
+        $hasSoapColumn = true;
+        continue; // handled separately via subquery
     }
 
     $sellist .= ", ";
@@ -233,6 +250,12 @@ foreach ($aColumns as $colname) {
     } else {
         $sellist .= escape_sql_column_name($colname, ['patient_data']);
     }
+}
+
+// Build the full SELECT list: base columns + SOAP subquery (if requested)
+$baseSellist = $sellist; // columns from patient_data only (for layout_options lookup)
+if ($hasSoapColumn) {
+    $sellist .= ", (SELECT COUNT(*) FROM form_soap fs WHERE fs.pid = patient_data.pid AND fs.activity = 1) AS soap_count";
 }
 
 // Get total number of rows in the table.
@@ -256,8 +279,9 @@ $out = [
 ];
 
 // save into variable data about fields of 'patient_data' from 'layout_options'
+// Use baseSellist (without subquery) to avoid SQL syntax errors in the layout lookup
 $fieldsInfo = [];
-$quoteSellist = preg_replace('/(\w+)/i', '"${1}"', str_replace('`', '', $sellist));
+$quoteSellist = preg_replace('/(\w+)/i', '"${1}"', str_replace('`', '', $baseSellist));
 $res = sqlStatement('SELECT data_type, field_id, list_id FROM layout_options WHERE form_id = "DEM" AND field_id IN(' . $quoteSellist . ')');
 while ($row = sqlFetchArray($res)) {
     $fieldsInfo[$row['field_id']] = $row;
@@ -284,6 +308,8 @@ while ($row = sqlFetchArray($res)) {
             }
 
             $arow[] = attr($name);
+        } elseif ($colname == 'soap_count') {
+            $arow[] = $row['soap_count'] ?? '0';
         } else {
             $arow[] = isset($fieldsInfo[$colname]) ? attr(generate_plaintext_field($fieldsInfo[$colname], $row[$colname])) : attr($row[$colname]);
         }

@@ -71,6 +71,20 @@ while ($row = sqlFetchArray($res)) {
     $orderjson .= "[\"$colcount\", \"" . addcslashes((string) $colorder, "\t\r\n\"\\") . "\"]";
     ++$colcount;
 }
+
+// Add virtual "SOAP" indicator column
+$header .= "   <th>" . xlt('SOAP') . "</th>\n";
+$header0 .= "   <td><input type='text' size='20' value='' class='form-control search_init' placeholder='" . xla("Search by") . " " . xlt('SOAP') . "'/></td>\n";
+if ($coljson) {
+    $coljson .= ", ";
+}
+$coljson .= "{\"sName\": \"soap_count\", \"bSortable\": true, \"mRender\": renderSoapBadge}";
+if ($orderjson) {
+    $orderjson .= ", ";
+}
+$orderjson .= "[\"$colcount\", \"desc\"]";
+++$colcount;
+
 $loading = "";
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
@@ -334,6 +348,17 @@ $session = SessionWrapperFactory::getInstance()->getActiveSession();
         } else {
             return data;
         }
+    }
+
+    function renderSoapBadge(data, type, full) {
+        if (type == 'display') {
+            var count = parseInt(data) || 0;
+            if (count > 0) {
+                return '<span class="badge badge-success" title="' + count + ' SOAP note(s)"><i class="fas fa-notes-medical mr-1"></i>' + count + '</span>';
+            }
+            return '<span class="badge badge-light text-muted">—</span>';
+        }
+        return data;
     }
 
     function openNewTopWindow(pid) {
