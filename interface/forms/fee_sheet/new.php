@@ -1043,6 +1043,210 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
                             </div>
                         </fieldset>
 
+                    <!-- Pacca PINE: AI Coding Suggestions -->
+                    <fieldset id="pine-coding-panel">
+                        <legend style="color: #6b4fa0;">
+                            <i class="fas fa-brain mr-1"></i>
+                            <?php echo xlt("AI Coding Suggestions"); ?>
+                        </legend>
+                        <div id="pine-coding-body">
+                            <div id="pine-coding-loading" class="text-center text-muted py-3">
+                                <i class="fas fa-spinner fa-spin mr-1"></i> Analyzing encounter for coding suggestions&hellip;
+                            </div>
+                            <div id="pine-coding-content" style="display:none;">
+                                <div class="row">
+                                    <!-- SOAP Note Summary -->
+                                    <div class="col-md-5">
+                                        <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #6b4fa0; text-transform: uppercase;">SOAP Note</div>
+                                        <div id="pine-coding-soap" style="font-size: 0.9rem; line-height: 1.5; max-height: 250px; overflow-y: auto; padding: 8px; background: #f8f5fc; border-radius: 8px;">
+                                            <p id="pine-soap-s" class="mb-1"><strong>S:</strong> <span></span></p>
+                                            <p id="pine-soap-o" class="mb-1"><strong>O:</strong> <span></span></p>
+                                            <p id="pine-soap-a" class="mb-1"><strong>A:</strong> <span></span></p>
+                                            <p id="pine-soap-p" class="mb-0"><strong>P:</strong> <span></span></p>
+                                        </div>
+                                    </div>
+                                    <!-- Suggested Codes -->
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #d4615e; text-transform: uppercase;">
+                                                    <i class="fas fa-diagnoses mr-1"></i>ICD-10 Diagnosis Codes
+                                                </div>
+                                                <div id="pine-coding-icd10-list"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-2" style="font-size: 0.8rem; font-weight: 600; color: #6aab7b; text-transform: uppercase;">
+                                                    <i class="fas fa-procedures mr-1"></i>CPT Procedure Codes
+                                                </div>
+                                                <div id="pine-coding-cpt-list"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 text-right">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary mr-2" onclick="pineCodingRefresh()" title="Re-analyze">
+                                                <i class="fas fa-sync-alt"></i> Re-analyze
+                                            </button>
+                                            <button type="button" class="btn btn-sm text-white" style="background: #8b6cc1;" onclick="pineCodingAddSelected()">
+                                                <i class="fas fa-plus mr-1"></i> Add Selected to Fee Sheet
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="pine-coding-empty" style="display:none;" class="text-muted text-center py-3">
+                                <i class="fas fa-file-medical mr-1"></i> No SOAP note found for this encounter. Write a SOAP note first, then re-open the Fee Sheet.
+                            </div>
+                            <div id="pine-coding-error" style="display:none;" class="text-danger text-center py-2"></div>
+                        </div>
+                    </fieldset>
+                    <script>
+                    (function() {
+                        var pinePid = <?php echo json_encode((int)$fs->pid); ?>;
+                        var pineEncounter = <?php echo json_encode((int)$fs->encounter); ?>;
+
+                        function pineCodingMakeCheckbox(item, type) {
+                            var id = 'pine-code-' + type + '-' + item.code.replace(/[^a-zA-Z0-9]/g, '');
+                            var confidence = item.confidence || 'medium';
+                            var badgeColor = confidence === 'high' ? '#6aab7b' : confidence === 'medium' ? '#f2c078' : '#ccc';
+                            var div = document.createElement('div');
+                            div.className = 'form-check mb-2';
+                            div.innerHTML =
+                                '<input class="form-check-input pine-code-check" type="checkbox" ' +
+                                'id="' + id + '" data-code-type="' + type + '" data-code="' + item.code + '" ' +
+                                (confidence === 'high' ? 'checked' : '') + '>' +
+                                '<label class="form-check-label" for="' + id + '" style="font-size:0.9rem;">' +
+                                '<strong>' + item.code + '</strong> ' +
+                                '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + badgeColor + ';margin:0 4px;"></span>' +
+                                item.description +
+                                '</label>';
+                            return div;
+                        }
+
+                        function pineCodingRender(data) {
+                            var loading = document.getElementById('pine-coding-loading');
+                            var content = document.getElementById('pine-coding-content');
+                            var empty = document.getElementById('pine-coding-empty');
+                            loading.style.display = 'none';
+
+                            // Render SOAP
+                            var soap = data.soap_note || {};
+                            document.querySelector('#pine-soap-s span').textContent = soap.subjective || 'N/A';
+                            document.querySelector('#pine-soap-o span').textContent = soap.objective || 'N/A';
+                            document.querySelector('#pine-soap-a span').textContent = soap.assessment || 'N/A';
+                            document.querySelector('#pine-soap-p span').textContent = soap.plan || 'N/A';
+
+                            // Render ICD-10
+                            var icdList = document.getElementById('pine-coding-icd10-list');
+                            icdList.innerHTML = '';
+                            (data.suggested_icd10 || []).forEach(function(item) {
+                                icdList.appendChild(pineCodingMakeCheckbox(item, 'ICD10'));
+                            });
+                            if (!data.suggested_icd10 || !data.suggested_icd10.length) {
+                                icdList.innerHTML = '<span class="text-muted" style="font-size:0.85rem;">No suggestions</span>';
+                            }
+
+                            // Render CPT
+                            var cptList = document.getElementById('pine-coding-cpt-list');
+                            cptList.innerHTML = '';
+                            (data.suggested_cpt || []).forEach(function(item) {
+                                cptList.appendChild(pineCodingMakeCheckbox(item, 'CPT4'));
+                            });
+                            if (!data.suggested_cpt || !data.suggested_cpt.length) {
+                                cptList.innerHTML = '<span class="text-muted" style="font-size:0.85rem;">No suggestions</span>';
+                            }
+
+                            content.style.display = '';
+                        }
+
+                        window.pineCodingRefresh = function() {
+                            var loading = document.getElementById('pine-coding-loading');
+                            var content = document.getElementById('pine-coding-content');
+                            var empty = document.getElementById('pine-coding-empty');
+                            var errorDiv = document.getElementById('pine-coding-error');
+                            loading.style.display = '';
+                            content.style.display = 'none';
+                            empty.style.display = 'none';
+                            errorDiv.style.display = 'none';
+
+                            // Fetch SOAP note from the sidecar which will query the DB
+                            // We pass encounter info; sidecar needs SOAP content.
+                            // Since sidecar can't query OpenEMR DB directly, we fetch SOAP from the page's context.
+                            // The SOAP note is in the OpenEMR DB — fetch it via an AJAX call to OpenEMR itself.
+                            var soapUrl = top.webroot_url + '/library/ajax/fee_sheet_ai.php?pid=' + pinePid + '&encounter=' + pineEncounter;
+                            fetch(soapUrl, {credentials: 'same-origin'})
+                                .then(function(r) { return r.json(); })
+                                .then(function(soapData) {
+                                    if (!soapData.subjective && !soapData.objective && !soapData.assessment && !soapData.plan) {
+                                        loading.style.display = 'none';
+                                        empty.style.display = '';
+                                        return;
+                                    }
+                                    // Now send to AI sidecar via POST body (avoids URL length issues)
+                                    var truncate = function(s, max) { return (s || '').substring(0, max || 500); };
+                                    var body = JSON.stringify({
+                                        pid: pinePid,
+                                        encounter: pineEncounter,
+                                        subjective: truncate(soapData.subjective, 500),
+                                        objective: truncate(soapData.objective, 500),
+                                        assessment: truncate(soapData.assessment, 500),
+                                        plan: truncate(soapData.plan, 500),
+                                        conditions: truncate(soapData.conditions, 300)
+                                    });
+
+                                    return fetch('http://localhost:8888/api/coding', {
+                                        method: 'POST',
+                                        headers: {'Content-Type': 'application/json'},
+                                        body: body
+                                    }).then(function(r) {
+                                        if (!r.ok) throw new Error('AI service error: ' + r.status);
+                                        return r.json();
+                                    }).then(function(data) {
+                                        pineCodingRender(data);
+                                    });
+                                })
+                                .catch(function(err) {
+                                    loading.style.display = 'none';
+                                    errorDiv.style.display = '';
+                                    errorDiv.textContent = 'AI coding suggestions unavailable. (' + err.message + ')';
+                                });
+                        };
+
+                        window.pineCodingAddSelected = function() {
+                            var checks = document.querySelectorAll('.pine-code-check:checked');
+                            if (!checks.length) {
+                                alert('No codes selected.');
+                                return;
+                            }
+                            // Build newcodes value: code_type|code|description~code_type|code|description
+                            var codes = [];
+                            checks.forEach(function(cb) {
+                                var codeType = cb.getAttribute('data-code-type');
+                                var code = cb.getAttribute('data-code');
+                                codes.push(codeType + '|' + code + '|');
+                            });
+                            var f = document.forms['fee_sheet_form'];
+                            f.newcodes.value = codes.join('~');
+                            top.restoreSession();
+                            f.submit();
+                        };
+
+                        // Auto-load only if no codes on the fee sheet yet
+                        var hasBillingRows = document.querySelectorAll('input[name^="bill["]').length > 0;
+                        if (!hasBillingRows) {
+                            pineCodingRefresh();
+                        } else {
+                            // Codes already present — show collapsed state
+                            document.getElementById('pine-coding-loading').style.display = 'none';
+                            document.getElementById('pine-coding-content').style.display = 'none';
+                            document.getElementById('pine-coding-empty').style.display = 'none';
+                            var info = document.getElementById('pine-coding-error');
+                            info.style.display = '';
+                            info.className = 'text-muted text-center py-3';
+                            info.innerHTML = '<i class="fas fa-check-circle mr-1" style="color:#6aab7b;"></i> Codes already on fee sheet. <a href="#" onclick="pineCodingRefresh();return false;">Re-analyze</a> for more suggestions.';
+                        }
+                    })();
+                    </script>
+                    <!-- End Pacca PINE AI Coding -->
+
                     <fieldset>
                     <legend><?php echo xlt("Select Code")?></legend>
                     <div class='text-center'>

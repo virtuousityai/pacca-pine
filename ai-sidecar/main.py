@@ -23,7 +23,7 @@ app.add_middleware(
         "http://localhost:8300",
         "https://localhost:9300",
     ],
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -306,6 +306,170 @@ async def get_patient_summary(patient_uuid: str):
 
     summary = await call_llm(context)
     return SummaryResponse(**summary)
+
+
+class CodingSuggestion(BaseModel):
+    code: str
+    code_type: str  # "ICD10" or "CPT4"
+    description: str
+    confidence: str  # "high", "medium", "low"
+
+
+class CodingResponse(BaseModel):
+    soap_note: dict
+    suggested_icd10: list[CodingSuggestion]
+    suggested_cpt: list[CodingSuggestion]
+
+
+CODING_SYSTEM_PROMPT = """\
+Medical coding assistant. Given SOAP note, return JSON only:
+{"icd10":[{"code":"X00.0","description":"desc","confidence":"high"}],"cpt":[{"code":"99214","description":"desc","confidence":"high"}]}
+2-5 ICD-10 codes, 1-3 CPT E&M codes (99211-99215 established, 99202-99205 new). Valid codes only. No markdown.\
+"""
+
+
+@app.get("/api/coding/{encounter_id}", response_model=CodingResponse)
+async def get_coding_suggestions(encounter_id: int):
+    """Suggest ICD-10 and CPT codes for an encounter based on SOAP notes."""
+    import json as json_mod
+
+    # Fetch SOAP note and patient conditions from the database via FHIR isn't ideal here,
+    # so we'll query the OpenEMR database directly through a helper endpoint.
+    # For now, we use the FHIR API to get patient context and a direct DB query for SOAP.
+
+    # First, get the encounter's SOAP note and patient info via internal API
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        token = await get_fhir_token(client)
+
+        # Get encounter to find patient
+        enc_resp = await client.get(
+            f"{FHIR_BASE}/Encounter/{encounter_id}",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+
+    # If we can't get the encounter via FHIR by encounter_id, we need a different approach.
+    # The sidecar will accept SOAP note content and conditions as POST body instead.
+    raise HTTPException(501, "Use POST /api/coding endpoint instead")
+
+
+class CodingRequest(BaseModel):
+    pid: int
+    encounter: int
+    subjective: str = ""
+    objective: str = ""
+    assessment: str = ""
+    plan: str = ""
+    conditions: str = ""
+
+
+@app.post("/api/coding", response_model=CodingResponse)
+async def suggest_codes(req: CodingRequest):
+    """Suggest ICD-10 and CPT codes from SOAP note content."""
+    subjective = req.subjective
+    objective = req.objective
+    assessment = req.assessment
+    plan = req.plan
+    conditions = req.conditions
+
+    soap = {
+        "subjective": subjective,
+        "objective": objective,
+        "assessment": assessment,
+        "plan": plan,
+    }
+
+    soap_text = f"S: {subjective}\nO: {objective}\nA: {assessment}\nP: {plan}"
+    if not soap_text.strip("SOAP: \n"):
+        raise HTTPException(400, "No SOAP note content provided")
+
+    user_msg = f"SOAP Note:\n{soap_text}"
+    if conditions:
+        user_msg += f"\n\nActive conditions: {conditions}"
+
+    # Retry up to 3 times — free LLM tier is flaky
+    content = ""
+    for attempt in range(3):
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            resp = await client.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": OPENROUTER_MODEL,
+                    "messages": [
+                        {"role": "system", "content": CODING_SYSTEM_PROMPT},
+                        {"role": "user", "content": user_msg},
+                    ],
+                    "temperature": 0.2,
+                    "max_tokens": 2048,
+                },
+            )
+
+        if resp.status_code != 200:
+            if attempt < 2:
+                await asyncio.sleep(2)
+                continue
+            raise HTTPException(502, f"LLM request failed: {resp.status_code}")
+
+        content = resp.json().get("choices", [{}])[0].get("message", {}).get("content", "")
+        if content:
+            break
+        if attempt < 2:
+            await asyncio.sleep(2)
+
+    if not content:
+        raise HTTPException(502, "LLM returned empty content after retries")
+
+    text = content.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    text = text.strip()
+
+    import json as json_mod
+    try:
+        data = json_mod.loads(text)
+    except json_mod.JSONDecodeError:
+        # Try to recover
+        import re
+        data = {"icd10": [], "cpt": []}
+        for match in re.finditer(r'"code"\s*:\s*"([^"]+)".*?"description"\s*:\s*"([^"]+)"', text):
+            code, desc = match.groups()
+            if code[0].isdigit() and len(code) == 5:
+                data["cpt"].append({"code": code, "description": desc, "confidence": "medium"})
+            else:
+                data["icd10"].append({"code": code, "description": desc, "confidence": "medium"})
+
+    icd10_suggestions = [
+        CodingSuggestion(
+            code=item.get("code", ""),
+            code_type="ICD10",
+            description=item.get("description", ""),
+            confidence=item.get("confidence", "medium"),
+        )
+        for item in data.get("icd10", [])
+        if item.get("code")
+    ]
+
+    cpt_suggestions = [
+        CodingSuggestion(
+            code=item.get("code", ""),
+            code_type="CPT4",
+            description=item.get("description", ""),
+            confidence=item.get("confidence", "medium"),
+        )
+        for item in data.get("cpt", [])
+        if item.get("code")
+    ]
+
+    return CodingResponse(
+        soap_note=soap,
+        suggested_icd10=icd10_suggestions,
+        suggested_cpt=cpt_suggestions,
+    )
 
 
 @app.get("/health")
