@@ -504,8 +504,41 @@ input::placeholder {
   padding: 0.75rem 1.25rem;
 }
 
+/* Section header bars (e.g. "Who", "Contact" on Patient forms) —
+   override the dark bg-secondary with a soft lavender gradient */
+.card-header.bg-secondary {
+  background: linear-gradient(135deg, $gray-200, $gray-100) !important;
+  border-bottom: 1px solid $gray-300;
+  padding: 0 !important;
+
+  .btn.btn-link.text-light,
+  .btn-link.text-light {
+    color: $body-color !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none !important;
+    padding: 0.65rem 1.25rem;
+    display: block;
+    width: 100%;
+    text-align: left;
+    letter-spacing: 0.01em;
+
+    &:hover,
+    &:focus {
+      color: $primary !important;
+      text-decoration: none !important;
+    }
+  }
+}
+
 .card-body {
   padding: 1.25rem;
+}
+
+/* Prevent buttons inside input-group from stretching to match
+   tall siblings like multi-select elements (e.g. Previous Names "Add") */
+.input-group > .btn {
+  align-self: flex-start;
 }
 
 /* Fieldsets used as panels */
@@ -881,7 +914,7 @@ legend {
   border-bottom: 1px solid $gray-300;
   padding: 4px 8px 0 !important;
   margin-top: 0 !important;
-  gap: 2px;
+  gap: 6px;
 }
 
 #mainBox .tabSpan {
@@ -889,6 +922,7 @@ legend {
   border-bottom: none !important;
   border-radius: 8px 8px 0 0 !important;
   padding: 5px 14px !important;
+  margin: 0 2px !important;
   font-size: 12px;
   color: $gray-500;
   background: transparent;

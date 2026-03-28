@@ -25645,8 +25645,43 @@ input::placeholder {
   padding: 0.75rem 1.25rem;
 }
 
+/* Section header bars (e.g. "Who", "Contact" on Patient forms) —
+   override the dark bg-secondary with a soft lavender gradient */
+.card-header.bg-secondary {
+  background: -webkit-linear-gradient(315deg, #f0eaf8, #f8f5fc) !important;
+  background: linear-gradient(135deg, #f0eaf8, #f8f5fc) !important;
+  border-bottom: 1px solid #e6ddf2;
+  padding: 0 !important;
+}
+.card-header.bg-secondary .btn.btn-link.text-light,
+.card-header.bg-secondary .btn-link.text-light {
+  color: #2d2440 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  padding: 0.65rem 1.25rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  letter-spacing: 0.01em;
+}
+.card-header.bg-secondary .btn.btn-link.text-light:hover, .card-header.bg-secondary .btn.btn-link.text-light:focus,
+.card-header.bg-secondary .btn-link.text-light:hover,
+.card-header.bg-secondary .btn-link.text-light:focus {
+  color: #8b6cc1 !important;
+  text-decoration: none !important;
+}
+
 .card-body {
   padding: 1.25rem;
+}
+
+/* Prevent buttons inside input-group from stretching to match
+   tall siblings like multi-select elements (e.g. Previous Names "Add") */
+.input-group > .btn {
+  -webkit-align-self: flex-start;
+      -ms-flex-item-align: start;
+          align-self: flex-start;
 }
 
 /* Fieldsets used as panels */
@@ -26010,7 +26045,7 @@ legend {
   border-bottom: 1px solid #e6ddf2;
   padding: 4px 8px 0 !important;
   margin-top: 0 !important;
-  gap: 2px;
+  gap: 6px;
 }
 
 #mainBox .tabSpan {
@@ -26018,6 +26053,7 @@ legend {
   border-bottom: none !important;
   border-radius: 8px 8px 0 0 !important;
   padding: 5px 14px !important;
+  margin: 0 2px !important;
   font-size: 12px;
   color: #7e7394;
   background: transparent;
