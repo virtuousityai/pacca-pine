@@ -65,8 +65,8 @@ if (!empty($grparr['']['grp_size'])) {
 $arrOeUiSettings = [
     'heading_title' => xl('History and Lifestyle'),
     'include_patient_name' => true,
-    'expandable' => false,
-    'expandable_files' => [],//all file names need suffix _xpd
+    'expandable' => true,
+    'expandable_files' => ['history_xpd'],//all file names need suffix _xpd
     'action' => "",//conceal, reveal, search, reset, link or back
     'action_title' => "",
     'action_href' => "",//only for actions - reset, link or back

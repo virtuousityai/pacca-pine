@@ -82,8 +82,8 @@ function show_date_fun(){
 $arrOeUiSettings = [
     'heading_title' => xl('Patient Reports'),
     'include_patient_name' => true,
-    'expandable' => false,
-    'expandable_files' => [],//all file names need suffix _xpd
+    'expandable' => true,
+    'expandable_files' => ['patient_report_xpd'],//all file names need suffix _xpd
     'action' => "",//conceal, reveal, search, reset, link or back
     'action_title' => "",
     'action_href' => "",//only for actions - reset, link or back

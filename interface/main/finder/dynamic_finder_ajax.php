@@ -149,6 +149,10 @@ if (isset($_GET['sSearch']) && $_GET['sSearch'] !== "") {
             } else {// like search
                 array_push($srch_bind, ($sSearch . "%"), ($sSearch . "%"), ($sSearch . "%"));
             }
+        } elseif ($colname == 'ss' || str_starts_with($colname, 'phone_')) {
+            // SSN and phone numbers: always use contains match for partial search
+            $where .= escape_sql_column_name($colname, ['patient_data']) . " LIKE ? ";
+            array_push($srch_bind, ('%' . $sSearch . '%'));
         } elseif ($searchMethodInPatientList) { // exact search
             $where .= escape_sql_column_name($colname, ['patient_data']) . " LIKE ? ";
             array_push($srch_bind, $sSearch);
@@ -188,6 +192,10 @@ for ($i = 0; $i < count($aColumns); ++$i) {
         } elseif ($colname == 'DOB') {
             $where .= escape_sql_column_name($colname, ['patient_data']) . " LIKE ? ";
             array_push($srch_bind, dateSearch($sSearch));
+        } elseif ($colname == 'ss' || str_starts_with($colname, 'phone_')) {
+            // SSN and phone numbers: always use contains match for partial search
+            $where .= escape_sql_column_name($colname, ['patient_data']) . " LIKE ? ";
+            array_push($srch_bind, ('%' . $sSearch . '%'));
         } elseif ($searchMethodInPatientList) { // exact search
             $where .= escape_sql_column_name($colname, ['patient_data']) . " LIKE ? ";
             array_push($srch_bind, $sSearch);

@@ -1770,7 +1770,8 @@ table.dataTable thead .sorting_desc {
 }
 
 /* Patient dashboard sub-nav (Dashboard, History, Assessments…) */
-.patient-demographic .navbar.navbar-light {
+/* Patient nav bar — targets all patient pages, not just the dashboard */
+#container_div .navbar.navbar-light {
   background: #ffffff !important;
   border-bottom: 2px solid $gray-300;
   border-radius: var(--radius, 16px) var(--radius, 16px) 0 0;

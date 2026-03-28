@@ -31,6 +31,8 @@ use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Events\PatientDocuments\PatientDocumentTreeViewFilterEvent;
 use OpenEMR\Events\PatientDocuments\PatientRetrieveOffsiteDocument;
 use OpenEMR\Services\DocumentTemplates\DocumentTemplateService;
+use OpenEMR\Menu\PatientMenuRole;
+use OpenEMR\OeUI\OemrUI;
 use OpenEMR\Services\FacilityService;
 use OpenEMR\Services\PatientService;
 
@@ -1185,6 +1187,31 @@ class C_Document extends Controller
         $this->assign('demo_pid', $session->get('pid'));
         $this->assign('is_new_referer', $is_new_referer);
         $this->assign('new_title', xlt("New Documents"));
+
+        // Render page heading and patient nav bar for the template
+        if ($session->get('pid') > 0) {
+            $oemr_ui = new OemrUI([
+                'heading_title' => xl('Documents'),
+                'include_patient_name' => true,
+                'expandable' => true,
+                'expandable_files' => ['documents_xpd'],
+                'action' => '',
+                'action_title' => '',
+                'action_href' => '',
+                'show_help_icon' => false,
+                'help_file_name' => '',
+            ]);
+            $this->assign('page_heading_html', $oemr_ui->pageHeading());
+
+            ob_start();
+            $menuPatient = new PatientMenuRole();
+            $menuPatient->displayHorizNavBarMenu();
+            $this->assign('patient_nav_html', ob_get_clean());
+
+            ob_start();
+            $oemr_ui->oeBelowContainerDiv();
+            $this->assign('below_container_js', ob_get_clean());
+        }
 
         return $this->fetch(OEGlobalsBag::getInstance()->get('template_dir') . "documents/" . $this->template_mod . "_list.html");
     }

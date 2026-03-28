@@ -66,7 +66,17 @@ border-radius: 4px 0 0 4px!important;
 {else}
   <body>
 {/if}
-<div class="container-fluid mt-3">
+<div id="container_div" class="container-fluid mt-3">
+    {if !empty($page_heading_html)}
+        {$page_heading_html}
+    {/if}
+    {if !empty($patient_nav_html)}
+    <div class="row">
+        <div class="col-sm-12">
+            {$patient_nav_html}
+        </div>
+    </div>
+    {/if}
     <div class="row">
         <div class="col-sm-2">
             <div class="title">
@@ -229,5 +239,15 @@ $(function () {
 });
 
 </script>
+{if !empty($patient_nav_html)}
+<script>
+$(function () {
+    $('#documents').addClass("active");
+});
+</script>
+{/if}
+{if !empty($below_container_js)}
+    {$below_container_js}
+{/if}
 </body>
 </html>

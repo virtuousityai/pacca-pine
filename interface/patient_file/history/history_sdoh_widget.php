@@ -25,6 +25,7 @@ use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Menu\PatientMenuRole;
+use OpenEMR\OeUI\OemrUI;
 use OpenEMR\Services\SDOH\HistorySdohService;
 
 $logger = ServiceContainer::getLogger();
@@ -162,6 +163,20 @@ $disabBadge = $disabId ? 'badge-info' : 'badge-secondary';
 // Score: prefer stored instrument_score, else computed positives
 $totalScore = (string) (($info['instrument_score'] ?? '') !== '' ? (int)$info['instrument_score'] : $positiveCount);
 
+
+$include_root = dirname(__FILE__, 3);
+$arrOeUiSettings = [
+    'heading_title' => xl('SDOH Assessment'),
+    'include_patient_name' => true,
+    'expandable' => true,
+    'expandable_files' => ['history_sdoh_widget_xpd'],
+    'action' => "",
+    'action_title' => "",
+    'action_href' => "",
+    'show_help_icon' => false,
+    'help_file_name' => ""
+];
+$oemr_ui = new OemrUI($arrOeUiSettings);
 ?>
 <!doctype html>
 <html>
@@ -170,13 +185,17 @@ $totalScore = (string) (($info['instrument_score'] ?? '') !== '' ? (int)$info['i
     <title><?php echo xlt("SDOH Assessment"); ?></title>
 </head>
 <body class="body_top">
-    <div id="container_div" class="container mt-3">
-        <h4><?php echo xlt("Social Determinants of Health (SDOH)"); ?></h4>
+    <div id="container_div" class="<?php echo $oemr_ui->oeContainer(); ?> mt-3">
+        <div class="row">
+            <div class="col-sm-12">
+                <?php require_once("$include_root/patient_file/summary/dashboard_header.php"); ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <?php
                 // highlight nav tab
-                $list_id = "sdoh";
+                $list_id = "sdoc1";
                 $menuPatient = new PatientMenuRole();
                 $menuPatient->displayHorizNavBarMenu();
                 ?>
@@ -296,5 +315,12 @@ $totalScore = (string) (($info['instrument_score'] ?? '') !== '' ? (int)$info['i
             </div> <!-- /card -->
         <?php endif; ?>
     </div>
+<?php $oemr_ui->oeBelowContainerDiv(); ?>
+<script>
+    var listId = '#' + <?php echo js_escape($list_id); ?>;
+    $(function () {
+        $(listId).addClass("active");
+    });
+</script>
 </body>
 </html>
