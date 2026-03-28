@@ -203,9 +203,62 @@ function clinical_summary_widget($patient_id, $mode, $dateTarget = '', $organize
                 $message .= $cat_display . ': ' . $item_display . "\n";
             }
 
-            $message .= "\n" . xl('See the Clinical Reminders widget for more details');
-            echo '<img src="../../pic/empty.gif" onload="alert(' . attr_js($message) . ');this.parentNode.removeChild(this);" />';
-            // end claude code
+            $footer_text = xl('See the Clinical Reminders widget for more details');
+
+            // Build styled overlay (self-contained, no Bootstrap JS dependency)
+            // This fragment loads inside a nested iframe where Bootstrap modal() is unavailable
+            echo '<script>';
+            echo '(function() {';
+            echo '  var targetDoc = window.top.document;';
+            echo '  if (targetDoc.getElementById("cdr-reminder-overlay")) return;';
+            // Overlay backdrop
+            echo '  var overlay = targetDoc.createElement("div");';
+            echo '  overlay.id = "cdr-reminder-overlay";';
+            echo '  overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(45,36,64,0.4);z-index:99999;display:flex;align-items:center;justify-content:center;animation:cdrFadeIn 0.2s ease;";';
+            // Modal box
+            echo '  var box = targetDoc.createElement("div");';
+            echo '  box.style.cssText = "background:#fff;border-radius:16px;border:1px solid #e6ddf2;box-shadow:0 8px 32px rgba(139,108,193,0.14);max-width:440px;width:90%;overflow:hidden;animation:cdrSlideIn 0.25s ease;";';
+            // Header
+            echo '  var hdr = targetDoc.createElement("div");';
+            echo '  hdr.style.cssText = "background:linear-gradient(135deg,#f0eaf8,#f8f5fc);border-bottom:1px solid #e6ddf2;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;";';
+            echo '  hdr.innerHTML = \'<h5 style="margin:0;font-weight:600;color:#2d2440;font-size:1rem;font-family:Inter,Lato,Helvetica,sans-serif;">' . addslashes(text(xl('New Due Clinical Reminders'))) . '</h5><button id=\"cdr-close-x\" style=\"background:none;border:none;font-size:1.4rem;color:#7e7394;cursor:pointer;padding:0 4px;\">&times;</button>\';';
+            echo '  box.appendChild(hdr);';
+            // Body
+            echo '  var body = targetDoc.createElement("div");';
+            echo '  body.style.cssText = "padding:1.25rem;font-family:Inter,Lato,Helvetica,sans-serif;";';
+            echo '  body.innerHTML = \'<ul style="list-style:none;padding:0;margin:0;">';
+            foreach ($new_targets as $key => $value) {
+                $category_item = explode(":", (string) $key);
+                $category = $category_item[0] ?? '';
+                $item = $category_item[1] ?? '';
+                $cat_display = generate_display_field(['data_type' => '1','list_id' => 'rule_action_category'], $category);
+                $item_display = generate_display_field(['data_type' => '1','list_id' => 'rule_action'], $item);
+                echo '<li style="padding:0.5rem 0;border-bottom:1px solid #e6ddf2;color:#2d2440;">';
+                echo '<strong style="color:#8b6cc1;">' . addslashes(text($cat_display)) . ':</strong> ' . addslashes(text($item_display));
+                echo '</li>';
+            }
+            echo '</ul>';
+            echo '<p style="margin:1rem 0 0;font-size:0.85rem;color:#7e7394;">' . addslashes(text($footer_text)) . '</p>\';';
+            echo '  box.appendChild(body);';
+            // Footer
+            echo '  var ftr = targetDoc.createElement("div");';
+            echo '  ftr.style.cssText = "border-top:1px solid #e6ddf2;padding:0.75rem 1.25rem;text-align:right;";';
+            echo '  ftr.innerHTML = \'<button id=\"cdr-ok-btn\" style=\"background:linear-gradient(135deg,#8b6cc1,#7b5db5);color:#fff;border:none;border-radius:10px;padding:0.4rem 1.5rem;font-weight:600;font-size:0.875rem;cursor:pointer;font-family:Inter,Lato,Helvetica,sans-serif;\">OK</button>\';';
+            echo '  box.appendChild(ftr);';
+            echo '  overlay.appendChild(box);';
+            // Animations
+            echo '  var style = targetDoc.createElement("style");';
+            echo '  style.textContent = "@keyframes cdrFadeIn{from{opacity:0}to{opacity:1}} @keyframes cdrSlideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}";';
+            echo '  targetDoc.head.appendChild(style);';
+            echo '  targetDoc.body.appendChild(overlay);';
+            // Close handlers
+            echo '  function closeModal(){ overlay.style.opacity="0"; setTimeout(function(){ overlay.remove(); style.remove(); }, 200); }';
+            echo '  targetDoc.getElementById("cdr-ok-btn").addEventListener("click", closeModal);';
+            echo '  targetDoc.getElementById("cdr-close-x").addEventListener("click", closeModal);';
+            echo '  overlay.addEventListener("click", function(e){ if(e.target===overlay) closeModal(); });';
+            echo '})();';
+            echo '</script>';
+            // end styled overlay
         }
     }
 }

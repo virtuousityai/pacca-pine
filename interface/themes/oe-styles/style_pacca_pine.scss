@@ -1769,26 +1769,106 @@ table.dataTable thead .sorting_desc {
   }
 }
 
+/* Patient dashboard sub-nav (Dashboard, History, Assessments…) */
+.patient-demographic .navbar.navbar-light {
+  background: #ffffff !important;
+  border-bottom: 2px solid $gray-300;
+  border-radius: var(--radius, 16px) var(--radius, 16px) 0 0;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0;
+
+  .nav-item {
+    margin: 0 2px;
+
+    .nav-link {
+      color: $gray-600 !important;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: $primary !important;
+        background: $gray-100;
+      }
+    }
+
+    &.active .nav-link {
+      color: $primary !important;
+      font-weight: 600;
+      background: rgba($primary, 0.08);
+    }
+  }
+
+  .dropdown {
+    margin: 0 2px;
+
+    .dropdown-toggle {
+      color: $gray-600 !important;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: $primary !important;
+        background: $gray-100;
+      }
+    }
+
+    .dropdown-menu {
+      border: 1px solid $gray-300;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(45, 36, 64, 0.1);
+      padding: 0.35rem 0;
+      margin-top: 4px;
+
+      .nav-link,
+      .dropdown-item {
+        color: $gray-600 !important;
+        font-weight: 500;
+        font-size: 0.875rem;
+        padding: 0.45rem 1rem;
+        transition: all 0.15s ease;
+
+        &:hover {
+          color: $primary !important;
+          background: $gray-100;
+        }
+      }
+    }
+  }
+}
+
 /* Tab strip legacy */
 ul.tabNav {
+  background: $gray-100 !important;
   border-bottom: 2px solid $gray-300;
+  padding: 4px 4px 0 !important;
+
+  li {
+    padding: 0 2px !important;
+
+    &.current a {
+      background: #ffffff !important;
+      color: $primary !important;
+      font-weight: 600;
+      border-bottom: 2px solid $primary;
+    }
+  }
 
   a {
-    color: $gray-600;
+    color: $gray-600 !important;
     font-weight: 500;
-    padding: 0.5rem 0.85rem;
+    padding: 0.5rem 0.85rem !important;
     border-radius: 6px 6px 0 0;
     transition: all 0.15s;
 
     &:hover {
-      color: $primary;
-      background: $gray-100;
-    }
-
-    &.current {
-      color: $primary;
-      font-weight: 600;
-      border-bottom: 2px solid $primary;
+      color: $primary !important;
+      background: $gray-200 !important;
     }
   }
 }
