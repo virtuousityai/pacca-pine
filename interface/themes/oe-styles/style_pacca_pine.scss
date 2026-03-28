@@ -118,49 +118,291 @@ body {
   color: $body-color;
 }
 
-/* Buttons */
-.btn-primary,
-.btn-success,
-.btn-danger,
-.btn-info,
-.btn-warning {
-  color: #ffffff;
-}
+/* ── Buttons ─────────────────────────────────────────────────────── */
 
-.btn-primary {
-  background-color: #8b6cc1;
-  border-color: #8b6cc1;
+/* Base button refinements */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
 
-  &:hover {
-    background-color: #6b4fa0;
-    border-color: #6b4fa0;
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.2);
   }
 }
 
-.btn-outline-primary,
-.btn-outline-success {
+.btn-sm {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.btn-lg {
+  padding: 0.7rem 1.75rem;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #8b6cc1, #7b5db5);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(139, 108, 193, 0.25);
+
+  &:hover,
+  &:active {
+    background: linear-gradient(135deg, #7b5db5, #6b4fa0);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(139, 108, 193, 0.3);
+    color: #ffffff;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.3);
+  }
+
+  &:disabled,
+  &.disabled {
+    background: $gray-400;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #6aab7b, #5a9a6b);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(106, 171, 123, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #5a9a6b, #4a8a5b);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(106, 171, 123, 0.3);
+    color: #ffffff;
+  }
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #d4615e, #c44f4c);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(212, 97, 94, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #c44f4c, #b43f3c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(212, 97, 94, 0.3);
+    color: #ffffff;
+  }
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #7eb8da, #6ea8ca);
+  color: #ffffff;
+
+  &:hover {
+    background: linear-gradient(135deg, #6ea8ca, #5e98ba);
+    color: #ffffff;
+  }
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f2c078, #e8b060);
+  color: $body-color;
+
+  &:hover {
+    background: linear-gradient(135deg, #e8b060, #dea050);
+    color: $body-color;
+  }
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid $gray-300;
+  color: $body-color;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background: $gray-100;
+    border-color: $gray-400;
+    color: $body-color;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.btn-outline-primary {
   color: $primary;
+  border: 1px solid $primary;
+  background: transparent;
+  border-radius: 10px;
+
+  &:hover {
+    background: $primary;
+    color: #ffffff;
+  }
 }
 
-.btn-secondary,
-.btn-secondary:hover {
-  background-color: $gray-200;
-  border-color: $gray-500;
-  color: $black;
+.btn-outline-success {
+  color: $green;
+  border: 1px solid $green;
+
+  &:hover {
+    background: $green;
+    color: #ffffff;
+  }
 }
 
-/* Forms and inputs */
+.btn-outline-secondary {
+  color: $gray-600;
+  border: 1px solid $gray-300;
+
+  &:hover {
+    background: $gray-200;
+    color: $body-color;
+  }
+}
+
+.btn-link {
+  color: $primary;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: $indigo;
+    text-decoration: underline;
+  }
+}
+
+/* ── Legacy & Module Buttons ─────────────────────────────────────── */
+
+/* Module manager Enable/Install/Disable buttons */
+.activate,
+input[type="button"].activate {
+  background: linear-gradient(135deg, #6aab7b, #5a9a6b) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 5px 14px !important;
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto !important;
+  min-width: 64px;
+  box-shadow: 0 2px 6px rgba(106, 171, 123, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #5a9a6b, #4a8a5b) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(106, 171, 123, 0.3);
+  }
+}
+
+.deactivate,
+input[type="button"].deactivate {
+  background: linear-gradient(135deg, #d4615e, #c44f4c) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 5px 14px !important;
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto !important;
+  min-width: 64px;
+  box-shadow: 0 2px 6px rgba(212, 97, 94, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #c44f4c, #b43f3c) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 97, 94, 0.3);
+  }
+}
+
+/* Care coordination & module search buttons */
+.search_button,
+.search_button2 {
+  background: linear-gradient(135deg, #8b6cc1, #7b5db5) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 4px 12px !important;
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(139, 108, 193, 0.25);
+
+  &:hover {
+    background: linear-gradient(135deg, #7b5db5, #6b4fa0) !important;
+    box-shadow: 0 4px 12px rgba(139, 108, 193, 0.3);
+  }
+}
+
+/* Generic submit/button inputs not using .btn class */
+input[type="submit"],
+input[type="button"] {
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid $gray-300;
+}
+
+/* Outline-style help/info buttons in module manager */
+.btn-outline-info {
+  color: $primary;
+  border-color: $gray-300;
+  border-radius: 8px;
+
+  &:hover {
+    background: $primary;
+    border-color: $primary;
+    color: #ffffff;
+  }
+}
+
+/* ── Forms & Inputs ─────────────────────────────────────────────── */
+
 .form-control,
+select.form-control,
+textarea.form-control,
+.custom-select {
+  background-color: #ffffff;
+  color: $body-color;
+  border: 1px solid $gray-300;
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  height: auto;
+  min-height: 38px;
+}
+
 select,
 textarea,
 input[type="text"],
 input[type="number"],
 input[type="email"],
 input[type="password"],
-.input-group-text {
+input[type="date"],
+input[type="tel"],
+input[type="search"],
+input[type="url"] {
   background-color: #ffffff;
   color: $body-color;
-  border-color: $gray-300;
+  border: 1px solid $gray-300;
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-control:focus,
@@ -169,11 +411,223 @@ textarea:focus,
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="email"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+.custom-select:focus {
   background-color: #ffffff;
   color: $body-color;
-  border-color: #8b6cc1;
-  box-shadow: 0 0 0 0.15rem rgba(139, 108, 193, 0.25);
+  border-color: $primary;
+  box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.15);
+  outline: none;
+}
+
+.form-control-sm {
+  border-radius: 8px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  min-height: 32px;
+}
+
+.form-control-lg {
+  border-radius: 12px;
+  padding: 0.65rem 1.1rem;
+  font-size: 1rem;
+}
+
+.input-group-text {
+  background-color: $gray-100;
+  color: $gray-600;
+  border: 1px solid $gray-300;
+  border-radius: 10px;
+  font-size: 0.875rem;
+}
+
+.input-group > .form-control:first-child,
+.input-group > .custom-select:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group > .form-control:last-child,
+.input-group > .custom-select:last-child,
+.input-group > .input-group-append > .btn,
+.input-group > .input-group-append > .input-group-text {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Labels */
+label,
+.form-label,
+.col-form-label {
+  font-weight: 500;
+  color: $gray-600;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Disabled fields */
+.form-control:disabled,
+.form-control[readonly],
+select:disabled,
+input:disabled {
+  background-color: $gray-100;
+  color: $gray-500;
+  border-color: $gray-300;
+  opacity: 0.7;
+}
+
+/* Placeholder */
+.form-control::placeholder,
+input::placeholder {
+  color: $gray-400;
+}
+
+/* ── Cards & Panels ─────────────────────────────────────────────── */
+
+.card {
+  background: #ffffff;
+  border: 1px solid $gray-300;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(139, 108, 193, 0.07);
+}
+
+.card-header {
+  background: $gray-100;
+  border-bottom: 1px solid $gray-300;
+  border-radius: 16px 16px 0 0 !important;
+  font-weight: 600;
+  color: $body-color;
+  padding: 0.75rem 1.25rem;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Fieldsets used as panels */
+fieldset,
+.fieldset {
+  background: $gray-100;
+  border: 1px solid $gray-300;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+legend {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $body-color;
+  padding: 0 0.5rem;
+}
+
+/* ── Alerts ──────────────────────────────────────────────────────── */
+
+.alert {
+  border-radius: 10px;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.alert-info {
+  background-color: rgba(126, 184, 218, 0.15);
+  color: #3a6a8a;
+}
+
+.alert-success {
+  background-color: rgba(106, 171, 123, 0.15);
+  color: #3a6a4a;
+}
+
+.alert-warning {
+  background-color: rgba(242, 192, 120, 0.15);
+  color: #7a5a2a;
+}
+
+.alert-danger {
+  background-color: rgba(212, 97, 94, 0.15);
+  color: #8a2a28;
+}
+
+/* ── Badges ──────────────────────────────────────────────────────── */
+
+.badge {
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.3em 0.6em;
+}
+
+.badge-primary,
+.badge-info {
+  background-color: $primary;
+}
+
+/* ── Modals ──────────────────────────────────────────────────────── */
+
+.modal-content {
+  border-radius: 16px;
+  border: 1px solid $gray-300;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.modal-header {
+  border-bottom: 1px solid $gray-300;
+  padding: 1rem 1.25rem;
+}
+
+.modal-footer {
+  border-top: 1px solid $gray-300;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ── Custom checkboxes & radios ──────────────────────────────────── */
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: $primary;
+  border-color: $primary;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 3px rgba(139, 108, 193, 0.15);
+}
+
+/* ── Pagination ──────────────────────────────────────────────────── */
+
+.page-link {
+  color: $primary;
+  border-color: $gray-300;
+  border-radius: 8px;
+  margin: 0 2px;
+
+  &:hover {
+    background: $gray-200;
+    color: $indigo;
+  }
+}
+
+.page-item.active .page-link {
+  background-color: $primary;
+  border-color: $primary;
+}
+
+/* ── Tooltips & Popovers ─────────────────────────────────────────── */
+
+.tooltip-inner {
+  background: $gray-800;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+}
+
+.popover {
+  border-radius: 12px;
+  border-color: $gray-300;
+  box-shadow: 0 8px 32px rgba(139, 108, 193, 0.14);
 }
 
 /* Tables */
