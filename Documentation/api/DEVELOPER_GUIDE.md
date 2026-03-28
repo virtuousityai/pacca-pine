@@ -1,6 +1,6 @@
 # Developer Guide
 
-Complete guide for developers working with or extending the OpenEMR API.
+Complete guide for developers working with or extending the Pacca PINE API.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -50,10 +50,10 @@ Complete guide for developers working with or extending the OpenEMR API.
 ## Overview
 
 This guide is for developers who are:
-- **Integrating** with OpenEMR APIs
-- **Extending** OpenEMR API functionality
-- **Contributing** to OpenEMR API development
-- **Operating** OpenEMR in production environments
+- **Integrating** with Pacca PINE APIs
+- **Extending** Pacca PINE API functionality
+- **Contributing** to Pacca PINE API development
+- **Operating** Pacca PINE in production environments
 
 ### Prerequisites
 
@@ -66,7 +66,7 @@ This guide is for developers who are:
 - Git version control
 
 **Development Environment:**
-- OpenEMR 7.0+ installation
+- Pacca PINE 7.0+ installation
 - PHP development environment
 - MySQL/MariaDB database
 - Composer (PHP dependency manager)
@@ -74,7 +74,7 @@ This guide is for developers who are:
 
 ## Internal API Usage
 
-OpenEMR supports making API calls from within authenticated sessions, useful for:
+Pacca PINE supports making API calls from within authenticated sessions, useful for:
 - Custom modules
 - Internal workflows
 - Administrative tools
@@ -161,7 +161,7 @@ $userData = sqlQuery("SELECT * FROM users WHERE id = ?", [$userId]);
 
 ## Multisite Support
 
-OpenEMR supports multiple independent sites within a single installation.
+Pacca PINE supports multiple independent sites within a single installation.
 
 ### Multisite Architecture
 
@@ -1206,7 +1206,7 @@ abstract class BaseService
 **Location:** `src/Services/FHIR/`
 
 **Purpose:**
-- Map OpenEMR data to FHIR
+- Map Pacca PINE data to FHIR
 - FHIR validation
 - US Core compliance
 
@@ -1642,7 +1642,7 @@ Brief description of changes
 - **Documentation:** https://www.open-emr.org/wiki/
 
 **Support:**
-- **Community Forum:** https://community.open-emr.org/
+- **Pacca PINE Community:** https://community.open-emr.org/
 - **Chat:** https://chat.open-emr.org/
 - **Issues:** https://github.com/openemr/openemr/issues
 
@@ -1652,9 +1652,9 @@ For questions about extending the API, post in the community forum or join the d
 ## Documentation Attribution
 
 ### Authorship
-This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
-- Original documentation by OpenEMR developers and contributors
-- Technical specifications from the OpenEMR codebase
+This documentation represents the collective knowledge and contributions of the Pacca PINE open-source community. The content is based on:
+- Original documentation by Pacca PINE developers and contributors
+- Technical specifications from the Pacca PINE codebase
 - Community feedback and real-world implementation experience
 
 ### AI Assistance
@@ -1667,9 +1667,9 @@ The organization, structure, and presentation of this documentation was enhanced
 All technical accuracy is maintained from the original community-authored documentation.
 
 ### Contributing
-OpenEMR is an open-source project. To contribute to this documentation:
+Pacca PINE is an open-source project. To contribute to this documentation:
 - **Report Issues:** [GitHub Issues](https://github.com/openemr/openemr/issues)
-- **Discuss:** [Community Forum](https://community.open-emr.org/)
+- **Discuss:** [Pacca PINE Community](https://community.open-emr.org/)
 - **Submit Changes:** [Pull Requests](https://github.com/openemr/openemr/pulls)
 
 **Last Updated:** November 2025

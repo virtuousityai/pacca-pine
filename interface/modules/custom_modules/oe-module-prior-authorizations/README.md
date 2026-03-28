@@ -1,4 +1,4 @@
-# Authorizations Module of OpenEMR
+# Authorizations Module of Pacca PINE
 This module is to help a practice manage the authorizations needed to be paid for a patients visit.
 Most practices that need to get authorization need a way to manage those authorizations. This module provides
 the tools necessary to see what authorizations the patient have in the system. The module allows this

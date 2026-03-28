@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The **Dashboard Context Manager** is a new OpenEMR module that allows healthcare staff to customize their patient dashboard view based on their current care context. Instead of seeing all 25+ dashboard widgets at once, users can switch between focused views optimized for different clinical scenarios.
+The **Dashboard Context Manager** is a new Pacca PINE module that allows healthcare staff to customize their patient dashboard view based on their current care context. Instead of seeing all 25+ dashboard widgets at once, users can switch between focused views optimized for different clinical scenarios.
 
 Whether you're seeing a patient in the Emergency Department, conducting a telehealth visit, or providing routine primary care, the Dashboard Context Manager ensures you see only the most relevant information for your current workflow.
 
@@ -247,7 +247,7 @@ Need a context for a specific workflow? Create your own!
 
 **Issue**: Expected widget doesn't appear in the settings dialog
 
-**Explanation**: Only widgets present on the dashboard can be controlled. If a widget is globally disabled in OpenEMR settings, it won't appear in the context manager.
+**Explanation**: Only widgets present on the dashboard can be controlled. If a widget is globally disabled in Pacca PINE settings, it won't appear in the context manager.
 
 ---
 
@@ -298,7 +298,7 @@ A: Critical alerts and clinical decision support reminders should be configured 
 ## Version Information
 
 - **Module Version**: 1.0.0
-- **Minimum OpenEMR Version**: 7.0.0
+- **Minimum Pacca PINE Version**: 7.0.0
 - **PHP Requirement**: 8.1+
 
 ---
@@ -307,13 +307,13 @@ A: Critical alerts and clinical decision support reminders should be configured 
 
 For questions, issues, or feature requests:
 
-- **OpenEMR Forums**: [community.open-emr.org](https://community.open-emr.org)
+- **Pacca PINE Forums**: [community.open-emr.org](https://community.open-emr.org)
 - **GitHub Issues**: [github.com/openemr/openemr](https://github.com/openemr/openemr)
 
 ---
 
 ## Credits
 
-Developed by Jerry Padgett (sjpadgett@gmail.com) for the OpenEMR community.
+Developed by Jerry Padgett (sjpadgett@gmail.com) for the Pacca PINE community.
 
 Licensed under GNU General Public License v3.

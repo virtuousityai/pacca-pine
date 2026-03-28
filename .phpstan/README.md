@@ -1,6 +1,6 @@
-# PHPStan Custom Rules for OpenEMR
+# PHPStan Custom Rules for Pacca PINE
 
-This directory contains custom PHPStan rules to enforce modern coding patterns in OpenEMR.
+This directory contains custom PHPStan rules to enforce modern coding patterns in Pacca PINE.
 
 ## Rules
 
@@ -266,7 +266,7 @@ try {
 }
 ```
 
-**Or using OpenEMR's oeHttp wrapper:**
+**Or using Pacca PINE's oeHttp wrapper:**
 ```php
 use OpenEMR\Common\Http\oeHttp;
 

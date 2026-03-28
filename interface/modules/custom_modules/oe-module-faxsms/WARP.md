@@ -1,10 +1,10 @@
-# WARP.md - OpenEMR FaxSMS Module
+# WARP.md - Pacca PINE FaxSMS Module
 
-This file provides guidance to WARP (warp.dev) when working with the OpenEMR FaxSMS Module.
+This file provides guidance to WARP (warp.dev) when working with the Pacca PINE FaxSMS Module.
 
 ## Module Overview
 
-**oe-module-faxsms** is a custom OpenEMR module that provides integrated fax and SMS messaging capabilities. The module supports multiple vendor services:
+**oe-module-faxsms** is a custom Pacca PINE module that provides integrated fax and SMS messaging capabilities. The module supports multiple vendor services:
 
 - **SMS Providers**: Twilio SMS, RingCentral SMS
 - **Fax Providers**: etherFAX, RingCentral Fax, SignalWire Fax
@@ -93,7 +93,7 @@ abstract function fetchReminderCount(): string|bool;
 ```
 
 **Key Features**:
-- Encrypts/decrypts credentials using OpenEMR's CryptoGen
+- Encrypts/decrypts credentials using Pacca PINE's CryptoGen
 - Routes actions based on URL parameters (`_ACTION_COMMAND`, `type`)
 - Manages service type in session (`$_SESSION['oefax_current_module_type']`)
 
@@ -111,7 +111,7 @@ Each vendor has its own controller class extending `AppDispatch`:
 
 **Bootstrap File**: `openemr.bootstrap.php`
 
-The module integrates with OpenEMR's Symfony event dispatcher to:
+The module integrates with Pacca PINE's Symfony event dispatcher to:
 
 1. **Add Menu Items** - Dynamically adds SMS/Fax menu items based on enabled services
 2. **Patient Report Buttons** - Injects "Send Fax" button in patient reports
@@ -176,7 +176,7 @@ Fax/SMS message queue and history.
 CREATE TABLE oe_faxsms_queue (
   id INT(11) AUTO_INCREMENT PRIMARY KEY,
   account TINYTEXT,                       -- Vendor account identifier
-  uid INT(11),                            -- OpenEMR user ID
+  uid INT(11),                            -- Pacca PINE user ID
   job_id TEXT,                            -- Vendor job/message GUID
   date DATETIME DEFAULT CURRENT_TIMESTAMP,
   receive_date DATETIME,
@@ -315,7 +315,7 @@ Modal dialog for selecting recipient and sending messages:
 
 Runs appointment reminder notifications via:
 - **Manual**: Click menu item "Send Email Reminders" / "Test Email Reminders"
-- **Scheduled**: Can be triggered via OpenEMR background services or cron
+- **Scheduled**: Can be triggered via Pacca PINE background services or cron
 
 **Configuration**:
 - Hours before appointment to notify (set in Twilio setup)
@@ -323,7 +323,7 @@ Runs appointment reminder notifications via:
 
 ### Background Service Integration
 
-To integrate with OpenEMR's background services:
+To integrate with Pacca PINE's background services:
 
 ```sql
 INSERT INTO background_services (name, title, active, running, next_run,
@@ -381,7 +381,7 @@ VALUES ('FaxSMS_Notifications', 'FaxSMS Appointment Notifications', 1, 0, NOW(),
 - **Namespacing**: Use `OpenEMR\Modules\FaxSMS\*` namespace for src/ classes
 - **Encryption**: Always encrypt sensitive credentials before storage
 - **ACL**: Always verify ACL before allowing actions
-- **Legacy Functions**: Avoid deprecated OpenEMR database functions
+- **Legacy Functions**: Avoid deprecated Pacca PINE database functions
 
 ### Database Queries
 
@@ -430,11 +430,11 @@ This is required for CLI scripts and background services.
 }
 ```
 
-**Important**: Each module has its own `composer.json`. Do **NOT** run `composer dump-autoload` in the OpenEMR root directory.
+**Important**: Each module has its own `composer.json`. Do **NOT** run `composer dump-autoload` in the Pacca PINE root directory.
 
 ### Module Dependencies
 
-- OpenEMR 7.0.3+
+- Pacca PINE 7.0.3+
 - PHP 8.1+ (uses modern PHP features: enums, first-class callables)
 - Laminas Framework (for module management)
 - Symfony EventDispatcher
@@ -455,7 +455,7 @@ Received faxes are stored as patient documents under this category.
 ### File Storage
 
 - **Fax Documents**: Stored in `sites/<site>/documents/<patient>/`
-- **Temporary Uploads**: Uses OpenEMR's temp directory system
+- **Temporary Uploads**: Uses Pacca PINE's temp directory system
 - **MIME Types**: Supports TIFF, PDF, JPEG, PNG
 
 ## API Endpoints
@@ -487,7 +487,7 @@ let serviceType = "<type>";              // 'sms', 'fax', 'email'
 
 ### Dialog System
 
-Uses OpenEMR's `dlgopen()` for modal dialogs:
+Uses Pacca PINE's `dlgopen()` for modal dialogs:
 
 ```javascript
 dlgopen(url, dialogName, modalSize, height, allowResize, title, options);
@@ -530,8 +530,8 @@ mysql -u local_openemr -p 5qy3xkMjP4A2US1u7Qv -e "
 
 ## References
 
-- **OpenEMR Module System**: `/Documentation/MODULES.md` (in OpenEMR root)
-- **Event System**: `/src/Events/` (in OpenEMR root)
+- **Pacca PINE Module System**: `/Documentation/MODULES.md` (in Pacca PINE root)
+- **Event System**: `/src/Events/` (in Pacca PINE root)
 - **Twilio API**: https://www.twilio.com/docs/sms
 - **RingCentral API**: https://developers.ringcentral.com/
 - **etherFAX API**: https://www.etherfax.net/developers/
@@ -543,9 +543,9 @@ mysql -u local_openemr -p 5qy3xkMjP4A2US1u7Qv -e "
 2. **Verify ACL** at the start of every controller action
 3. **Use service type routing** to support multiple vendors seamlessly
 4. **Test in demo/sandbox mode** before using production API keys
-5. **Log errors** to OpenEMR's logging system for debugging
+5. **Log errors** to Pacca PINE's logging system for debugging
 6. **Respect session management** - use `$sessionAllowWrite = true` where needed
-7. **Follow OpenEMR coding standards** - PSR-12, QueryUtils, modern PHP
+7. **Follow Pacca PINE coding standards** - PSR-12, QueryUtils, modern PHP
 8. **Document vendor-specific quirks** in controller comments
 9. **Handle API failures gracefully** with user-friendly error messages
 10. **Keep vendor SDKs updated** but test thoroughly after updates
@@ -580,7 +580,7 @@ SignalWire provides a Twilio-compatible REST API for faxing, making it an excell
    - Purchase or port a fax-capable phone number
    - Ensure the number is configured for fax
 
-4. **Configure in OpenEMR**:
+4. **Configure in Pacca PINE**:
    - Navigate to: **Modules → Manage Modules → FaxSMS Module → Config**
    - Select "SignalWire Fax" from Fax vendor dropdown
    - Click "Setup Fax Account"
@@ -665,10 +665,10 @@ When working on this module:
 1. **Review the specific issue** - What's not working? Error messages?
 2. **Check relevant controller** - Which vendor service is affected?
 3. **Verify configuration** - Are credentials set and valid?
-4. **Check logs** - OpenEMR logs and vendor API logs
+4. **Check logs** - Pacca PINE logs and vendor API logs
 5. **Test in isolation** - Use vendor's test tools before debugging module code
 
 ---
 
 **Last Updated**: December 2025
-**For**: OpenEMR 7.0.3 / oe-module-faxsms v5.0.0
+**For**: Pacca PINE 7.0.3 / oe-module-faxsms v5.0.0

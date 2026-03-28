@@ -1,5 +1,5 @@
 # module-faxsms
-Fax and SMS feature for OpenEMR that currently supports Twilio SMS and etherFAX for faxing.
+Fax and SMS feature for Pacca PINE that currently supports Twilio SMS and etherFAX for faxing.
 ## Install Module
 
 #### If upgrading to new version, use the Sql Button in the Module Manager FaxSMS entry to update the database tables. Or click trash can icon to unregister and then Install Button. All previous setting are maintained.
@@ -10,7 +10,7 @@ Fax and SMS feature for OpenEMR that currently supports Twilio SMS and etherFAX 
 - Select the appropriate vendors for SMS and/or Fax. Tick the Individual User Accounts if you want to have the vendor account(s) associated with the user that is setting up the account.
 - Once a vendor is selected an account credential setup button will display.
 - Click the Setup SMS/Fax Account button and input the appropriate account information received when setting up the vendor accounts.
-- Log out and log back in to OpenEMR.
+- Log out and log back in to Pacca PINE.
 
 - You will find the module in the menu under Modules.
 ### Tips

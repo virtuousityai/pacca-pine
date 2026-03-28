@@ -16,21 +16,21 @@
 
 [![Backers on Open Collective](https://opencollective.com/openemr/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/openemr/sponsors/badge.svg)](#sponsors)
 
-# OpenEMR
+# Pacca PINE
 
-[OpenEMR](https://open-emr.org) is a Free and Open Source electronic health records and medical practice management application. It features fully integrated electronic health records, practice management, scheduling, electronic billing, internationalization, free support, a vibrant community, and a whole lot more. It runs on Windows, Linux, Mac OS X, and many other platforms.
+[Pacca PINE](https://open-emr.org) is a Free and Open Source electronic health records and medical practice management application, built on OpenEMR. It features fully integrated electronic health records, practice management, scheduling, electronic billing, internationalization, free support, a vibrant community, and a whole lot more. It runs on Windows, Linux, Mac OS X, and many other platforms.
 
 ### Contributing
 
-OpenEMR is a leader in healthcare open source software and comprises a large and diverse community of software developers, medical providers and educators with a very healthy mix of both volunteers and professionals. [Join us and learn how to start contributing today!](https://open-emr.org/wiki/index.php/FAQ#How_do_I_begin_to_volunteer_for_the_OpenEMR_project.3F)
+Pacca PINE is built on OpenEMR, a leader in healthcare open source software, and comprises a large and diverse community of software developers, medical providers and educators with a very healthy mix of both volunteers and professionals. [Join us and learn how to start contributing today!](https://open-emr.org/wiki/index.php/FAQ#How_do_I_begin_to_volunteer_for_the_OpenEMR_project.3F)
 
-> Already comfortable with git? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for quick setup instructions and requirements for contributing to OpenEMR by resolving a bug or adding an awesome feature 😊.
+> Already comfortable with git? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for quick setup instructions and requirements for contributing to Pacca PINE by resolving a bug or adding an awesome feature 😊.
 
 ### Support
 
 Community and Professional support can be found [here](https://open-emr.org/wiki/index.php/OpenEMR_Support_Guide).
 
-Extensive documentation and forums can be found on the [OpenEMR website](https://open-emr.org) that can help you to become more familiar about the project 📖.
+Extensive documentation and forums can be found on the [Pacca PINE website](https://open-emr.org) that can help you to become more familiar about the project 📖.
 
 ### Reporting Issues and Bugs
 
@@ -54,7 +54,7 @@ Check out [FHIR_README.md](FHIR_README.md)
 
 ### For Developers
 
-If using OpenEMR directly from the code repository, then the following commands will build OpenEMR (Node.js version 22.* is required) :
+If using Pacca PINE directly from the code repository, then the following commands will build Pacca PINE (Node.js version 22.* is required) :
 
 ```shell
 composer install --no-dev

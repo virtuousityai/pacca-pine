@@ -261,9 +261,9 @@ Returns DocumentReference with link to download CCD XML file.
 
 ### Launch Types
 
-**EHR Launch** - App launched from within OpenEMR:
+**EHR Launch** - App launched from within Pacca PINE:
 ```
-1. User clicks app in OpenEMR
+1. User clicks app in Pacca PINE
 2. App receives launch token
 3. App requests authorization with launch token
 4. App receives patient + encounter context
@@ -310,11 +310,11 @@ Returns DocumentReference with link to download CCD XML file.
 ### Swagger UI
 Interactive API testing:
 ```
-https://your-openemr-install/swagger/
+https://your-pacca-pine-install/swagger/
 ```
 
 ### Online Demos
-Test against live OpenEMR instances:
+Test against live Pacca PINE instances:
 - **Demo Portal:** https://www.open-emr.org/wiki/index.php/Development_Demo
 - **Click:** "API (Swagger) User Interface"
 
@@ -338,7 +338,7 @@ curl https://localhost:9300/apis/default/fhir/.well-known/smart-configuration
 - **[Troubleshooting](Documentation/api/SMART_ON_FHIR.md#troubleshooting)** - Common issues
 
 ### Community
-- **[OpenEMR Forum](https://community.open-emr.org/)** - Ask questions
+- **[Pacca PINE Forum](https://community.open-emr.org/)** - Ask questions
 - **[GitHub Issues](https://github.com/openemr/openemr/issues)** - Report bugs
 
 ### Standards
@@ -426,9 +426,10 @@ curl https://localhost:9300/apis/default/fhir/.well-known/smart-configuration
 ## Documentation Attribution
 
 ### Authorship
-This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
+Pacca PINE is built on [OpenEMR](https://open-emr.org), the leading open-source electronic health records platform. This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
 - Original documentation by OpenEMR developers and contributors
 - Technical specifications from the OpenEMR codebase
+- Pacca PINE customizations and enhancements
 - Community feedback and real-world implementation experience
 
 ### AI Assistance
@@ -441,7 +442,7 @@ The organization, structure, and presentation of this documentation was enhanced
 All technical accuracy is maintained from the original community-authored documentation.
 
 ### Contributing
-OpenEMR is an open-source project. To contribute to this documentation:
+Pacca PINE is an open-source project built on OpenEMR. To contribute to this documentation:
 - **Report Issues:** [GitHub Issues](https://github.com/openemr/openemr/issues)
 - **Discuss:** [Community Forum](https://community.open-emr.org/)
 - **Submit Changes:** [Pull Requests](https://github.com/openemr/openemr/pulls)

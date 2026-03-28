@@ -1,9 +1,9 @@
-# OpenEMR Development Guide
+# Pacca PINE Development Guide
 
 ## Project Structure
 
 ```
-/src/              - Modern PSR-4 code (OpenEMR\ namespace)
+/src/              - Modern PSR-4 code (OpenEMR\ namespace — kept for upstream compatibility)
 /library/          - Legacy procedural PHP code
 /interface/        - Web UI controllers and templates
 /templates/        - Smarty/Twig templates
@@ -56,7 +56,7 @@ docker compose exec openemr /root/devtools services-test
 docker compose exec openemr /root/devtools php-log
 ```
 
-**Tip:** Install [openemr-cmd](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-cmd)
+**Tip:** Install [openemr-cmd](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-cmd) (upstream utility)
 for shorter commands (e.g., `openemr-cmd ut` for unit tests) from any directory.
 
 ### Isolated tests (no Docker required)
@@ -128,7 +128,7 @@ npm run gulp-build   # Build only (no watch)
 - **Indentation:** 4 spaces
 - **Line endings:** LF (Unix)
 - **strict_types:** New files should use `declare(strict_types=1)` — adoption is growing
-- **Namespaces:** PSR-4 with `OpenEMR\` prefix for `/src/`
+- **Namespaces:** PSR-4 with `OpenEMR\` prefix for `/src/` (kept for upstream compatibility)
 - New code goes in `/src/`, legacy helpers in `/library/`
 - **Database:** Use `QueryUtils` for queries. New schema changes use Doctrine
   Migrations. Do not instantiate database connections directly — use the

@@ -14,7 +14,7 @@ For more information:
 
 ## Usage
 
-The DI container is **not yet fully integrated** into OpenEMR.
+The DI container is **not yet fully integrated** into Pacca PINE.
 Once it is, here's how things will work:
 
 - Application entrypoints (e.g. API endpoints and CLI tools) will be managed by the container
@@ -59,7 +59,7 @@ Services will probably get large, and it can be split apart if and when needed.
 
 ## Migrating Legacy Code
 
-Many existing services in OpenEMR do not yet follow DI principles. Before wiring a legacy service into the container:
+Many existing services in Pacca PINE do not yet follow DI principles. Before wiring a legacy service into the container:
 
 1. Refactor to accept dependencies via constructor
 2. Remove direct usage of `$GLOBALS`, `OEGlobalsBag`, or various singletons for service access

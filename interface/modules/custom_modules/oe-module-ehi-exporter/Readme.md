@@ -13,7 +13,7 @@ of certification by the product, of which the Health IT Module is a part.
 * (b)(10)(i)(C) - Limit the ability of users who can create export file(s) in at
         least one of these two ways: (1) To a specific set of
         identified users **(2) As a system administrative function
-        [This is the option chosen by OpenEMR]**.
+        [This is the option chosen by Pacca PINE]**.
 * (b)(10)(i)(D) - The export files(s) created must be electronic and in a
         computable format.
 * (b)(10)(i)(E) - The publicly accessible hyperlink of the export’s format must
@@ -58,11 +58,11 @@ information:
 > *      (iii) In employment records held by a covered entity in its role as employer; and
 > *      (iv) Regarding a person who has been deceased for more than 50 years.
 
-OpenEMR does not have a way currently of distinguishing notes that are specific to psychotherapy notes and which are to be excluded from the export.
+Pacca PINE does not have a way currently of distinguishing notes that are specific to psychotherapy notes and which are to be excluded from the export.
 
-Users wanting to keep their psychotherapy notes confidential that are stored inside of OpenEMR will need to use a different mechanism than this export.
+Users wanting to keep their psychotherapy notes confidential that are stored inside of Pacca PINE will need to use a different mechanism than this export.
 
-OpenEMR does not have a way of marking records as education records and so education records should not be stored in OpenEMR if using this system as a certified product.
+Pacca PINE does not have a way of marking records as education records and so education records should not be stored in Pacca PINE if using this system as a certified product.
 
 The ONC Certification public URL documentation for this export can be found at
 https://raw.githubusercontent.com/openemr/openemr/7.0.2/Documentation/EHI_Exports/docs/

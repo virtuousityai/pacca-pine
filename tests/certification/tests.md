@@ -1,8 +1,8 @@
-<h1>OpenEMR Certification Test Mappings</h1>
+<h1>Pacca PINE Certification Test Mappings</h1>
 
 <h4>Overview:</h4>
 <p>In order to verify that code changes pass certification tests, contributors must execute the relevant test cases
-before pushing changes. This document maps OpenEMR features with Meaningful Use certification tests.</p>
+before pushing changes. This document maps Pacca PINE features with Meaningful Use certification tests.</p>
 
 <h4>Notes:</h4>
 <ul>
@@ -16,7 +16,7 @@ before pushing changes. This document maps OpenEMR features with Meaningful Use 
   <thead>
     <tr>
       <th align="center"><span>Certification Test Name</span></th>
-      <th align="center"><span>OpenEMR Feature Mappings</span></th>
+      <th align="center"><span>Pacca PINE Feature Mappings</span></th>
       <th align="center"><span>Testing Procedures</span></th>
       <th align="center"><span>Testing Tools</span></th>
     </tr>

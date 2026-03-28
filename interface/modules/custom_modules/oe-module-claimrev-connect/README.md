@@ -1,5 +1,5 @@
-# ClaimRev Connect Module for OpenEMR
-This module creates the connection to the Claim Revolution, LLC clearinghouse. Using REST APIs, the module will send your claim file in for processing and download the 999/277 files to the appropriate location on the OpenEMR system.
+# ClaimRev Connect Module for Pacca PINE
+This module creates the connection to the Claim Revolution, LLC clearinghouse. Using REST APIs, the module will send your claim file in for processing and download the 999/277 files to the appropriate location on the Pacca PINE system.
 The module also handles the real-time eligibility of your patients. There are multiple ways this can be accomplished.
 <ul>
 <li> Manual – In the patient card a new card is created that lets the user manually check for eligibility from Claim Revolution.  </li>

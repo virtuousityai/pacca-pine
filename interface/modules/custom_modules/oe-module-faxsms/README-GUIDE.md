@@ -1,14 +1,14 @@
-# Fax • SMS • Email • Voice Module for OpenEMR (`oe-module-faxsms`)
+# Fax • SMS • Email • Voice Module for Pacca PINE (`oe-module-faxsms`)
 
-> Unified communications for OpenEMR — enabling Fax, SMS, Email, and optional Voice (RingCentral) features. Compatible with OpenEMR **7.0.4+**.
+> Unified communications for Pacca PINE — enabling Fax, SMS, Email, and optional Voice (RingCentral) features. Compatible with Pacca PINE **7.0.4+**.
 
 ---
 ## **EtherFax Send / Test Warning**
 > When sending a fax to a number within the *same etherFax account* (common for testing/loopback), EtherFax may reuse the **same JobId** for the outbound (Sent) job and the inbound (Received) record.
-> Since OpenEMR enforces **unique (account + job_id)** and does not allow duplicates, the inbound “Received” update can overwrite the existing Sent queue entry — meaning you may not see a full Sent-history for that test fax once it is received.
+> Since Pacca PINE enforces **unique (account + job_id)** and does not allow duplicates, the inbound “Received” update can overwrite the existing Sent queue entry — meaning you may not see a full Sent-history for that test fax once it is received.
 
 ## 📘 Overview
-This module extends OpenEMR’s communication capabilities, providing clinicians and staff with a single interface to send and receive **Faxes**, **SMS**, **Emails**, and make **Voice** calls. It supports multiple vendors, allows **per-user service permissions**, and integrates tightly with OpenEMR’s patient and document management systems.
+This module extends Pacca PINE’s communication capabilities, providing clinicians and staff with a single interface to send and receive **Faxes**, **SMS**, **Emails**, and make **Voice** calls. It supports multiple vendors, allows **per-user service permissions**, and integrates tightly with Pacca PINE’s patient and document management systems.
 
 ---
 
@@ -33,7 +33,7 @@ This module extends OpenEMR’s communication capabilities, providing clinicians
 3. The module will appear under the **Modules** menu.
 
 ### 2️⃣ Install Dependencies
-Run the following in your OpenEMR root directory:
+Run the following in your Pacca PINE root directory:
 ```bash
 composer install && composer dump-autoload -o
 ```
@@ -140,7 +140,7 @@ To automate appointment reminders:
 ```
 
 **Parameters:**
-- `site` – OpenEMR site ID (e.g., default)
+- `site` – Pacca PINE site ID (e.g., default)
 - `user` – Username for execution
 - `type` – `sms` or `email`
 - `testrun` – `1` for dry run, `0` to send
@@ -195,7 +195,7 @@ This module is distributed under the **GNU General Public License v3.0 (GPL-3)**
 ## 📚 References
 - **Repository Path:**
   `interface/modules/custom_modules/oe-module-faxsms`
-- **OpenEMR Forum Topic:**
+- **Pacca PINE Forum Topic:**
   [Newly Improved Fax, SMS and Email Module – Community Discussion](https://community.open-emr.org/t/newly-improved-fax-sms-and-email-module/23266)
 - **Vendor Docs:**
   [RingCentral Developer Portal](https://developer.ringcentral.com)
@@ -222,7 +222,7 @@ This module is distributed under the **GNU General Public License v3.0 (GPL-3)**
 
 ---
 
-**Maintained by:** OpenEMR Community
+**Maintained by:** Pacca PINE Community
 **Lead Developer:** Jerry Padgett
 **Version:** 7.0.4
 **License:** GPL-3

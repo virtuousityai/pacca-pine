@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive refactoring of the OpenEMR FaxSMS module to standardize inbound fax storage across all fax providers (EtherFax and SignalWire). The refactoring ensures consistent queue storage, automatic patient matching, and proper document integration.
+This document describes the comprehensive refactoring of the Pacca PINE FaxSMS module to standardize inbound fax storage across all fax providers (EtherFax and SignalWire). The refactoring ensures consistent queue storage, automatic patient matching, and proper document integration.
 
 ## Problem Statement
 
@@ -33,7 +33,7 @@ FaxDocumentService
 
 **Key Features:**
 - Automatic patient matching by phone number (multiple format patterns)
-- Stores documents in OpenEMR document system with FAX category
+- Stores documents in Pacca PINE document system with FAX category
 - Separates unassigned faxes in dedicated directory
 - Handles both patient-assigned and unassigned documents
 - Returns document_id and media_path for queue tracking
@@ -56,7 +56,7 @@ Incoming Fax
     ├── status (received, delivered, failed, etc.)
     ├── direction (inbound)
     ├── patient_id (if matched)
-    ├── document_id (OpenEMR document)
+    ├── document_id (Pacca PINE document)
     ├── media_path (stored file location)
     └── details_json (complete metadata)
 ```
@@ -73,7 +73,7 @@ The `oe_faxsms_queue` table now includes:
 | direction | varchar(20) | inbound or outbound |
 | site_id | varchar(63) | Multi-site support |
 | patient_id | int | Assigned patient (if matched) |
-| document_id | int | OpenEMR document reference |
+| document_id | int | Pacca PINE document reference |
 | media_path | longtext | File system path to fax media |
 | details_json | longtext | Complete fax metadata |
 | calling_number | tinytext | Sender's phone number |
@@ -389,7 +389,7 @@ mysql -u user -p database < table.sql
 - [ ] Receive fax from EtherFax → stored in queue
 - [ ] Receive fax from SignalWire → stored in queue
 - [ ] Fax auto-matches patient by phone number
-- [ ] Document created in OpenEMR document system
+- [ ] Document created in Pacca PINE document system
 - [ ] document_id and media_path saved in queue
 - [ ] Unassigned fax stored correctly if no patient match
 
@@ -433,7 +433,7 @@ KEY `uid` (`uid`,`receive_date`) -- User timeline
 
 ### Media Storage
 
-- **Small files** (< 50MB): Stored in OpenEMR document system
+- **Small files** (< 50MB): Stored in Pacca PINE document system
 - **Large files**: Consider external storage integration
 - **Cleanup**: Soft delete (deleted=1) for audit trail
 
@@ -467,8 +467,8 @@ KEY `uid` (`uid`,`receive_date`) -- User timeline
 All code follows:
 
 - **PSR-12**: PHP Standards Recommendations for Extended Coding Style
-- **OpenEMR Standards**: Following module development guidelines
-- **QueryUtils**: Using OpenEMR database abstraction layer
+- **Pacca PINE Standards**: Following module development guidelines
+- **QueryUtils**: Using Pacca PINE database abstraction layer
 - **Exception Handling**: Custom exceptions for clear error scoping
 - **Error Logging**: Comprehensive logging for debugging and auditing
 

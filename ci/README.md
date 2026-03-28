@@ -1,8 +1,8 @@
-# OpenEMR
+# Pacca PINE
 
 ## Continuous Integration
 
-This directory houses the configuration for automated tests across multiple version and setup configurations of OpenEMR. It is used by the GitHub Actions workflow in `.github/workflows/test.yml` to run various tests.
+This directory houses the configuration for automated tests across multiple version and setup configurations of Pacca PINE. It is used by the GitHub Actions workflow in `.github/workflows/test.yml` to run various tests.
 
 ### Layout and Configurations
 
@@ -29,7 +29,7 @@ The GitHub Actions workflow dynamically builds a test matrix based on the direct
 2. It reads the `docker-compose.yml` to determine the exact database image.
 3. It creates a configuration for GitHub Actions to run tests against that specific setup.
 
-This allows testing OpenEMR across multiple environments automatically without having to manually update the GitHub workflow file.
+This allows testing Pacca PINE across multiple environments automatically without having to manually update the GitHub workflow file.
 
 ### Test Types
 
@@ -57,7 +57,7 @@ Code coverage reporting is enabled only for the `apache_84_114` configuration. W
 To add a new test configuration:
 
 1. Create a new directory following the naming convention `webserver_phpversion_dbversion`.
-2. Add a `docker-compose.yml` file with the appropriate MySQL/MariaDB and OpenEMR services (see below `Adding a New Configuration` section).
+2. Add a `docker-compose.yml` file with the appropriate MySQL/MariaDB and Pacca PINE services (see below `Adding a New Configuration` section).
 3. Ensure the database service is named `mysql` for compatibility with the test scripts.
 4. If you want to skip E2E tests for this configuration, add `_no-e2e` suffix to the directory name.
 
@@ -67,7 +67,7 @@ The CI process uses several important environment variables:
 
 - `DOCKER_DIR`: The directory containing the Docker Compose configuration
 - `ENABLE_COVERAGE`: Whether to enable code coverage reporting (true/false)
-- `OPENEMR_DIR`: The directory containing OpenEMR inside the Docker container
+- `OPENEMR_DIR`: The directory containing Pacca PINE inside the Docker container
 - `COMPOSE_FILE`: The Docker Compose COMPOSE_FILE environment variable is set to store the templates for the multi-file composition. The first file is the template for the web server configuration (Apache or Nginx). The second file is the template for the database configuration (MariaDB or MySQL). The third file is the template for the PHP version and MariaDB/MySQL version.
 
 ### Docker Compose Extension System
@@ -223,7 +223,7 @@ You can also run the same Docker Compose setup locally:
 docker compose -f "ci/compose-shared-apache.yml" -f "ci/compose-shared-mariadb.yml" -f "ci/compose-shared-selenium/docker-compose.yml" -f "ci/apache_84_114/docker-compose.yml" up -d
 ```
 
-You can go directly into the OpenEMR testing container:
+You can go directly into the Pacca PINE testing container:
 ```bash
 docker compose -f "ci/compose-shared-apache.yml" -f "ci/compose-shared-mariadb.yml" -f "ci/compose-shared-selenium/docker-compose.yml" -f "ci/apache_84_114/docker-compose.yml" exec -it openemr sh
 ```

@@ -85,7 +85,7 @@ function showHelp(): void
     echo "                      --enableMoves=false \\\n";
     echo "                      --dedup=false\n";
     echo "\n";
-    exit;
+    //exit;
 }
 
 function outputMessage($message): void

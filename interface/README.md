@@ -1,14 +1,14 @@
-# OpenEMR-interface
+# Pacca PINE-interface
 
-The OpenEMR UI is built with [SASS](https://sass-lang.com/) on top of a bootstrap base (compiled with [gulp](https://gulpjs.com/)).
+The Pacca PINE UI is built with [SASS](https://sass-lang.com/) on top of a bootstrap base (compiled with [gulp](https://gulpjs.com/)).
 
 ### Themes
 
-Different `themes` share a common `core` and have their own overrides to customize the appearance of OpenEMR.
+Different `themes` share a common `core` and have their own overrides to customize the appearance of Pacca PINE.
 
 There are three different types of themes:
 * The `light` theme is the default modern theme
-* The `manila` theme is a combination of OpenEMR's legacy themes (which have all been removed) with some modern elements.
+* The `manila` theme is a combination of Pacca PINE's legacy themes (which have all been removed) with some modern elements.
 * The other themes (called `colors`) are the same `color_base` theme with different color palettes.
 
 `rtl_` prefixed themes are built by appending the `rtl.css` file to every theme automatically. These overrides provide right to left adjustments for all `style*.css` files
@@ -34,7 +34,7 @@ Compiling SASS files locally requires [node.js](http://nodejs.org) and [npm](htt
 
 From here you can either:
 * `npm run dev` - just compiles the local `.scss` files and recompiles them whenever they are changed.
-* `npm run dev-sync` (EXPERIMENTAL*) - loads your local OpenEMR instance using BrowserSync (port 3000) in front of 80 (feel free to edit the package.json to change the port)
+* `npm run dev-sync` (EXPERIMENTAL*) - loads your local Pacca PINE instance using BrowserSync (port 3000) in front of 80 (feel free to edit the package.json to change the port)
     * [See video of `dev-sync` in action](https://imgur.com/a/C0dVnfq)
 
 ## TODOs

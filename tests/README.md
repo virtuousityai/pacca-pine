@@ -1,6 +1,6 @@
-# OpenEMR Tests
+# Pacca PINE Tests
 
-OpenEMR uses [PHPUnit](https://phpunit.de/) for PHP tests and [Jest](https://jestjs.io/) for JavaScript tests. Browser-based tests use [Symfony Panther](https://github.com/symfony/panther).
+Pacca PINE uses [PHPUnit](https://phpunit.de/) for PHP tests and [Jest](https://jestjs.io/) for JavaScript tests. Browser-based tests use [Symfony Panther](https://github.com/symfony/panther).
 
 ## Directory Structure
 
@@ -59,4 +59,4 @@ npm run test:js-coverage  # With coverage
 
 ## Certification Reference
 
-The [`certification/tests.md`](certification/tests.md) document maps OpenEMR features to Meaningful Use certification requirements. It links to official ONC test procedures and test data for manual QA verification—these are not automated tests.
+The [`certification/tests.md`](certification/tests.md) document maps Pacca PINE features to Meaningful Use certification requirements. It links to official ONC test procedures and test data for manual QA verification—these are not automated tests.

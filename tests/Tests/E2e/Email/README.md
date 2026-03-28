@@ -1,11 +1,11 @@
 # Email Testing with Mailpit
 
-This directory contains automated tests for email functionality in OpenEMR using [Mailpit](https://github.com/axllent/mailpit) as a mail testing service.
+This directory contains automated tests for email functionality in Pacca PINE using [Mailpit](https://github.com/axllent/mailpit) as a mail testing service.
 
 ## Overview
 
 The email testing infrastructure allows you to:
-- Test email sending functionality in OpenEMR core
+- Test email sending functionality in Pacca PINE core
 - Test email sending in the oe-module-faxsms module
 - Verify email delivery, content, and metadata
 - Run tests both locally and in CI/CD pipelines
@@ -31,7 +31,7 @@ The email testing infrastructure allows you to:
    - Mailpit configuration
 
 4. **Test Suites**:
-   - `EmailSendTest.php` - Integration tests for OpenEMR core email functionality using direct PHP calls
+   - `EmailSendTest.php` - Integration tests for Pacca PINE core email functionality using direct PHP calls
    - `FaxSmsEmailTest.php` - Placeholder tests for oe-module-faxsms (currently skipped, pending proper setup)
 
 **Note**: These are integration tests, not E2E tests. They do **not** require Selenium or browser automation. They test email functionality by:
@@ -45,7 +45,7 @@ The email testing infrastructure allows you to:
 ### Prerequisites
 
 1. Docker and Docker Compose installed
-2. OpenEMR development environment set up
+2. Pacca PINE development environment set up
 
 ### Start the Environment
 
@@ -56,7 +56,7 @@ docker compose up -d
 
 This will start:
 - MySQL database
-- OpenEMR application
+- Pacca PINE application
 - Mailpit service
 - Other supporting services (Selenium, CouchDB, etc.)
 
@@ -68,7 +68,7 @@ You can view all emails sent during testing in the web interface.
 
 ### Run Email Tests
 
-From the OpenEMR root directory:
+From the Pacca PINE root directory:
 
 ```bash
 # Run all email tests
@@ -234,14 +234,14 @@ Full message response includes:
 
 1. Check Mailpit is running: `docker compose ps mailpit`
 2. Check logs: `docker compose logs mailpit`
-3. Verify SMTP settings in OpenEMR
+3. Verify SMTP settings in Pacca PINE
 4. Check network connectivity between containers
 
 ### Tests Timing Out
 
 1. Increase timeout in `waitForEmail()` calls
 2. Check if email sending is actually triggered
-3. Review OpenEMR error logs: `docker compose logs openemr`
+3. Review Pacca PINE error logs: `docker compose logs openemr`
 
 ### Mailpit API Connection Errors
 
@@ -264,7 +264,7 @@ Full message response includes:
 
 - [Mailpit Documentation](https://mailpit.axllent.org/)
 - [Mailpit GitHub Repository](https://github.com/axllent/mailpit)
-- [OpenEMR Email Queue System](../../../library/classes/postmaster.php)
+- [Pacca PINE Email Queue System](../../../library/classes/postmaster.php)
 - [PHPUnit Documentation](https://phpunit.de/)
 - [Symfony Panther Documentation](https://github.com/symfony/panther)
 

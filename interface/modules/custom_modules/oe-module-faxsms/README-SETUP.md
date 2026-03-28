@@ -2,7 +2,7 @@
 
 ## Overview
 
-The FaxSMS module provides integrated communication services for OpenEMR including Fax, SMS, Email, and Voice capabilities. The module supports multiple vendors and allows granular user permissions for each service.
+The FaxSMS module provides integrated communication services for Pacca PINE including Fax, SMS, Email, and Voice capabilities. The module supports multiple vendors and allows granular user permissions for each service.
 
 ## Module Architecture
 
@@ -29,7 +29,7 @@ The FaxSMS module provides integrated communication services for OpenEMR includi
 
 ### Phase 1: Enable Accounts (Global Configuration)
 
-Administrators should navigate to **Services → Setup Services** in the OpenEMR menu.
+Administrators should navigate to **Services → Setup Services** in the Pacca PINE menu.
 
 #### Service Configuration
 1. **Enable SMS Module**: Administrators can choose from disabled, RingCentral SMS, Twilio SMS, or Clickatell
@@ -179,7 +179,7 @@ All forms include CSRF tokens for security against cross-site request forgery at
 - Review user permissions quarterly
 - Monitor background service execution
 - Update vendor credentials as needed
-- Test services after OpenEMR updates
+- Test services after Pacca PINE updates
 
 ### Monitoring
 - Check service status regularly

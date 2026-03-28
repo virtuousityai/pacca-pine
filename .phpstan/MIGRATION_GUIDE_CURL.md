@@ -1,6 +1,6 @@
 # Migration Guide: From curl_* to GuzzleHttp
 
-This guide helps you migrate from raw `curl_*` functions to GuzzleHttp, the modern HTTP client library used by OpenEMR.
+This guide helps you migrate from raw `curl_*` functions to GuzzleHttp, the modern HTTP client library used by Pacca PINE.
 
 ## Why Migrate?
 
@@ -8,7 +8,7 @@ This guide helps you migrate from raw `curl_*` functions to GuzzleHttp, the mode
 2. **Testability**: Guzzle can be easily mocked in unit tests
 3. **PSR-7 Compliance**: Uses standard HTTP message interfaces
 4. **Rich Features**: Built-in middleware, retries, authentication, and more
-5. **Consistency**: Unified HTTP client usage across OpenEMR codebase
+5. **Consistency**: Unified HTTP client usage across Pacca PINE codebase
 
 ## Common Migration Patterns
 
@@ -96,7 +96,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer ' . $token,
     'Accept: application/json',
-    'User-Agent: OpenEMR/7.0'
+    'User-Agent: Pacca PINE/7.0'
 ]);
 
 $response = curl_exec($ch);
@@ -112,7 +112,7 @@ $response = $client->request('GET', 'https://api.example.com/data', [
     'headers' => [
         'Authorization' => 'Bearer ' . $token,
         'Accept' => 'application/json',
-        'User-Agent' => 'OpenEMR/7.0'
+        'User-Agent' => 'Pacca PINE/7.0'
     ]
 ]);
 ```
@@ -150,9 +150,9 @@ $response = $client->request('POST', 'https://api.example.com/upload', [
 ]);
 ```
 
-### Using OpenEMR's oeHttp Wrapper
+### Using Pacca PINE's oeHttp Wrapper
 
-OpenEMR provides a convenient wrapper around Guzzle:
+Pacca PINE provides a convenient wrapper around Guzzle:
 
 ```php
 use OpenEMR\Common\Http\oeHttp;
@@ -241,13 +241,13 @@ $response = $client->request('GET', 'https://api.example.com/data', [
 
 - [Guzzle Documentation](https://docs.guzzlephp.org/)
 - [PSR-7: HTTP Message Interface](https://www.php-fig.org/psr/psr-7/)
-- OpenEMR's oeHttp: `src/Common/Http/oeHttp.php`
-- OpenEMR's oeOAuth: `src/Common/Http/oeOAuth.php`
+- Pacca PINE's oeHttp: `src/Common/Http/oeHttp.php`
+- Pacca PINE's oeOAuth: `src/Common/Http/oeOAuth.php`
 
 ## Getting Help
 
 If you need help migrating a complex curl usage pattern, please:
-1. Check existing Guzzle usage in the OpenEMR codebase for examples
+1. Check existing Guzzle usage in the Pacca PINE codebase for examples
 2. Look at `src/Common/Http/oeHttp.php` for the convenience wrapper
-3. Ask in the OpenEMR development chat
+3. Ask in the Pacca PINE development chat
 4. Consult the Guzzle documentation

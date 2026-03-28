@@ -1,6 +1,6 @@
-# OpenEMR API Documentation
+# Pacca PINE API Documentation
 
-Complete documentation for OpenEMR's REST API, FHIR API, and SMART on FHIR integration.
+Complete documentation for Pacca PINE's REST API, FHIR API, and SMART on FHIR integration.
 
 ## Documentation Overview
 
@@ -8,7 +8,7 @@ Complete documentation for OpenEMR's REST API, FHIR API, and SMART on FHIR integ
 |----------|-------------|
 | [AUTHENTICATION.md](AUTHENTICATION.md) | OAuth2 flows, client registration, token management, and introspection |
 | [AUTHORIZATION.md](AUTHORIZATION.md) | Scopes, permissions, and granular access control |
-| [STANDARD_API.md](STANDARD_API.md) | OpenEMR REST API (`/api/` endpoints) |
+| [STANDARD_API.md](STANDARD_API.md) | Pacca PINE REST API (`/api/` endpoints) |
 | [FHIR_API.md](FHIR_API.md) | FHIR R4 API (`/fhir/` endpoints) |
 | [SMART_ON_FHIR.md](SMART_ON_FHIR.md) | SMART app integration and launch flows |
 | [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Internal usage, multisite, security, and development |
@@ -20,8 +20,8 @@ Complete documentation for OpenEMR's REST API, FHIR API, and SMART on FHIR integ
 2. Base URL set: **Administration → Config → Connectors → Site Address**
    - Example: `https://your-openemr-install` or `https://your-openemr-install/openemr` (note this should be the root of your openemr installation without a trailing slash)
 3. APIs enabled:
-    - **Standard API**: Administration → Config → Connectors → Enable OpenEMR Standard REST API
-    - **FHIR API**: Administration → Config → Connectors → Enable OpenEMR Standard FHIR REST API
+    - **Standard API**: Administration → Config → Connectors → Enable Pacca PINE Standard REST API
+    - **FHIR API**: Administration → Config → Connectors → Enable Pacca PINE Standard FHIR REST API
 
 ### Choose Your Integration Path
 
@@ -31,7 +31,7 @@ Complete documentation for OpenEMR's REST API, FHIR API, and SMART on FHIR integ
 #### Building a SMART on FHIR App?
 → Start with [SMART on FHIR](SMART_ON_FHIR.md)
 
-#### Need Custom OpenEMR Integration?
+#### Need Custom Pacca PINE Integration?
 → Start with [Standard API](STANDARD_API.md)
 
 #### Internal Development?
@@ -39,7 +39,7 @@ Complete documentation for OpenEMR's REST API, FHIR API, and SMART on FHIR integ
 
 ## API Endpoints
 
-### Standard API (OpenEMR REST)
+### Standard API (Pacca PINE REST)
 ```
 https://localhost:9300/apis/default/api
 ```
@@ -70,18 +70,18 @@ https://localhost:9300/apis/default/portal
 ```mermaid
 sequenceDiagram
     participant App
-    participant OpenEMR
+    participant Pacca PINE
     participant User
 
-    App->>OpenEMR: 1. Register Client
-    OpenEMR->>App: Client ID & Secret
-    App->>OpenEMR: 2. Authorization Request
-    OpenEMR->>User: 3. Login & Consent
-    User->>OpenEMR: 4. Approve
-    OpenEMR->>App: 5. Authorization Code
-    App->>OpenEMR: 6. Exchange Code for Token
-    OpenEMR->>App: 7. Access Token + Refresh Token
-    App->>OpenEMR: 8. API Requests with Token
+    App->>Pacca PINE: 1. Register Client
+    Pacca PINE->>App: Client ID & Secret
+    App->>Pacca PINE: 2. Authorization Request
+    Pacca PINE->>User: 3. Login & Consent
+    User->>Pacca PINE: 4. Approve
+    Pacca PINE->>App: 5. Authorization Code
+    App->>Pacca PINE: 6. Exchange Code for Token
+    Pacca PINE->>App: 7. Access Token + Refresh Token
+    App->>Pacca PINE: 8. API Requests with Token
 ```
 
 [Detailed Authentication Guide →](AUTHENTICATION.md)
@@ -135,7 +135,7 @@ Include site name in endpoint:
 
 - **Interactive Testing**: https://your-openemr-install/swagger/
 - **Online Demos**: https://www.open-emr.org/wiki/index.php/Development_Demo
-- **Community Forum**: https://community.open-emr.org/
+- **Pacca PINE Community**: https://community.open-emr.org/
 - **Issue Tracker**: https://github.com/openemr/openemr/issues
 
 ## Security
@@ -159,9 +159,9 @@ For US healthcare providers see [ONC EHR Certification Requiremens](https://www.
 ## Documentation Attribution
 
 ### Authorship
-This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
-- Original documentation by OpenEMR developers and contributors
-- Technical specifications from the OpenEMR codebase
+This documentation represents the collective knowledge and contributions of the Pacca PINE open-source community. The content is based on:
+- Original documentation by Pacca PINE developers and contributors
+- Technical specifications from the Pacca PINE codebase
 - Community feedback and real-world implementation experience
 
 ### AI Assistance
@@ -174,9 +174,9 @@ The organization, structure, and presentation of this documentation was enhanced
 All technical accuracy is maintained from the original community-authored documentation.
 
 ### Contributing
-OpenEMR is an open-source project. To contribute to this documentation:
+Pacca PINE is an open-source project. To contribute to this documentation:
 - **Report Issues:** [GitHub Issues](https://github.com/openemr/openemr/issues)
-- **Discuss:** [Community Forum](https://community.open-emr.org/)
+- **Discuss:** [Pacca PINE Community](https://community.open-emr.org/)
 - **Submit Changes:** [Pull Requests](https://github.com/openemr/openemr/pulls)
 
 **Last Updated:** November 2025

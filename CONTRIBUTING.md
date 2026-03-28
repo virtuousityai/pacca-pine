@@ -14,7 +14,7 @@ For larger changes — new features, architectural changes, or anything that wou
 
 ## Which Repository?
 
-OpenEMR is split across multiple repositories. Make sure your contribution targets the right one:
+Pacca PINE is built on OpenEMR and split across multiple repositories. Make sure your contribution targets the right one:
 
 - **[openemr/openemr](https://github.com/openemr/openemr)** — The application itself: PHP code, frontend, APIs, clinical features, tests.
 - **[openemr/openemr-devops](https://github.com/openemr/openemr-devops)** — Infrastructure and deployment: Docker, Kubernetes, cloud provisioning (CloudFormation, Terraform), and operational tooling.
@@ -23,7 +23,7 @@ When in doubt, ask on the forum or open an issue to discuss where the work belon
 
 ## Commit Messages
 
-OpenEMR uses [Conventional Commits](https://www.conventionalcommits.org/) for all commits merged to `master` and `rel-*` branches. Your PR title must follow this format:
+Pacca PINE uses [Conventional Commits](https://www.conventionalcommits.org/) for all commits merged to `master` and `rel-*` branches. Your PR title must follow this format:
 
 ```
 <type>(<scope>): <description>
@@ -139,28 +139,28 @@ Review the diff before committing. See
 
 ## Code Contributions (local development)
 
-You will need a "local" version of OpenEMR to make changes to the source code. The easiest way to do this is with [Docker](https://hub.docker.com/r/openemr/openemr/):
+You will need a "local" version of Pacca PINE to make changes to the source code. The easiest way to do this is with [Docker](https://hub.docker.com/r/openemr/openemr/):
 
 ---
 
-### Starting with OpenEMR Development Docker Environment
-- For the highly recommended free course "You Can Be a OpenEMR Developer in 5 Easy Steps", click below:
+### Starting with Pacca PINE Development Docker Environment
+- For the highly recommended free course "You Can Be a Pacca PINE Developer in 5 Easy Steps", click below:
 
-    [You Can Be a OpenEMR Developer in 5 Easy Steps](https://www.open-emr.org/blog/you-can-be-a-openemr-developer-in-5-easy-steps/)
+    [You Can Be a Pacca PINE Developer in 5 Easy Steps](https://www.open-emr.org/blog/you-can-be-a-openemr-developer-in-5-easy-steps/)
 
 - For the Video Tutorial, click below:
 
     [![Getting Started Video Tutorial](Documentation/images/easy-dev-intro.png)](https://youtu.be/D4tXP5G9-sY)
 
-    - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+    - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
-1. [Create your own fork of OpenEMR](https://github.com/openemr/openemr/fork) (you will need a GitHub account) and `git clone` it to your local machine.
+1. [Create your own fork of Pacca PINE](https://github.com/openemr/openemr/fork) (you will need a GitHub account) and `git clone` it to your local machine.
 
     - For the Video Tutorial, click below:
 
       [![Getting Started Video Tutorial](Documentation/images/easy-dev-git.png)](https://youtu.be/QhTlWMqPV1Q)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
     - If you haven't already, [install git](https://git-scm.com/downloads) for your system
 	- (optional) If you want to set up the base services(e.g. git, docker, docker compose, openemr-cmd, minkube and kubectl) easily, please try [openemr-env-installer](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-env-installer)
@@ -170,7 +170,7 @@ You will need a "local" version of OpenEMR to make changes to the source code. T
     - (recommended) [Install openemr-cmd](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-cmd) for shorthand commands that work from any directory. Examples: `openemr-cmd ut` (unit-test), `openemr-cmd at` (api-test), `openemr-cmd et` (e2e-test), `openemr-cmd php-log`. Use `openemr-cmd-h` to search available commands.
     - (optional) If you want to monitor and easily manage the docker environment, please also [install openemr-monitor](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-monitor) and [install portainer](https://github.com/openemr/openemr-devops/tree/master/utilities/portainer) for your system
     - (optional) If you want to migrate the running docker environment, please try [openemr-env-migrator](https://github.com/openemr/openemr-devops/tree/master/utilities/openemr-env-migrator)
-    - (optional) If you want to set up with orchestration tool, please try [OpenEMR Kubernetes Orchestrations](https://github.com/openemr/openemr-devops/tree/master/kubernetes/minikube)
+    - (optional) If you want to set up with orchestration tool, please try [Pacca PINE Kubernetes Orchestrations](https://github.com/openemr/openemr-devops/tree/master/kubernetes/minikube)
 3. Run `docker compose up` from your command line
     - When the build is done, you'll see the following message:
     ```sh
@@ -193,7 +193,7 @@ You will need a "local" version of OpenEMR to make changes to the source code. T
 
       [![Getting Started Video Tutorial](Documentation/images/easy-dev-advanced-vscode-xdebug.png)](https://youtu.be/0dEYDHWECMI)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above videos and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above videos and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
     - An exception to this is if making changes to styling scripts in interface/themes/. In that case will need to clear web browser cache and run the following command to rebuild the theme files:
       ```sh
@@ -233,11 +233,11 @@ We look forward to your contribution...
 
 ---
 
-### Advanced Use of OpenEMR Development Docker Environment
+### Advanced Use of Pacca PINE Development Docker Environment
 
-The OpenEMR development docker environment has a very rich advanced feature set. See below Index for links to all the cool advanced stuff:
+The Pacca PINE development docker environment has a very rich advanced feature set. See below Index for links to all the cool advanced stuff:
 
-**Index for Advanced Use of OpenEMR Development Docker Environment**
+**Index for Advanced Use of Pacca PINE Development Docker Environment**
 
 ---
 
@@ -247,8 +247,8 @@ The OpenEMR development docker environment has a very rich advanced feature set.
 4. [Php syntax checking, psr12 checking, and automated testing](#dev_tools_tests)
 5. [Run the entire dev tool suite](#dev_tools_suite)
 6. [Run only all the automated tests](#dev_tools_auto)
-7. [Resetting OpenEMR and loading demo data](#dev_tools_reset)
-8. [Backup and restore OpenEMR data](#dev_tools_backup)
+7. [Resetting Pacca PINE and loading demo data](#dev_tools_reset)
+8. [Backup and restore Pacca PINE data](#dev_tools_backup)
 9. [Send/receive snapshots](#dev_tools_send)
 10. [Create and add random patient data](#dev_tools_randompatients)
 11. [Add multisite bank](#dev_tools_bankmultisite)
@@ -269,7 +269,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
 
       [![Getting Started Video Tutorial](Documentation/images/easy-dev-vscode-xdebug.png)](https://youtu.be/XJl7SQGNhpw)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
      - Firefox/Chrome install xdebug helper add on and enable
     - PHPStorm Settings->Language & Frameworks->PHP->Debug
@@ -290,7 +290,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
       docker compose exec openemr /root/devtools xdebug-log
       ```
 2. <a name="api"></a>API development and testing.
-    - Swagger is including in OpenEMR to ease API documentation, development, and testing.
+    - Swagger is included in Pacca PINE to ease API documentation, development, and testing.
     - The following command will update the API documentation (derive documentation from [_rest_routes.inc.php](_rest_routes.inc.php) to [swagger/openemr-api.yaml](swagger/openemr-api.yaml)):
       ```sh
       docker compose exec openemr /root/devtools build-api-docs
@@ -316,7 +316,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
           ```sh
           docker compose exec openemr /root/devtools set-swagger-to-multisite
           ```
-    - There is also a dev tool to make it easy to test the API on the online OpenEMR demo farm. For example, what if you wanted to test the API at [https://eleven.openemr.io/a/openemr](https://eleven.openemr.io/a/openemr):
+    - There is also a dev tool to make it easy to test the API on the online Pacca PINE demo farm. For example, what if you wanted to test the API at [https://eleven.openemr.io/a/openemr](https://eleven.openemr.io/a/openemr):
         - Go to [https://eleven.openemr.io/a/openemr/swagger](https://eleven.openemr.io/a/openemr/swagger/index.html) and follow the Swagger gui flow above. The following command can be used to get a client id and secret from that online demo:
           ```sh
           docker compose exec openemr /root/devtools register-oauth2-client-demo https://eleven.openemr.io/a/openemr
@@ -397,33 +397,33 @@ The OpenEMR development docker environment has a very rich advanced feature set.
     ```sh
     docker compose exec openemr /root/devtools clean-sweep-tests
     ```
-7. <a name="dev_tools_reset"></a>Resetting OpenEMR and loading demo data.
+7. <a name="dev_tools_reset"></a>Resetting Pacca PINE and loading demo data.
     - For the Video Tutorial, click below:
 
       [![Resetting and Demo Data Video Tutorial](Documentation/images/easy-dev-reset.png)](https://youtu.be/1ch84Ffmky8)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
-    - To reset OpenEMR only (then can reinstall manually via setup.php in web browser):
+    - To reset Pacca PINE only (then can reinstall manually via setup.php in web browser):
       ```sh
       docker compose exec openemr /root/devtools dev-reset
       ```
         - When running setup.php, need to use `mysql` for 'Server Host', `root` for 'Root Password', and `%` for 'User Hostname'.
-    - To reset and reinstall OpenEMR:
+    - To reset and reinstall Pacca PINE:
       ```sh
       docker compose exec openemr /root/devtools dev-reset-install
       ```
-    - To reset and reinstall OpenEMR with demo data (this includes several users with access controls setup in addition to patient portal logins. [See HERE for those credentials](https://www.open-emr.org/wiki/index.php/Development_Demo#Demo_Credentials).):
+    - To reset and reinstall Pacca PINE with demo data (this includes several users with access controls setup in addition to patient portal logins. [See HERE for those credentials](https://www.open-emr.org/wiki/index.php/Development_Demo#Demo_Credentials).):
       ```sh
       docker compose exec openemr /root/devtools dev-reset-install-demodata
       ```
         - hint: this is also a great way to test any changes a developer has made to the sql upgrade stuff (ie. such as sql/5_0_2-to-6_0_0_upgrade.sql)
-8. <a name="dev_tools_backup"></a>Backup and restore OpenEMR data (database and data on drive) via snapshots.
+8. <a name="dev_tools_backup"></a>Backup and restore Pacca PINE data (database and data on drive) via snapshots.
     - For the Video Tutorial, click below:
 
       [![Snapshots and Capsules Video Tutorial](Documentation/images/easy-dev-snapshots-capsules.png)](https://youtu.be/n569Lw5I5us)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
      - Create a backup snapshot (using `example` below, but can use any alphanumeric identifier):
       ```sh
@@ -442,7 +442,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
 
       [![Snapshots and Capsules Video Tutorial](Documentation/images/easy-dev-snapshots-capsules.png)](https://youtu.be/n569Lw5I5us)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
     - Here is how to grab a capsule from the docker, which can then store or share with friends.
         - List the capsules:
@@ -462,16 +462,16 @@ The OpenEMR development docker environment has a very rich advanced feature set.
           ```sh
           docker compose exec openemr /root/devtools restore example
           ```
-        - Ensure run upgrade to ensure will work with current version OpenEMR:
+        - Ensure run upgrade to ensure will work with current version Pacca PINE:
           ```sh
           docker compose exec openemr /root/devtools upgrade 5.0.2
           ```
-10. <a name="dev_tools_randompatients"></a>Create and add random patient data. This will use synthea to create random patients that are then imported into OpenEMR. You can choose the number of patients. Note that each patient will take several seconds.
+10. <a name="dev_tools_randompatients"></a>Create and add random patient data. This will use synthea to create random patients that are then imported into Pacca PINE. You can choose the number of patients. Note that each patient will take several seconds.
     - For the Video Tutorial, click below:
 
       [![Creating Random Patients Video Tutorial](Documentation/images/easy-dev-random-pat.png)](https://youtu.be/cFBFXFm_Psg)
 
-      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [OpenEMR Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
+      - (Recommend using Ubuntu Desktop 22.04 for above video and other videos in the [Pacca PINE Easy Docker Development Environment Video Series](https://www.youtube.com/playlist?list=PLFiWG_dDadgQT7zjqvEqbXm1OiuubOVO8). Easiest way to do this is setting up a [Ubuntu Desktop 22.04 Virtual Machine on VirtualBox](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox), which recommend configuring with 40GB hard drive, assigning 25% of computer memory, and assigning 25% of cpu cores to the virtual machine.)
 
     - Create and add 100 random patients (defaults to development mode set to true, which is set be default to true; development mode will markedly improve performance by bypassing the import of the ccda document and bypassing the use of the audit_master and audit_details tables and will directly import the new patient data from the ccda. Note this should never be done on sites that already contain real data/use, and it will also turn off the audit log during the import.):
        ```sh
@@ -505,7 +505,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
     ```
 14. <a name="dev_tools_charset"></a>Change the database character set and collation (character set is the encoding that is used to store data in the database; collation are a set of rules that the database uses to sort the stored data).
     - Best to demonstrate this devtool with examples.
-        - Set character set to utf8mb4 and collation to utf8mb4_general_ci (this is default for OpenEMR 6 and higher):
+        - Set character set to utf8mb4 and collation to utf8mb4_general_ci (this is default for Pacca PINE 6 and higher):
           ```sh
           docker compose exec openemr /root/devtools change-encoding-collation utf8mb4 utf8mb4_general_ci
           ```
@@ -517,12 +517,12 @@ The OpenEMR development docker environment has a very rich advanced feature set.
           ```sh
           docker compose exec openemr /root/devtools change-encoding-collation utf8mb4 utf8mb4_vietnamese_ci
           ```
-        - Set character set to utf8 and collation to utf8_general_ci (this is default for OpenEMR 5 and lower):
+        - Set character set to utf8 and collation to utf8_general_ci (this is default for Pacca PINE 5 and lower):
           ```sh
           docker compose exec openemr /root/devtools change-encoding-collation utf8 utf8_general_ci
           ```
 15. <a name="dev_tools_https"></a>Test ssl certificate (to test client based certificates and revert back to default self signed certificate) and force/unforce https.
-    - To test client based certificates, create a zip package of the certificate in OpenEMR at Administration->System->Certificates. Then can import this zip package (example `ssl.zip`) into the docker via:
+    - To test client based certificates, create a zip package of the certificate in Pacca PINE at Administration->System->Certificates. Then can import this zip package (example `ssl.zip`) into the docker via:
       ```sh
       docker compose cp ssl.zip openemr:/certs/
       ```
@@ -564,7 +564,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
       docker compose exec openemr /root/devtools sql-ssl-client-off
       ```
 17. <a name="dev_tools_couchdb"></a>CouchDB integration.
-    - In OpenEMR, CouchDB is an option for the patients document storage. For this reason, a CouchDB docker is included in this OpenEMR docker development environment. You can visit the CouchDB GUI directly via http://localhost:5984/_utils/ or https://localhost:6984/_utils/ with username `admin` and password `password`. You can configure OpenEMR to use this CouchDB docker for patient document storage in OpenEMR at Administration->Globals->Documents:
+    - In Pacca PINE, CouchDB is an option for the patients document storage. For this reason, a CouchDB docker is included in this Pacca PINE docker development environment. You can visit the CouchDB GUI directly via http://localhost:5984/_utils/ or https://localhost:6984/_utils/ with username `admin` and password `password`. You can configure Pacca PINE to use this CouchDB docker for patient document storage in Pacca PINE at Administration->Globals->Documents:
         - Document Storage Method->CouchDB
     - After running the following devtools, 'dev-reset', 'dev-install', 'dev-reset-install', 'dev-reset-install-demodata', 'restore-snapshot', then need to restart the couchdb docker via the following command:
         ```sh
@@ -588,7 +588,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
           docker compose exec openemr /root/devtools couchdb-ssl-client-off
           ```
 18. <a name="dev_tools_ldap"></a>LDAP integration.
-    - In OpenEMR, LDAP is an option for authentication. If this is turned on, then this will be supported for the `admin` user, which will use the following password: `admin`
+    - In Pacca PINE, LDAP is an option for authentication. If this is turned on, then this will be supported for the `admin` user, which will use the following password: `admin`
     - Turn on LDAP:
       ```sh
       docker compose exec openemr /root/devtools enable-ldap
@@ -628,7 +628,7 @@ The OpenEMR development docker environment has a very rich advanced feature set.
 
 ### Non-docker Use
 
-If you do not want to use Docker, you can always install OpenEMR directly on your local environment. This will require installing additional dependencies for your operating system. For more info see [OpenEMR Development Versions](https://open-emr.org/wiki/index.php/OpenEMR_Installation_Guides#OpenEMR_Development_Versions) on the wiki.
+If you do not want to use Docker, you can always install Pacca PINE directly on your local environment. This will require installing additional dependencies for your operating system. For more info see [Pacca PINE Development Versions](https://open-emr.org/wiki/index.php/OpenEMR_Installation_Guides#OpenEMR_Development_Versions) on the wiki.
 
 ## Financial contributions
 
@@ -639,7 +639,7 @@ Anyone can file an expense. If the expense makes sense for the development of th
 
 ### Contributors
 
-Thank you to all the people who have already contributed to openemr!
+Thank you to all the people who have already contributed to Pacca PINE!
 <a href="https://github.com/openemr/openemr/graphs/contributors"><img src="https://opencollective.com/openemr/contributors.svg?width=890" /></a>
 
 ### Backers

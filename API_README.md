@@ -45,7 +45,7 @@ curl -X GET 'https://localhost:9300/apis/default/fhir/Patient' \
 - **[🔑 Authorization & Scopes](Documentation/api/AUTHORIZATION.md)** - Permissions and access control
 - **[🏥 FHIR API Reference](Documentation/api/FHIR_API.md)** - FHIR R4 endpoints and resources
 - **[⚡ SMART on FHIR](Documentation/api/SMART_ON_FHIR.md)** - App integration and launch flows
-- **[🛠️ Standard API Reference](Documentation/api/STANDARD_API.md)** - OpenEMR REST endpoints
+- **[🛠️ Standard API Reference](Documentation/api/STANDARD_API.md)** - Pacca PINE REST endpoints
 - **[👨‍💻 Developer Guide](Documentation/api/DEVELOPER_GUIDE.md)** - Internal usage and development
 
 ## 🎯 Common Tasks
@@ -106,7 +106,7 @@ https://localhost:9300/apis/default/fhir
 - `POST /fhir/DocumentReference/$docref` - Generate CCD
 - `GET /fhir/$export` - Bulk data export
 
-### Standard API (OpenEMR REST)
+### Standard API (Pacca PINE REST)
 ```
 https://localhost:9300/apis/default/api
 ```
@@ -147,7 +147,7 @@ https://localhost:9300/apis/default/portal
 ### Interactive Testing
 Test endpoints interactively with Swagger UI:
 ```
-https://your-openemr-install/swagger/
+https://your-pacca-pine-install/swagger/
 ```
 
 ### Online Demos
@@ -158,12 +158,12 @@ Try the API on live demo instances:
 ### Configure Swagger OAuth
 When testing with Swagger, set your client's redirect URI to:
 ```
-<OpenEMR base URI>/swagger/oauth2-redirect.html
+<Pacca PINE base URI>/swagger/oauth2-redirect.html
 ```
 
 ## 🌐 Multisite Support
 
-OpenEMR supports multiple sites with site-specific endpoints:
+Pacca PINE supports multiple sites with site-specific endpoints:
 
 **Default site:**
 ```
@@ -297,7 +297,7 @@ curl -X GET 'https://localhost:9300/apis/default/fhir/MedicationRequest?patient=
 ## 🏗️ For Developers
 
 ### Internal API Usage
-- **[Internal API Guide](Documentation/api/DEVELOPER_GUIDE.md#internal-api-usage)** - Using APIs from within OpenEMR
+- **[Internal API Guide](Documentation/api/DEVELOPER_GUIDE.md#internal-api-usage)** - Using APIs from within Pacca PINE
 - **[Example Code](tests/api/InternalApiTest.php)** - Internal API examples
 
 ### Extending the API
@@ -351,12 +351,12 @@ Response ← JSON Formatting ← Validation ← Processing
 
 ## 📜 License
 
-OpenEMR is licensed under [GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+Pacca PINE is licensed under [GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 API integrations must comply with:
 - HIPAA requirements
 - State/federal healthcare regulations
-- OpenEMR license terms
+- Pacca PINE license terms
 
 ## 🔗 Quick Links
 
@@ -373,9 +373,10 @@ API integrations must comply with:
 ## Documentation Attribution
 
 ### Authorship
-This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
+Pacca PINE is built on [OpenEMR](https://open-emr.org), the leading open-source electronic health records platform. This documentation represents the collective knowledge and contributions of the OpenEMR open-source community. The content is based on:
 - Original documentation by OpenEMR developers and contributors
 - Technical specifications from the OpenEMR codebase
+- Pacca PINE customizations and enhancements
 - Community feedback and real-world implementation experience
 
 ### AI Assistance
@@ -388,7 +389,7 @@ The organization, structure, and presentation of this documentation was enhanced
 All technical accuracy is maintained from the original community-authored documentation.
 
 ### Contributing
-OpenEMR is an open-source project. To contribute to this documentation:
+Pacca PINE is an open-source project built on OpenEMR. To contribute to this documentation:
 - **Report Issues:** [GitHub Issues](https://github.com/openemr/openemr/issues)
 - **Discuss:** [Community Forum](https://community.open-emr.org/)
 - **Submit Changes:** [Pull Requests](https://github.com/openemr/openemr/pulls)

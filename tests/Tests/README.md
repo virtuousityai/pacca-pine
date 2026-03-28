@@ -1,15 +1,15 @@
-## OpenEMR Testing
+## Pacca PINE Testing
 
 ### Overview
 
-OpenEMR integration and unit tests are implemented using [phpunit](https://phpunit.de/). Browser based test cases are implemented using [Symfony's Panther framework](https://github.com/symfony/panther).
+Pacca PINE integration and unit tests are implemented using [phpunit](https://phpunit.de/). Browser based test cases are implemented using [Symfony's Panther framework](https://github.com/symfony/panther).
 
 ### Test Case Directory Structure
 
 | Directory | Test Case Type |
 | --------- | -------------- |
 | Api       | API Controller Tests |
-| Common    | Tests OpenEMR "common"/reusable components |
+| Common    | Tests Pacca PINE "common"/reusable components |
 | E2e       | Browser Based Tests (End to End) |
 | Fixture   | Manages test case fixtures |
 | Isolated  | Tests that run without a database or Docker (Twig templates, etc.) |
@@ -25,7 +25,7 @@ The FixtureManager currently supports the following record types:
 - FHIR Patient Resources
 
 To support additional record types within FixtureManager:
-- Add a supporting json file to the Fixture Namespace which maps to an OpenEMR database table.
+- Add a supporting json file to the Fixture Namespace which maps to a Pacca PINE database table.
 - Add public methods to the class to get, install, and remove fixture records.
 
 ### Isolated Tests

@@ -25,8 +25,8 @@ Steps to reproduce the behavior:
 ### Client configuration
 
 - Browser:
-- OpenEMR version:
+- Pacca PINE version:
 - Operating system:
 
-<!-- Love openemr? Please consider supporting our project:
+<!-- Love Pacca PINE? Please consider supporting our project:
 👉  https://github.com/sponsors/openemr -->
