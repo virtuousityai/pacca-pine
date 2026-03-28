@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skin 1: Sunrise Peach - OpenEMR</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #e8734a;
+    --primary-light: #f4a87a;
+    --primary-dark: #c9563a;
+    --secondary: #6b8f71;
+    --accent: #f7c859;
+    --bg: #fef9f4;
+    --bg-card: #ffffff;
+    --bg-sidebar: #fdf0e6;
+    --text: #3d2c22;
+    --text-muted: #8a7568;
+    --border: #f0ddd0;
+    --hover: #fff5ee;
+    --success: #6b8f71;
+    --danger: #d94f4f;
+    --warning: #f7c859;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(232,115,74,0.08);
+    --shadow-lg: 0 8px 32px rgba(232,115,74,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* === LOGIN PAGE === */
+  .login-page { display:flex; min-height:100vh; }
+  .login-left { flex:1; background:linear-gradient(135deg,#e8734a 0%,#f4a87a 50%,#f7c859 100%); display:flex; align-items:center; justify-content:center; padding:3rem; }
+  .login-left-content { text-align:center; color:#fff; }
+  .login-left h1 { font-size:2.5rem; font-weight:700; margin-bottom:0.5rem; }
+  .login-left p { font-size:1.1rem; opacity:0.9; }
+  .login-logo { width:80px; height:80px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2rem; color:var(--primary); }
+  .login-right { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem; background:var(--bg); }
+  .login-box { width:100%; max-width:380px; }
+  .login-box h2 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .login-box .sub { color:var(--text-muted); margin-bottom:2rem; font-size:0.95rem; }
+  .form-group { margin-bottom:1.2rem; }
+  .form-group label { display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.4rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; }
+  .form-group input { width:100%; padding:0.75rem 1rem; border:2px solid var(--border); border-radius:var(--radius-sm); font-size:1rem; font-family:inherit; background:var(--bg-card); transition:border 0.2s; }
+  .form-group input:focus { outline:none; border-color:var(--primary); }
+  .btn-primary { width:100%; padding:0.85rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:1rem; font-weight:700; font-family:inherit; cursor:pointer; transition:all 0.2s; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:var(--shadow-lg); }
+
+  /* === DASHBOARD === */
+  .dashboard { display:none; min-height:100vh; }
+  .sidebar { width:260px; background:var(--bg-sidebar); border-right:1px solid var(--border); padding:1.5rem 0; position:fixed; height:100vh; overflow-y:auto; }
+  .sidebar-logo { display:flex; align-items:center; gap:0.75rem; padding:0 1.5rem 1.5rem; border-bottom:1px solid var(--border); margin-bottom:1rem; }
+  .sidebar-logo .icon { width:40px; height:40px; background:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:1.1rem; }
+  .sidebar-logo span { font-weight:700; font-size:1.1rem; }
+  .nav-section { padding:0 1rem; margin-bottom:1.5rem; }
+  .nav-section-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); padding:0 0.5rem; margin-bottom:0.5rem; }
+  .nav-item { display:flex; align-items:center; gap:0.75rem; padding:0.65rem 0.75rem; border-radius:var(--radius-sm); cursor:pointer; transition:all 0.15s; font-size:0.9rem; color:var(--text); text-decoration:none; }
+  .nav-item:hover { background:var(--hover); }
+  .nav-item.active { background:var(--primary); color:#fff; font-weight:600; }
+  .nav-item .dot { width:8px; height:8px; border-radius:50%; }
+  .main { margin-left:260px; padding:2rem; }
+  .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
+  .topbar h1 { font-size:1.6rem; }
+  .topbar-actions { display:flex; gap:0.75rem; align-items:center; }
+  .avatar { width:38px; height:38px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.85rem; }
+  .search-box { padding:0.6rem 1rem; border:2px solid var(--border); border-radius:var(--radius); font-size:0.9rem; font-family:inherit; width:280px; background:var(--bg-card); }
+  .search-box:focus { outline:none; border-color:var(--primary-light); }
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+  .stat-card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .stat-card .label { font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.5rem; }
+  .stat-card .value { font-size:2rem; font-weight:700; color:var(--primary); }
+  .stat-card .change { font-size:0.8rem; color:var(--success); margin-top:0.25rem; }
+  .content-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.25rem; }
+  .card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .card h3 { font-size:1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; }
+  .card h3 .badge { font-size:0.7rem; background:var(--primary-light); color:#fff; padding:0.2rem 0.6rem; border-radius:20px; font-weight:600; }
+  .patient-row { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 0; border-bottom:1px solid var(--border); }
+  .patient-row:last-child { border-bottom:none; }
+  .patient-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#fff; }
+  .patient-info .name { font-weight:600; font-size:0.9rem; }
+  .patient-info .detail { font-size:0.8rem; color:var(--text-muted); }
+  .patient-status { margin-left:auto; font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:20px; font-weight:600; }
+  .status-scheduled { background:#e8f5e9; color:#2e7d32; }
+  .status-waiting { background:#fff3e0; color:#e65100; }
+  .status-completed { background:#e3f2fd; color:#1565c0; }
+  .appt-item { padding:0.6rem 0; border-bottom:1px solid var(--border); }
+  .appt-item:last-child { border-bottom:none; }
+  .appt-time { font-weight:700; font-size:0.85rem; color:var(--primary); }
+  .appt-name { font-size:0.9rem; font-weight:600; }
+  .appt-type { font-size:0.8rem; color:var(--text-muted); }
+
+  /* === PATIENT PORTAL === */
+  .portal { display:none; min-height:100vh; background:var(--bg); }
+  .portal-header { background:linear-gradient(135deg,var(--primary),var(--primary-light)); padding:2rem 3rem; color:#fff; }
+  .portal-header h1 { font-size:1.4rem; }
+  .portal-header p { opacity:0.9; font-size:0.95rem; }
+  .portal-content { max-width:900px; margin:0 auto; padding:2rem; }
+  .portal-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:1.5rem; }
+  .portal-card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; cursor:pointer; transition:all 0.2s; }
+  .portal-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .portal-card .icon { font-size:2rem; margin-bottom:0.75rem; }
+  .portal-card h4 { font-size:0.95rem; margin-bottom:0.3rem; }
+  .portal-card p { font-size:0.8rem; color:var(--text-muted); }
+  .health-summary { margin-top:1.5rem; }
+  .health-summary .metric { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.25rem; background:var(--bg-card); border-radius:var(--radius-sm); margin-bottom:0.75rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .metric .label { font-weight:600; }
+  .metric .val { font-size:1.2rem; font-weight:700; color:var(--primary); }
+
+  /* View Switcher */
+  .view-switcher { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; gap:0.5rem; background:var(--bg-card); padding:0.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); border:1px solid var(--border); z-index:100; }
+  .view-btn { padding:0.5rem 1rem; border:none; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:600; background:transparent; color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--primary); color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- VIEW SWITCHER -->
+<div class="view-switcher">
+  <button class="view-btn active" onclick="showView('login')">Login</button>
+  <button class="view-btn" onclick="showView('dashboard')">Dashboard</button>
+  <button class="view-btn" onclick="showView('portal')">Patient Portal</button>
+</div>
+
+<!-- LOGIN -->
+<div class="login-page" id="view-login" style="display:flex">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-logo">O</div>
+      <h1>OpenEMR</h1>
+      <p>Healthcare made warm & simple</p>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-box">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to your account</p>
+      <div class="form-group"><label>Username</label><input type="text" placeholder="Enter username"></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+      <button class="btn-primary" onclick="showView('dashboard')">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="view-dashboard">
+  <div class="sidebar">
+    <div class="sidebar-logo"><div class="icon">O</div><span>OpenEMR</span></div>
+    <div class="nav-section">
+      <div class="nav-section-title">Main</div>
+      <a class="nav-item active"><div class="dot" style="background:var(--primary)"></div> Dashboard</a>
+      <a class="nav-item"><div class="dot" style="background:var(--secondary)"></div> Calendar</a>
+      <a class="nav-item"><div class="dot" style="background:var(--accent)"></div> Messages</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Clinical</div>
+      <a class="nav-item"><div class="dot" style="background:#7eb8da"></div> Patients</a>
+      <a class="nav-item"><div class="dot" style="background:#c495c9"></div> Encounters</a>
+      <a class="nav-item"><div class="dot" style="background:#e8734a"></div> Billing</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Admin</div>
+      <a class="nav-item"><div class="dot" style="background:#8a7568"></div> Users</a>
+      <a class="nav-item"><div class="dot" style="background:#6b8f71"></div> Settings</a>
+      <a class="nav-item"><div class="dot" style="background:#d94f4f"></div> Reports</a>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h1>Good morning, Dr. Smith</h1>
+      <div class="topbar-actions">
+        <input class="search-box" placeholder="Search patients, records...">
+        <div class="avatar">DS</div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="label">Patients Today</div><div class="value">24</div><div class="change">+3 from yesterday</div></div>
+      <div class="stat-card"><div class="label">Appointments</div><div class="value">18</div><div class="change">2 cancellations</div></div>
+      <div class="stat-card"><div class="label">Pending Labs</div><div class="value">7</div><div class="change">3 critical</div></div>
+      <div class="stat-card"><div class="label">Messages</div><div class="value">12</div><div class="change">5 unread</div></div>
+    </div>
+    <div class="content-grid">
+      <div class="card">
+        <h3>Recent Patients <span class="badge">Today</span></h3>
+        <div class="patient-row"><div class="patient-avatar" style="background:#e8734a">MJ</div><div class="patient-info"><div class="name">Maria Johnson</div><div class="detail">DOB: 03/15/1985 &bull; Diabetes Follow-up</div></div><span class="patient-status status-scheduled">Scheduled</span></div>
+        <div class="patient-row"><div class="patient-avatar" style="background:#6b8f71">RW</div><div class="patient-info"><div class="name">Robert Williams</div><div class="detail">DOB: 11/22/1972 &bull; Annual Physical</div></div><span class="patient-status status-waiting">Waiting</span></div>
+        <div class="patient-row"><div class="patient-avatar" style="background:#7eb8da">SP</div><div class="patient-info"><div class="name">Sarah Park</div><div class="detail">DOB: 07/08/1990 &bull; Post-op Check</div></div><span class="patient-status status-completed">Completed</span></div>
+        <div class="patient-row"><div class="patient-avatar" style="background:#c495c9">JT</div><div class="patient-info"><div class="name">James Torres</div><div class="detail">DOB: 01/30/1968 &bull; Cardiology Consult</div></div><span class="patient-status status-scheduled">Scheduled</span></div>
+      </div>
+      <div class="card">
+        <h3>Upcoming</h3>
+        <div class="appt-item"><div class="appt-time">9:00 AM</div><div class="appt-name">Maria Johnson</div><div class="appt-type">Diabetes Follow-up</div></div>
+        <div class="appt-item"><div class="appt-time">9:45 AM</div><div class="appt-name">Robert Williams</div><div class="appt-type">Annual Physical</div></div>
+        <div class="appt-item"><div class="appt-time">10:30 AM</div><div class="appt-name">Sarah Park</div><div class="appt-type">Post-op Check</div></div>
+        <div class="appt-item"><div class="appt-time">11:15 AM</div><div class="appt-name">James Torres</div><div class="appt-type">Cardiology Consult</div></div>
+        <div class="appt-item"><div class="appt-time">1:00 PM</div><div class="appt-name">Linda Chen</div><div class="appt-type">Lab Review</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT PORTAL -->
+<div class="portal" id="view-portal">
+  <div class="portal-header">
+    <h1>Welcome, Maria Johnson</h1>
+    <p>Your health dashboard</p>
+  </div>
+  <div class="portal-content">
+    <div class="portal-cards">
+      <div class="portal-card"><div class="icon">&#128197;</div><h4>Appointments</h4><p>Schedule & manage visits</p></div>
+      <div class="portal-card"><div class="icon">&#128138;</div><h4>Medications</h4><p>View prescriptions</p></div>
+      <div class="portal-card"><div class="icon">&#128209;</div><h4>Lab Results</h4><p>View recent tests</p></div>
+      <div class="portal-card"><div class="icon">&#128172;</div><h4>Messages</h4><p>Contact your provider</p></div>
+      <div class="portal-card"><div class="icon">&#128179;</div><h4>Billing</h4><p>Payments & statements</p></div>
+      <div class="portal-card"><div class="icon">&#129657;</div><h4>Health Records</h4><p>Download your records</p></div>
+    </div>
+    <div class="health-summary">
+      <h3 style="margin-bottom:1rem">Health Summary</h3>
+      <div class="metric"><span class="label">Blood Pressure</span><span class="val">120/80</span></div>
+      <div class="metric"><span class="label">Heart Rate</span><span class="val">72 bpm</span></div>
+      <div class="metric"><span class="label">A1C</span><span class="val">6.2%</span></div>
+      <div class="metric"><span class="label">Next Appointment</span><span class="val">Mar 28</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.querySelectorAll('.login-page,.dashboard,.portal').forEach(el => el.style.display='none');
+  document.getElementById('view-'+view).style.display = view==='login'?'flex': view==='dashboard'?'flex':'block';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

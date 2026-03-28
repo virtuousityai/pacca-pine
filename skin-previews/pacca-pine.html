@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacca PINE - Healthcare Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #8b6cc1;
+    --primary-light: #b8a4d8;
+    --primary-dark: #6b4fa0;
+    --secondary: #e09891;
+    --accent: #f2c078;
+    --gold: #e8b930;
+    --bg: #f8f5fc;
+    --bg-card: #ffffff;
+    --bg-sidebar: #f0eaf8;
+    --text: #2d2440;
+    --text-muted: #7e7394;
+    --border: #e6ddf2;
+    --hover: #f5f0fb;
+    --success: #6aab7b;
+    --danger: #d4615e;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 2px 16px rgba(139,108,193,0.07);
+    --shadow-lg: 0 8px 32px rgba(139,108,193,0.14);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .pacca-img { object-fit:contain; }
+
+  .login-page { display:flex; min-height:100vh; }
+  .login-left { flex:1; background:linear-gradient(160deg,#8b6cc1 0%,#b8a4d8 40%,#e09891 100%); display:flex; align-items:center; justify-content:center; padding:3rem; position:relative; overflow:hidden; }
+  .login-left::before { content:''; position:absolute; width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,0.08); top:-60px; right:-60px; }
+  .login-left::after { content:''; position:absolute; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.06); bottom:-40px; left:-40px; }
+  .login-left-content { text-align:center; color:#fff; z-index:1; }
+  .login-logo { width:88px; height:88px; background:rgba(255,255,255,0.2); backdrop-filter:blur(10px); border-radius:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; padding:12px; }
+  .login-left h1 { font-size:2.2rem; font-weight:700; margin-bottom:0.15rem; }
+  .login-left .pine { font-size:1rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; opacity:0.9; margin-bottom:0.75rem; }
+  .login-left p { font-size:1rem; opacity:0.8; }
+  .login-right { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem; }
+  .login-box { width:100%; max-width:380px; }
+  .login-box .brand-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
+  .login-box .brand-row .logo-sm { width:40px; height:40px; }
+  .login-box .brand-row .brand-text { font-size:1.3rem; font-weight:700; color:var(--primary); }
+  .login-box .brand-row .brand-text span { font-weight:400; color:var(--text-muted); font-size:0.85rem; display:block; letter-spacing:2px; }
+  .login-box h2 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .login-box .sub { color:var(--text-muted); margin-bottom:2rem; }
+  .form-group { margin-bottom:1.2rem; }
+  .form-group label { display:block; font-weight:600; font-size:0.8rem; margin-bottom:0.4rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.6px; }
+  .form-group input { width:100%; padding:0.8rem 1rem; border:2px solid var(--border); border-radius:var(--radius-sm); font-size:0.95rem; font-family:inherit; background:var(--bg-card); transition:all 0.2s; }
+  .form-group input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(139,108,193,0.15); }
+  .btn-primary { width:100%; padding:0.85rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:1rem; font-weight:600; font-family:inherit; cursor:pointer; transition:all 0.2s; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:var(--shadow-lg); }
+  .forgot { text-align:center; margin-top:1rem; font-size:0.85rem; color:var(--primary); cursor:pointer; }
+
+  .dashboard { display:none; min-height:100vh; }
+  .topnav { background:var(--bg-card); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; height:64px; position:sticky; top:0; z-index:10; box-shadow:0 1px 4px rgba(0,0,0,0.03); }
+  .topnav .brand { font-weight:700; font-size:1.1rem; color:var(--primary); margin-right:2rem; display:flex; align-items:center; gap:0.6rem; }
+  .topnav .brand .icon { width:34px; height:34px; display:flex; align-items:center; justify-content:center; }
+  .topnav .brand .brand-name { display:flex; flex-direction:column; line-height:1.1; }
+  .topnav .brand .brand-name .name { font-size:1rem; font-weight:700; }
+  .topnav .brand .brand-name .sub-name { font-size:0.6rem; font-weight:600; letter-spacing:2px; color:var(--text-muted); text-transform:uppercase; }
+  .topnav nav { display:flex; gap:0.25rem; flex:1; }
+  .topnav nav a { padding:0.5rem 1rem; border-radius:var(--radius-sm); font-size:0.9rem; font-weight:500; color:var(--text-muted); text-decoration:none; transition:all 0.15s; }
+  .topnav nav a:hover { background:var(--hover); color:var(--text); }
+  .topnav nav a.active { background:var(--primary); color:#fff; }
+  .topnav .right { display:flex; align-items:center; gap:1rem; }
+  .topnav .search { padding:0.5rem 1rem; border:1px solid var(--border); border-radius:var(--radius); font-size:0.85rem; font-family:inherit; width:240px; background:var(--bg); }
+  .topnav .search:focus { outline:none; border-color:var(--primary-light); }
+  .avatar { width:36px; height:36px; border-radius:50%; background:var(--secondary); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.8rem; }
+  .dash-body { padding:2rem; max-width:1200px; margin:0 auto; }
+  .greeting { font-size:1.5rem; font-weight:700; margin-bottom:0.25rem; }
+  .greeting-sub { color:var(--text-muted); margin-bottom:2rem; }
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+  .stat { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); position:relative; overflow:hidden; }
+  .stat::after { content:''; position:absolute; top:0; left:0; width:4px; height:100%; border-radius:4px 0 0 4px; }
+  .stat:nth-child(1)::after { background:var(--primary); }
+  .stat:nth-child(2)::after { background:var(--secondary); }
+  .stat:nth-child(3)::after { background:var(--accent); }
+  .stat:nth-child(4)::after { background:var(--success); }
+  .stat .label { font-size:0.78rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.5rem; }
+  .stat .value { font-size:1.8rem; font-weight:700; }
+  .stat .sub { font-size:0.78rem; color:var(--success); margin-top:0.25rem; }
+  .grid { display:grid; grid-template-columns:1.5fr 1fr; gap:1.25rem; }
+  .card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .card h3 { font-size:1rem; margin-bottom:1rem; }
+  .table { width:100%; border-collapse:collapse; }
+  .table th { text-align:left; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); padding:0.5rem 0; border-bottom:2px solid var(--border); }
+  .table td { padding:0.7rem 0; border-bottom:1px solid var(--border); font-size:0.9rem; }
+  .table tr:last-child td { border-bottom:none; }
+  .pill { font-size:0.72rem; padding:0.2rem 0.6rem; border-radius:20px; font-weight:600; }
+  .pill-purple { background:#f0eaf8; color:#8b6cc1; }
+  .pill-pink { background:#fce8e6; color:#d4615e; }
+  .pill-green { background:#e8f5e9; color:#6aab7b; }
+  .timeline-item { display:flex; gap:1rem; padding:0.75rem 0; border-bottom:1px solid var(--border); }
+  .timeline-item:last-child { border-bottom:none; }
+  .timeline-dot { width:10px; height:10px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+  .timeline-text .title { font-weight:600; font-size:0.9rem; }
+  .timeline-text .time { font-size:0.78rem; color:var(--text-muted); }
+
+  .portal { display:none; min-height:100vh; }
+  .portal-nav { background:var(--bg-card); padding:1rem 2rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .portal-nav .brand { font-weight:700; color:var(--primary); font-size:1.1rem; display:flex; align-items:center; gap:0.6rem; }
+  .portal-nav .brand .logo-sm { width:28px; height:28px; }
+  .portal-hero { background:linear-gradient(135deg,var(--primary),var(--primary-light)); padding:3rem; color:#fff; text-align:center; position:relative; }
+  .portal-hero .hero-logo { width:48px; height:48px; margin:0 auto 0.75rem; opacity:0.3; }
+  .portal-hero h1 { font-size:1.6rem; margin-bottom:0.3rem; }
+  .portal-hero p { opacity:0.9; }
+  .portal-body { max-width:800px; margin:-2rem auto 0; padding:0 2rem 2rem; position:relative; z-index:1; }
+  .portal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-bottom:1.5rem; }
+  .portal-tile { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:1rem; }
+  .portal-tile:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .portal-tile .tile-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+  .portal-tile h4 { font-size:0.95rem; margin-bottom:0.15rem; }
+  .portal-tile p { font-size:0.8rem; color:var(--text-muted); }
+  .vitals-card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .vitals-card h3 { margin-bottom:1rem; }
+  .vital-row { display:flex; justify-content:space-between; padding:0.75rem 0; border-bottom:1px solid var(--border); }
+  .vital-row:last-child { border-bottom:none; }
+  .vital-row .val { font-weight:700; color:var(--primary); }
+
+  .view-switcher { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; gap:0.5rem; background:var(--bg-card); padding:0.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); border:1px solid var(--border); z-index:100; }
+  .view-btn { padding:0.5rem 1rem; border:none; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:600; background:transparent; color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--primary); color:#fff; }
+
+  /* Powered by footer */
+  .powered-by { text-align:center; padding:1.5rem; font-size:0.75rem; color:var(--text-muted); }
+  .powered-by span { color:var(--primary); font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- Pacca logo as embedded data URI -->
+
+<div class="view-switcher">
+  <button class="view-btn active" onclick="showView('login')">Login</button>
+  <button class="view-btn" onclick="showView('dashboard')">Dashboard</button>
+  <button class="view-btn" onclick="showView('portal')">Patient Portal</button>
+</div>
+
+<!-- LOGIN -->
+<div class="login-page" id="view-login" style="display:flex">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-logo">
+        <img class="pacca-img" src="data:image/png;base64,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" width="56" height="56" alt="Pacca">
+      </div>
+      <h1>Pacca</h1>
+      <div class="pine">PINE</div>
+      <p>Compassionate care, modern technology</p>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-box">
+      <div class="brand-row">
+        <div class="logo-sm">
+          <img class="pacca-img" src="data:image/png;base64,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" width="40" height="40" alt="Pacca">
+        </div>
+        <div class="brand-text">Pacca<span>PINE</span></div>
+      </div>
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to continue</p>
+      <div class="form-group"><label>Username</label><input type="text" placeholder="Enter username"></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+      <button class="btn-primary" onclick="showView('dashboard')">Sign In</button>
+      <div class="forgot">Forgot password?</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="view-dashboard">
+  <div class="topnav">
+    <div class="brand">
+      <div class="icon">
+        <img class="pacca-img" src="data:image/png;base64,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" width="30" height="30" alt="Pacca">
+      </div>
+      <div class="brand-name">
+        <span class="name">Pacca</span>
+        <span class="sub-name">PINE</span>
+      </div>
+    </div>
+    <nav>
+      <a class="active">Dashboard</a>
+      <a>Calendar</a>
+      <a>Patients</a>
+      <a>Encounters</a>
+      <a>Billing</a>
+      <a>Reports</a>
+    </nav>
+    <div class="right">
+      <input class="search" placeholder="Search...">
+      <div class="avatar">DS</div>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="greeting">Good morning, Dr. Smith</div>
+    <div class="greeting-sub">Thursday, March 27, 2026 &mdash; 18 appointments today</div>
+    <div class="stats-row">
+      <div class="stat"><div class="label">Patients Today</div><div class="value">24</div><div class="sub">+12% this week</div></div>
+      <div class="stat"><div class="label">Appointments</div><div class="value">18</div><div class="sub">2 walk-ins</div></div>
+      <div class="stat"><div class="label">Pending Results</div><div class="value">7</div><div class="sub">3 urgent</div></div>
+      <div class="stat"><div class="label">Unread Messages</div><div class="value">5</div><div class="sub">2 from patients</div></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Today's Schedule</h3>
+        <table class="table">
+          <thead><tr><th>Time</th><th>Patient</th><th>Visit Type</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>9:00 AM</td><td>Maria Johnson</td><td>Diabetes Follow-up</td><td><span class="pill pill-green">Checked In</span></td></tr>
+            <tr><td>9:45 AM</td><td>Robert Williams</td><td>Annual Physical</td><td><span class="pill pill-purple">Scheduled</span></td></tr>
+            <tr><td>10:30 AM</td><td>Sarah Park</td><td>Post-op Check</td><td><span class="pill pill-purple">Scheduled</span></td></tr>
+            <tr><td>11:15 AM</td><td>James Torres</td><td>Cardiology Consult</td><td><span class="pill pill-pink">Urgent</span></td></tr>
+            <tr><td>1:00 PM</td><td>Linda Chen</td><td>Lab Review</td><td><span class="pill pill-purple">Scheduled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Activity</h3>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--primary)"></div><div class="timeline-text"><div class="title">Lab results received</div><div class="time">Maria Johnson &bull; 8:45 AM</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--secondary)"></div><div class="timeline-text"><div class="title">Prescription renewed</div><div class="time">Robert Williams &bull; 8:30 AM</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--success)"></div><div class="timeline-text"><div class="title">Patient checked in</div><div class="time">Maria Johnson &bull; 8:55 AM</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent)"></div><div class="timeline-text"><div class="title">New message</div><div class="time">Sarah Park &bull; 7:15 AM</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--danger)"></div><div class="timeline-text"><div class="title">Critical lab alert</div><div class="time">James Torres &bull; Yesterday</div></div></div>
+      </div>
+    </div>
+    <div class="powered-by">Powered by <span>Pacca PINE</span></div>
+  </div>
+</div>
+
+<!-- PATIENT PORTAL -->
+<div class="portal" id="view-portal">
+  <div class="portal-nav">
+    <span class="brand">
+      <div class="logo-sm"><img class="pacca-img" src="data:image/png;base64,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" width="28" height="28" alt="Pacca"></div>
+      Pacca PINE Patient Portal
+    </span>
+    <div class="avatar" style="background:var(--secondary)">MJ</div>
+  </div>
+  <div class="portal-hero">
+    <div class="hero-logo"><img class="pacca-img" src="data:image/png;base64,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" width="48" height="48" alt="Pacca" style="opacity:0.25"></div>
+    <h1>Hello, Maria</h1>
+    <p>Here's your health overview</p>
+  </div>
+  <div class="portal-body">
+    <div class="portal-grid">
+      <div class="portal-tile"><div class="tile-icon" style="background:#f0eaf8">&#128197;</div><div><h4>Appointments</h4><p>Next: Mar 28, 9:00 AM</p></div></div>
+      <div class="portal-tile"><div class="tile-icon" style="background:#fce8e6">&#128138;</div><div><h4>Medications</h4><p>3 active prescriptions</p></div></div>
+      <div class="portal-tile"><div class="tile-icon" style="background:#fff8e1">&#128209;</div><div><h4>Lab Results</h4><p>2 new results available</p></div></div>
+      <div class="portal-tile"><div class="tile-icon" style="background:#e8f5e9">&#128172;</div><div><h4>Messages</h4><p>1 unread message</p></div></div>
+    </div>
+    <div class="vitals-card">
+      <h3>Recent Vitals</h3>
+      <div class="vital-row"><span>Blood Pressure</span><span class="val">120/80 mmHg</span></div>
+      <div class="vital-row"><span>Heart Rate</span><span class="val">72 bpm</span></div>
+      <div class="vital-row"><span>Temperature</span><span class="val">98.6 &deg;F</span></div>
+      <div class="vital-row"><span>A1C</span><span class="val">6.2%</span></div>
+      <div class="vital-row"><span>Weight</span><span class="val">154 lbs</span></div>
+    </div>
+    <div class="powered-by">Powered by <span>Pacca PINE</span></div>
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.querySelectorAll('.login-page,.dashboard,.portal').forEach(el => el.style.display='none');
+  document.getElementById('view-'+view).style.display = view==='login'?'flex': view==='dashboard'?'flex':'block';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

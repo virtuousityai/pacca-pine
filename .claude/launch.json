@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "skin-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "skin-previews", "-p", "8400", "-c-1"],
+      "port": 8400
+    }
+  ]
+}

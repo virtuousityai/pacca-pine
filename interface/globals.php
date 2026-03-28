@@ -630,11 +630,11 @@ if (!empty($glrow)) {
     $globalsBag->set('translate_document_categories', true);
     $globalsBag->set('translate_appt_categories', true);
     $globalsBag->set('timeout', 7200);
-    $openemr_name = 'OpenEMR';
-    $css_header = "$web_root/public/themes/style_default.css";
+    $openemr_name = 'Pacca PINE';
+    $css_header = "$web_root/public/themes/style_pacca_pine.css";
     $globalsBag->set('openemr_name', $openemr_name);
     $globalsBag->set('css_header', $css_header);
-    $compact_header = "$web_root/public/themes/style_default.css";
+    $compact_header = "$web_root/public/themes/style_pacca_pine.css";
     $globalsBag->set('compact_header', $compact_header);
     $globalsBag->set('schedule_start', 8);
     $globalsBag->set('schedule_end', 17);

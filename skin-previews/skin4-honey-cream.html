@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skin 4: Honey Cream - OpenEMR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #c48840;
+    --primary-light: #e4b87a;
+    --primary-dark: #9a6a2e;
+    --secondary: #7a9eb5;
+    --accent: #d4705a;
+    --bg: #faf6f0;
+    --bg-card: #ffffff;
+    --bg-sidebar: #f4ede2;
+    --text: #3a2f24;
+    --text-muted: #8c7e6e;
+    --border: #e8dfd2;
+    --hover: #f7f1e8;
+    --success: #6a9a72;
+    --danger: #c4645a;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 4px 20px rgba(196,136,64,0.06);
+    --shadow-lg: 0 12px 40px rgba(196,136,64,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .login-page { display:flex; min-height:100vh; }
+  .login-left { flex:1; background:linear-gradient(145deg,#9a6a2e,#c48840,#e4b87a,#f0d9a8); display:flex; align-items:center; justify-content:center; padding:3rem; position:relative; }
+  .login-left::before { content:''; position:absolute; inset:2rem; border:2px solid rgba(255,255,255,0.15); border-radius:30px; }
+  .login-left-content { text-align:center; color:#fff; z-index:1; }
+  .login-logo { width:90px; height:90px; background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); border-radius:28px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2.2rem; font-weight:700; border:2px solid rgba(255,255,255,0.2); }
+  .login-left h1 { font-size:2.4rem; font-weight:700; margin-bottom:0.5rem; }
+  .login-left p { font-size:1rem; opacity:0.85; }
+  .login-right { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem; }
+  .login-box { width:100%; max-width:400px; background:var(--bg-card); padding:2.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); }
+  .login-box h2 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .login-box .sub { color:var(--text-muted); margin-bottom:2rem; font-size:0.9rem; }
+  .form-group { margin-bottom:1.2rem; }
+  .form-group label { display:block; font-weight:600; font-size:0.8rem; margin-bottom:0.4rem; color:var(--text-muted); }
+  .form-group input { width:100%; padding:0.85rem 1.1rem; border:2px solid var(--border); border-radius:var(--radius-sm); font-size:0.95rem; font-family:inherit; background:var(--bg); transition:all 0.2s; }
+  .form-group input:focus { outline:none; border-color:var(--primary); background:#fff; }
+  .btn-primary { width:100%; padding:0.9rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:1rem; font-weight:600; font-family:inherit; cursor:pointer; transition:all 0.25s; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .login-footer { display:flex; justify-content:space-between; margin-top:1.2rem; font-size:0.82rem; color:var(--primary); }
+  .login-footer span { cursor:pointer; }
+
+  .dashboard { display:none; min-height:100vh; }
+  .sidebar { width:280px; background:var(--bg-card); border-right:1px solid var(--border); position:fixed; height:100vh; overflow-y:auto; display:flex; flex-direction:column; }
+  .sidebar-header { padding:1.5rem; display:flex; align-items:center; gap:0.75rem; border-bottom:1px solid var(--border); }
+  .sidebar-header .logo { width:42px; height:42px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:1.1rem; }
+  .sidebar-header .text { font-weight:700; font-size:1.05rem; }
+  .sidebar-header .text span { display:block; font-size:0.72rem; color:var(--text-muted); font-weight:500; }
+  .nav-group { padding:1rem 1rem 0; }
+  .nav-group-title { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); margin-bottom:0.5rem; padding:0 0.5rem; }
+  .nav-item { display:flex; align-items:center; gap:0.75rem; padding:0.7rem 0.75rem; border-radius:var(--radius-sm); cursor:pointer; font-size:0.88rem; font-weight:500; color:var(--text-muted); transition:all 0.15s; margin-bottom:2px; }
+  .nav-item:hover { background:var(--hover); color:var(--text); }
+  .nav-item.active { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; box-shadow:0 4px 12px rgba(196,136,64,0.2); }
+  .nav-icon { width:20px; text-align:center; font-size:1rem; }
+  .sidebar-footer { margin-top:auto; padding:1rem 1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; gap:0.75rem; }
+  .avatar { width:36px; height:36px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; font-size:0.8rem; }
+  .user-info .name { font-weight:600; font-size:0.85rem; }
+  .user-info .role { font-size:0.72rem; color:var(--text-muted); }
+  .main { margin-left:280px; padding:2rem; }
+  .main-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
+  .main-header h1 { font-size:1.5rem; }
+  .main-header .search { padding:0.65rem 1.1rem; border:2px solid var(--border); border-radius:var(--radius); font-size:0.9rem; font-family:inherit; width:300px; background:var(--bg-card); }
+  .main-header .search:focus { outline:none; border-color:var(--primary-light); }
+  .stat-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+  .stat-card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .stat-card .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; }
+  .stat-card .label { font-size:0.78rem; color:var(--text-muted); font-weight:500; }
+  .stat-card .icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+  .stat-card .value { font-size:2rem; font-weight:700; }
+  .stat-card .change { font-size:0.75rem; color:var(--success); margin-top:0.2rem; font-weight:500; }
+  .content-area { display:grid; grid-template-columns:1.5fr 1fr; gap:1.25rem; }
+  .card { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+  .card-header h3 { font-size:0.95rem; }
+  .card-header .see-all { font-size:0.78rem; color:var(--primary); cursor:pointer; font-weight:600; }
+  .patient-item { display:flex; align-items:center; gap:0.75rem; padding:0.75rem; border-radius:var(--radius-sm); margin-bottom:0.5rem; transition:background 0.15s; cursor:pointer; }
+  .patient-item:hover { background:var(--hover); }
+  .p-avatar { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.82rem; color:#fff; }
+  .p-info .name { font-weight:600; font-size:0.88rem; }
+  .p-info .detail { font-size:0.78rem; color:var(--text-muted); }
+  .p-status { margin-left:auto; }
+  .pill { font-size:0.7rem; padding:0.25rem 0.65rem; border-radius:20px; font-weight:600; }
+  .pill-gold { background:#fdf0d5; color:#9a6a2e; }
+  .pill-blue { background:#e0eff6; color:#4a7a8f; }
+  .pill-green { background:#e5f0e7; color:#4a7a52; }
+  .pill-red { background:#fce8e6; color:#c4645a; }
+  .upcoming-item { padding:0.7rem 0; border-bottom:1px solid var(--border); }
+  .upcoming-item:last-child { border-bottom:none; }
+  .up-time { font-size:0.78rem; font-weight:700; color:var(--primary); }
+  .up-name { font-weight:600; font-size:0.88rem; }
+  .up-type { font-size:0.78rem; color:var(--text-muted); }
+
+  .portal { display:none; min-height:100vh; }
+  .portal-nav { padding:1rem 2rem; background:var(--bg-card); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .portal-nav .brand { font-weight:700; color:var(--primary); font-size:1.1rem; }
+  .portal-nav .links { display:flex; gap:1.5rem; }
+  .portal-nav .links a { font-size:0.88rem; color:var(--text-muted); text-decoration:none; font-weight:500; }
+  .portal-nav .links a.active { color:var(--primary); }
+  .portal-hero { background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--primary-light)); padding:3rem 2rem; color:#fff; text-align:center; border-radius:0 0 40px 40px; }
+  .portal-hero h1 { font-size:1.6rem; margin-bottom:0.3rem; }
+  .portal-body { max-width:850px; margin:-1.5rem auto 0; padding:0 2rem 2rem; position:relative; z-index:1; }
+  .portal-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+  .portal-action { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; cursor:pointer; transition:all 0.25s; }
+  .portal-action:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .portal-action .ic { width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 0.75rem; }
+  .portal-action h4 { font-size:0.92rem; margin-bottom:0.2rem; }
+  .portal-action p { font-size:0.78rem; color:var(--text-muted); }
+  .portal-vitals { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .portal-vitals h3 { margin-bottom:1rem; }
+  .vital-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; }
+  .vital-item { padding:1rem; border-radius:var(--radius-sm); background:var(--bg); border:1px solid var(--border); }
+  .vital-item .label { font-size:0.75rem; color:var(--text-muted); margin-bottom:0.25rem; }
+  .vital-item .val { font-size:1.3rem; font-weight:700; color:var(--primary); }
+  .vital-item .unit { font-size:0.78rem; color:var(--text-muted); }
+
+  .view-switcher { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; gap:0.5rem; background:var(--bg-card); padding:0.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); border:1px solid var(--border); z-index:100; }
+  .view-btn { padding:0.5rem 1rem; border:none; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:600; background:transparent; color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--primary); color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="view-switcher">
+  <button class="view-btn active" onclick="showView('login')">Login</button>
+  <button class="view-btn" onclick="showView('dashboard')">Dashboard</button>
+  <button class="view-btn" onclick="showView('portal')">Patient Portal</button>
+</div>
+
+<div class="login-page" id="view-login" style="display:flex">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-logo">O</div>
+      <h1>OpenEMR</h1>
+      <p>Care that feels like home</p>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-box">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to continue to your dashboard</p>
+      <div class="form-group"><label>Username</label><input type="text" placeholder="Enter username"></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+      <button class="btn-primary" onclick="showView('dashboard')">Sign In</button>
+      <div class="login-footer"><span>Forgot password?</span><span>Need help?</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard" id="view-dashboard">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">O</div>
+      <div class="text">OpenEMR<span>Healthcare Platform</span></div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Overview</div>
+      <div class="nav-item active"><span class="nav-icon">&#127968;</span> Dashboard</div>
+      <div class="nav-item"><span class="nav-icon">&#128197;</span> Calendar</div>
+      <div class="nav-item"><span class="nav-icon">&#128172;</span> Messages</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Clinical</div>
+      <div class="nav-item"><span class="nav-icon">&#128101;</span> Patients</div>
+      <div class="nav-item"><span class="nav-icon">&#128203;</span> Encounters</div>
+      <div class="nav-item"><span class="nav-icon">&#128138;</span> Prescriptions</div>
+      <div class="nav-item"><span class="nav-icon">&#128300;</span> Lab Orders</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Operations</div>
+      <div class="nav-item"><span class="nav-icon">&#128179;</span> Billing</div>
+      <div class="nav-item"><span class="nav-icon">&#128202;</span> Reports</div>
+      <div class="nav-item"><span class="nav-icon">&#9881;</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="avatar">DS</div>
+      <div class="user-info"><div class="name">Dr. Smith</div><div class="role">Family Medicine</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="main-header"><h1>Good morning, Dr. Smith</h1><input class="search" placeholder="Search patients, records..."></div>
+    <div class="stat-cards">
+      <div class="stat-card"><div class="top"><span class="label">Patients Today</span><div class="icon" style="background:#fdf0d5">&#128101;</div></div><div class="value">24</div><div class="change">+3 from yesterday</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Appointments</span><div class="icon" style="background:#e0eff6">&#128197;</div></div><div class="value">18</div><div class="change">On schedule</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Pending Labs</span><div class="icon" style="background:#e5f0e7">&#128300;</div></div><div class="value">7</div><div class="change">3 critical</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Messages</span><div class="icon" style="background:#fce8e6">&#128172;</div></div><div class="value">12</div><div class="change">5 unread</div></div>
+    </div>
+    <div class="content-area">
+      <div class="card">
+        <div class="card-header"><h3>Recent Patients</h3><span class="see-all">See all</span></div>
+        <div class="patient-item"><div class="p-avatar" style="background:var(--primary)">MJ</div><div class="p-info"><div class="name">Maria Johnson</div><div class="detail">Diabetes Follow-up &bull; 9:00 AM</div></div><div class="p-status"><span class="pill pill-green">Checked In</span></div></div>
+        <div class="patient-item"><div class="p-avatar" style="background:var(--secondary)">RW</div><div class="p-info"><div class="name">Robert Williams</div><div class="detail">Annual Physical &bull; 9:45 AM</div></div><div class="p-status"><span class="pill pill-gold">Scheduled</span></div></div>
+        <div class="patient-item"><div class="p-avatar" style="background:var(--accent)">SP</div><div class="p-info"><div class="name">Sarah Park</div><div class="detail">Post-op Check &bull; 10:30 AM</div></div><div class="p-status"><span class="pill pill-blue">Waiting</span></div></div>
+        <div class="patient-item"><div class="p-avatar" style="background:#7a9eb5">JT</div><div class="p-info"><div class="name">James Torres</div><div class="detail">Cardiology Consult &bull; 11:15 AM</div></div><div class="p-status"><span class="pill pill-red">Urgent</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Upcoming</h3></div>
+        <div class="upcoming-item"><div class="up-time">9:00 AM</div><div class="up-name">Maria Johnson</div><div class="up-type">Diabetes Follow-up</div></div>
+        <div class="upcoming-item"><div class="up-time">9:45 AM</div><div class="up-name">Robert Williams</div><div class="up-type">Annual Physical</div></div>
+        <div class="upcoming-item"><div class="up-time">10:30 AM</div><div class="up-name">Sarah Park</div><div class="up-type">Post-op Check</div></div>
+        <div class="upcoming-item"><div class="up-time">11:15 AM</div><div class="up-name">James Torres</div><div class="up-type">Cardiology Consult</div></div>
+        <div class="upcoming-item"><div class="up-time">1:00 PM</div><div class="up-name">Linda Chen</div><div class="up-type">Lab Review</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="portal" id="view-portal">
+  <div class="portal-nav">
+    <span class="brand">OpenEMR</span>
+    <div class="links"><a class="active">Home</a><a>Appointments</a><a>Records</a><a>Messages</a></div>
+    <div class="avatar" style="background:var(--accent)">MJ</div>
+  </div>
+  <div class="portal-hero"><h1>Hello, Maria</h1><p>Everything you need for your health journey</p></div>
+  <div class="portal-body">
+    <div class="portal-actions">
+      <div class="portal-action"><div class="ic" style="background:#fdf0d5">&#128197;</div><h4>Appointments</h4><p>Schedule & manage</p></div>
+      <div class="portal-action"><div class="ic" style="background:#e0eff6">&#128138;</div><h4>Medications</h4><p>View prescriptions</p></div>
+      <div class="portal-action"><div class="ic" style="background:#e5f0e7">&#128209;</div><h4>Lab Results</h4><p>2 new available</p></div>
+      <div class="portal-action"><div class="ic" style="background:#fce8e6">&#128172;</div><h4>Messages</h4><p>1 unread</p></div>
+      <div class="portal-action"><div class="ic" style="background:#f5eaff">&#128179;</div><h4>Billing</h4><p>Payments</p></div>
+      <div class="portal-action"><div class="ic" style="background:#fdf0d5">&#129657;</div><h4>Records</h4><p>Health records</p></div>
+    </div>
+    <div class="portal-vitals">
+      <h3>Your Vitals</h3>
+      <div class="vital-grid">
+        <div class="vital-item"><div class="label">Blood Pressure</div><div class="val">120/80 <span class="unit">mmHg</span></div></div>
+        <div class="vital-item"><div class="label">Heart Rate</div><div class="val">72 <span class="unit">bpm</span></div></div>
+        <div class="vital-item"><div class="label">A1C</div><div class="val">6.2 <span class="unit">%</span></div></div>
+        <div class="vital-item"><div class="label">Weight</div><div class="val">154 <span class="unit">lbs</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.querySelectorAll('.login-page,.dashboard,.portal').forEach(el => el.style.display='none');
+  document.getElementById('view-'+view).style.display = view==='login'?'flex': view==='dashboard'?'flex':'block';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

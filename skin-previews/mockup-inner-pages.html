@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacca PINE - Inner Pages Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #8b6cc1;
+    --primary-light: #b8a4d8;
+    --primary-dark: #6b4fa0;
+    --primary-bg: #f0eaf8;
+    --secondary: #e09891;
+    --accent: #f2c078;
+    --gold: #e8b930;
+    --bg: #f8f5fc;
+    --bg-card: #ffffff;
+    --text: #2d2440;
+    --text-muted: #7e7394;
+    --text-light: #a89cc0;
+    --border: #e6ddf2;
+    --hover: #f5f0fb;
+    --success: #6aab7b;
+    --danger: #d4615e;
+    --info: #7eb8da;
+    --warning: #f2c078;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+    --shadow: 0 2px 12px rgba(139,108,193,0.06);
+    --shadow-md: 0 4px 20px rgba(139,108,193,0.1);
+    --shadow-lg: 0 8px 32px rgba(139,108,193,0.14);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; }
+
+  /* === SHARED TOP NAV === */
+  .topnav { background:var(--bg-card); border-bottom:1px solid var(--border); display:flex; align-items:center; height:56px; padding:0 1.25rem; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .topnav .brand { display:flex; align-items:center; gap:0.5rem; margin-right:1.5rem; flex-shrink:0; }
+  .topnav .brand img { width:28px; height:28px; }
+  .topnav .brand-text { font-weight:700; font-size:1rem; color:var(--primary); line-height:1; }
+  .topnav .brand-text small { display:block; font-size:0.55rem; font-weight:600; letter-spacing:2px; color:var(--text-muted); text-transform:uppercase; }
+  .nav-items { display:flex; gap:2px; flex:1; overflow-x:auto; }
+  .nav-item { display:flex; align-items:center; gap:0.4rem; padding:0.45rem 0.75rem; border-radius:var(--radius-sm); font-size:0.82rem; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all 0.15s; white-space:nowrap; text-decoration:none; }
+  .nav-item:hover { background:var(--hover); color:var(--text); }
+  .nav-item.active { background:var(--primary); color:#fff; }
+  .nav-item .icon { font-size:1rem; width:18px; text-align:center; }
+  .nav-right { display:flex; align-items:center; gap:0.75rem; margin-left:auto; flex-shrink:0; }
+  .search-bar { display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0.85rem; border:1.5px solid var(--border); border-radius:var(--radius); background:var(--bg); font-size:0.82rem; color:var(--text-muted); width:220px; }
+  .search-bar input { border:none; background:transparent; font-family:inherit; font-size:0.82rem; color:var(--text); outline:none; flex:1; }
+  .search-bar input::placeholder { color:var(--text-light); }
+  .notif-btn { width:36px; height:36px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; border:1px solid var(--border); }
+  .notif-btn .dot { position:absolute; top:6px; right:6px; width:7px; height:7px; background:var(--danger); border-radius:50%; border:1.5px solid #fff; }
+  .avatar-nav { width:34px; height:34px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.75rem; cursor:pointer; }
+
+  /* === CONTENT TABS === */
+  .content-tabs { display:flex; align-items:center; gap:0; padding:0 1.25rem; background:var(--bg-card); border-bottom:1px solid var(--border); }
+  .tab { display:flex; align-items:center; gap:0.4rem; padding:0.75rem 1rem; font-size:0.82rem; font-weight:500; color:var(--text-muted); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.15s; }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--primary); border-bottom-color:var(--primary); font-weight:600; }
+  .tab .close-tab { margin-left:0.5rem; font-size:0.7rem; opacity:0.5; cursor:pointer; }
+  .tab .close-tab:hover { opacity:1; }
+
+  /* === LAYOUT === */
+  .layout { display:flex; min-height:calc(100vh - 56px); }
+  .sidebar { width:260px; background:var(--bg-card); border-right:1px solid var(--border); padding:1.25rem; overflow-y:auto; flex-shrink:0; }
+  .main-content { flex:1; padding:1.25rem; overflow-y:auto; }
+
+  /* === SIDEBAR COMPONENTS === */
+  .sidebar-section { margin-bottom:1.5rem; }
+  .sidebar-section-title { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:0.75rem; }
+  .mini-cal { width:100%; border-collapse:collapse; margin-bottom:0.5rem; }
+  .mini-cal th { font-size:0.68rem; font-weight:600; color:var(--text-muted); padding:0.35rem; text-align:center; }
+  .mini-cal td { font-size:0.75rem; padding:0.3rem; text-align:center; cursor:pointer; border-radius:6px; transition:background 0.1s; }
+  .mini-cal td:hover { background:var(--hover); }
+  .mini-cal td.today { background:var(--primary); color:#fff; font-weight:700; }
+  .mini-cal td.other-month { color:var(--text-light); }
+  .mini-cal td.has-appt { position:relative; }
+  .mini-cal td.has-appt::after { content:''; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; background:var(--primary); border-radius:50%; }
+  .cal-nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+  .cal-nav .month { font-weight:600; font-size:0.88rem; }
+  .cal-nav button { background:none; border:1px solid var(--border); border-radius:6px; width:28px; height:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.75rem; }
+  .cal-nav button:hover { background:var(--hover); }
+  .provider-list { list-style:none; }
+  .provider-item { display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.6rem; border-radius:var(--radius-sm); cursor:pointer; font-size:0.82rem; transition:background 0.15s; }
+  .provider-item:hover { background:var(--hover); }
+  .provider-item.active { background:var(--primary-bg); font-weight:600; }
+  .provider-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .provider-avatar { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:700; color:#fff; flex-shrink:0; }
+  .quick-add-btn { width:100%; padding:0.6rem; border:2px dashed var(--border); border-radius:var(--radius-sm); background:transparent; color:var(--primary); font-weight:600; font-size:0.82rem; cursor:pointer; font-family:inherit; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:0.4rem; }
+  .quick-add-btn:hover { border-color:var(--primary-light); background:var(--primary-bg); }
+
+  /* === CALENDAR VIEW === */
+  .cal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+  .cal-header h2 { font-size:1.25rem; font-weight:700; display:flex; align-items:center; gap:0.75rem; }
+  .cal-header .nav-arrows { display:flex; gap:0.25rem; }
+  .cal-header .nav-arrows button { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; width:34px; height:34px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.85rem; color:var(--text-muted); transition:all 0.15s; }
+  .cal-header .nav-arrows button:hover { background:var(--hover); color:var(--text); }
+  .cal-actions { display:flex; gap:0.5rem; align-items:center; }
+  .cal-actions .today-btn { padding:0.45rem 1rem; background:var(--bg-card); border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:0.82rem; font-weight:600; color:var(--text); cursor:pointer; font-family:inherit; }
+  .cal-actions .today-btn:hover { border-color:var(--primary-light); }
+  .view-toggle { display:flex; border:1.5px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+  .view-toggle button { padding:0.45rem 0.85rem; border:none; background:transparent; font-size:0.78rem; font-weight:600; color:var(--text-muted); cursor:pointer; font-family:inherit; transition:all 0.15s; }
+  .view-toggle button:hover { background:var(--hover); }
+  .view-toggle button.active { background:var(--primary); color:#fff; }
+
+  .day-grid { background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow); }
+  .day-grid-header { display:grid; grid-template-columns:60px 1fr; background:var(--primary-bg); border-bottom:1px solid var(--border); }
+  .day-grid-header .time-col { padding:0.6rem; font-size:0.7rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; }
+  .day-grid-header .day-col { padding:0.6rem 1rem; font-weight:600; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; }
+  .day-grid-header .day-col .provider-badge { font-size:0.7rem; background:var(--primary); color:#fff; padding:0.15rem 0.5rem; border-radius:20px; }
+  .time-grid { display:grid; grid-template-columns:60px 1fr; }
+  .time-slot { padding:0.5rem 0.6rem; font-size:0.72rem; color:var(--text-muted); font-weight:500; text-align:right; border-right:1px solid var(--border); border-bottom:1px solid #f0edf5; min-height:48px; display:flex; align-items:flex-start; justify-content:flex-end; }
+  .event-area { border-bottom:1px solid #f0edf5; padding:0.25rem 0.5rem; position:relative; min-height:48px; }
+  .event-area:hover { background:#faf8fd; }
+
+  /* Appointment Cards */
+  .appt-card { background:var(--primary-bg); border-left:3px solid var(--primary); border-radius:0 var(--radius-xs) var(--radius-xs) 0; padding:0.5rem 0.75rem; margin-bottom:0.25rem; cursor:pointer; transition:all 0.15s; }
+  .appt-card:hover { box-shadow:var(--shadow-md); transform:translateX(2px); }
+  .appt-card.type-physical { background:#e8f0ea; border-left-color:var(--success); }
+  .appt-card.type-followup { background:var(--primary-bg); border-left-color:var(--primary); }
+  .appt-card.type-urgent { background:#fce8e6; border-left-color:var(--danger); }
+  .appt-card.type-consult { background:#e0eff6; border-left-color:var(--info); }
+  .appt-card.type-newpatient { background:#fdf5e0; border-left-color:var(--warning); }
+  .appt-card .appt-top { display:flex; justify-content:space-between; align-items:center; }
+  .appt-card .appt-name { font-weight:600; font-size:0.82rem; }
+  .appt-card .appt-time { font-size:0.7rem; color:var(--text-muted); }
+  .appt-card .appt-type { font-size:0.72rem; color:var(--text-muted); margin-top:0.1rem; }
+  .appt-card .appt-status { display:inline-flex; align-items:center; gap:0.25rem; font-size:0.65rem; font-weight:600; padding:0.1rem 0.4rem; border-radius:10px; margin-top:0.25rem; }
+  .status-in { background:#e8f0ea; color:#3d7a4a; }
+  .status-scheduled { background:var(--primary-bg); color:var(--primary); }
+  .status-waiting { background:#fdf5e0; color:#8a6a1a; }
+
+  /* === MOCKUP B: PATIENT VIEW === */
+  .patient-header { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; margin-bottom:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); display:flex; align-items:center; gap:1.25rem; }
+  .patient-avatar-lg { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; color:#fff; background:linear-gradient(135deg,var(--primary),var(--primary-light)); flex-shrink:0; }
+  .patient-details h2 { font-size:1.15rem; font-weight:700; margin-bottom:0.15rem; }
+  .patient-details .meta { font-size:0.82rem; color:var(--text-muted); display:flex; gap:1rem; flex-wrap:wrap; }
+  .patient-details .meta span { display:flex; align-items:center; gap:0.3rem; }
+  .patient-actions { margin-left:auto; display:flex; gap:0.5rem; }
+  .patient-actions button { padding:0.5rem 1rem; border-radius:var(--radius-sm); font-size:0.82rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+  .btn-fill { background:var(--primary); color:#fff; border:none; }
+  .btn-fill:hover { background:var(--primary-dark); }
+  .btn-outline { background:transparent; color:var(--primary); border:1.5px solid var(--primary-light); }
+  .btn-outline:hover { background:var(--primary-bg); }
+
+  .patient-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.25rem; }
+  .info-card { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .info-card h4 { font-size:0.82rem; font-weight:600; color:var(--text-muted); margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between; }
+  .info-card h4 .edit-link { font-size:0.72rem; color:var(--primary); cursor:pointer; font-weight:500; }
+  .info-row { display:flex; justify-content:space-between; padding:0.4rem 0; border-bottom:1px solid #f5f0fb; font-size:0.82rem; }
+  .info-row:last-child { border-bottom:none; }
+  .info-row .label { color:var(--text-muted); }
+  .info-row .value { font-weight:600; }
+
+  .clinical-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:1rem; }
+  .clinical-card { background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; }
+  .clinical-card-head { padding:0.85rem 1.25rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .clinical-card-head h3 { font-size:0.92rem; font-weight:600; }
+  .clinical-card-head .badge-count { font-size:0.68rem; background:var(--primary-bg); color:var(--primary); padding:0.15rem 0.5rem; border-radius:20px; font-weight:600; }
+  .clinical-card-body { padding:0.75rem 1.25rem; }
+  .med-row { display:flex; align-items:center; gap:0.75rem; padding:0.6rem 0; border-bottom:1px solid #f5f0fb; }
+  .med-row:last-child { border-bottom:none; }
+  .med-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; }
+  .med-info .med-name { font-weight:600; font-size:0.85rem; }
+  .med-info .med-dose { font-size:0.75rem; color:var(--text-muted); }
+  .med-status { margin-left:auto; font-size:0.68rem; font-weight:600; padding:0.15rem 0.5rem; border-radius:10px; }
+  .enc-row { padding:0.6rem 0; border-bottom:1px solid #f5f0fb; }
+  .enc-row:last-child { border-bottom:none; }
+  .enc-row .enc-top { display:flex; justify-content:space-between; align-items:center; }
+  .enc-row .enc-date { font-weight:600; font-size:0.82rem; }
+  .enc-row .enc-type { font-size:0.72rem; color:var(--text-muted); margin-top:0.1rem; }
+  .enc-badge { font-size:0.68rem; padding:0.15rem 0.45rem; border-radius:10px; font-weight:600; }
+
+  /* === VIEW SWITCHER === */
+  .view-switcher { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; gap:0.5rem; background:var(--bg-card); padding:0.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); border:1px solid var(--border); z-index:200; }
+  .view-btn { padding:0.5rem 0.85rem; border:none; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit; font-size:0.78rem; font-weight:600; background:transparent; color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--primary); color:#fff; }
+
+  /* Current time indicator */
+  .current-time { position:relative; }
+  .current-time::before { content:''; position:absolute; left:-8px; top:50%; transform:translateY(-50%); width:8px; height:8px; background:var(--danger); border-radius:50%; }
+  .current-time::after { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:100%; height:2px; background:var(--danger); z-index:1; }
+</style>
+</head>
+<body>
+
+<div class="view-switcher">
+  <button class="view-btn active" onclick="showView('calendar')">A: Calendar</button>
+  <button class="view-btn" onclick="showView('patient')">B: Patient View</button>
+  <button class="view-btn" onclick="showView('table')">C: Patient Finder</button>
+</div>
+
+<!-- ============ SHARED TOP NAV ============ -->
+<div class="topnav">
+  <div class="brand">
+    <img src="data:image/png;base64,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" alt="Pacca">
+    <div class="brand-text">Pacca<small>PINE</small></div>
+  </div>
+  <div class="nav-items">
+    <a class="nav-item active"><span class="icon">&#128197;</span> Calendar</a>
+    <a class="nav-item"><span class="icon">&#128269;</span> Finder</a>
+    <a class="nav-item"><span class="icon">&#128232;</span> Messages</a>
+    <a class="nav-item"><span class="icon">&#128101;</span> Patients</a>
+    <a class="nav-item"><span class="icon">&#128179;</span> Billing</a>
+    <a class="nav-item"><span class="icon">&#128203;</span> Flow</a>
+    <a class="nav-item"><span class="icon">&#128300;</span> Procedures</a>
+    <a class="nav-item"><span class="icon">&#128202;</span> Reports</a>
+    <a class="nav-item"><span class="icon">&#9881;</span> Admin</a>
+  </div>
+  <div class="nav-right">
+    <div class="search-bar">
+      <span>&#128269;</span>
+      <input placeholder="Search patients, records...">
+    </div>
+    <div class="notif-btn">&#128276;<div class="dot"></div></div>
+    <div class="avatar-nav">AD</div>
+  </div>
+</div>
+
+<!-- ============ VIEW A: CALENDAR ============ -->
+<div id="view-calendar" style="display:flex;flex-direction:column">
+  <div class="content-tabs">
+    <div class="tab active">&#128197; Calendar <span class="close-tab">&times;</span></div>
+    <div class="tab">&#128232; Message Center <span class="close-tab">&times;</span></div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="quick-add-btn">+ New Appointment</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="cal-nav">
+          <button>&lt;</button>
+          <span class="month">March 2026</span>
+          <button>&gt;</button>
+        </div>
+        <table class="mini-cal">
+          <thead><tr><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr></thead>
+          <tbody>
+            <tr><td class="other-month">23</td><td class="other-month">24</td><td class="other-month">25</td><td class="other-month">26</td><td class="other-month">27</td><td class="other-month">28</td><td class="other-month">01</td></tr>
+            <tr><td class="has-appt">02</td><td class="has-appt">03</td><td class="has-appt">04</td><td class="has-appt">05</td><td class="has-appt">06</td><td>07</td><td>08</td></tr>
+            <tr><td class="has-appt">09</td><td class="has-appt">10</td><td class="has-appt">11</td><td class="has-appt">12</td><td class="has-appt">13</td><td>14</td><td>15</td></tr>
+            <tr><td class="has-appt">16</td><td class="has-appt">17</td><td class="has-appt">18</td><td class="has-appt">19</td><td class="has-appt">20</td><td>21</td><td>22</td></tr>
+            <tr><td class="has-appt">23</td><td class="has-appt">24</td><td class="has-appt">25</td><td class="has-appt">26</td><td class="has-appt">27</td><td class="today">28</td><td>29</td></tr>
+            <tr><td>30</td><td>31</td><td class="other-month">01</td><td class="other-month">02</td><td class="other-month">03</td><td class="other-month">04</td><td class="other-month">05</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Providers</div>
+        <ul class="provider-list">
+          <li class="provider-item active"><div class="provider-avatar" style="background:var(--primary)">AD</div> Administrator</li>
+          <li class="provider-item"><div class="provider-avatar" style="background:var(--success)">DS</div> Dr. Smith</li>
+          <li class="provider-item"><div class="provider-avatar" style="background:var(--info)">JW</div> Dr. Williams</li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Today's Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+          <div style="background:var(--primary-bg);border-radius:var(--radius-sm);padding:0.6rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:var(--primary)">12</div><div style="font-size:0.68rem;color:var(--text-muted)">Appointments</div></div>
+          <div style="background:#e8f0ea;border-radius:var(--radius-sm);padding:0.6rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:var(--success)">4</div><div style="font-size:0.68rem;color:var(--text-muted)">Checked In</div></div>
+          <div style="background:#fdf5e0;border-radius:var(--radius-sm);padding:0.6rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:#8a6a1a">2</div><div style="font-size:0.68rem;color:var(--text-muted)">Waiting</div></div>
+          <div style="background:#fce8e6;border-radius:var(--radius-sm);padding:0.6rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:var(--danger)">1</div><div style="font-size:0.68rem;color:var(--text-muted)">Cancelled</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="cal-header">
+        <h2>
+          <span class="nav-arrows"><button>&lt;</button><button>&gt;</button></span>
+          Saturday, March 28, 2026
+        </h2>
+        <div class="cal-actions">
+          <button class="today-btn">Today</button>
+          <div class="view-toggle">
+            <button class="active">Day</button>
+            <button>Week</button>
+            <button>Month</button>
+          </div>
+        </div>
+      </div>
+      <div class="day-grid">
+        <div class="day-grid-header">
+          <div class="time-col">Time</div>
+          <div class="day-col">Schedule <span class="provider-badge">Administrator</span></div>
+        </div>
+        <div class="time-grid">
+          <div class="time-slot">8:00</div>
+          <div class="event-area">
+            <div class="appt-card type-physical">
+              <div class="appt-top"><span class="appt-name">Maria Johnson</span><span class="appt-time">8:00 - 8:30</span></div>
+              <div class="appt-type">Annual Physical</div>
+              <span class="appt-status status-in">&#9679; Checked In</span>
+            </div>
+          </div>
+          <div class="time-slot">8:30</div>
+          <div class="event-area"></div>
+          <div class="time-slot">9:00</div>
+          <div class="event-area">
+            <div class="appt-card type-followup">
+              <div class="appt-top"><span class="appt-name">Robert Williams</span><span class="appt-time">9:00 - 9:30</span></div>
+              <div class="appt-type">Diabetes Follow-up</div>
+              <span class="appt-status status-scheduled">&#9679; Scheduled</span>
+            </div>
+          </div>
+          <div class="time-slot">9:30</div>
+          <div class="event-area">
+            <div class="appt-card type-newpatient">
+              <div class="appt-top"><span class="appt-name">Emily Chen</span><span class="appt-time">9:30 - 10:15</span></div>
+              <div class="appt-type">New Patient Intake</div>
+              <span class="appt-status status-waiting">&#9679; Waiting</span>
+            </div>
+          </div>
+          <div class="time-slot current-time">10:00</div>
+          <div class="event-area current-time"></div>
+          <div class="time-slot">10:30</div>
+          <div class="event-area">
+            <div class="appt-card type-urgent">
+              <div class="appt-top"><span class="appt-name">James Torres</span><span class="appt-time">10:30 - 11:00</span></div>
+              <div class="appt-type">Urgent - Chest Pain Eval</div>
+              <span class="appt-status" style="background:#fce8e6;color:var(--danger)">&#9679; Urgent</span>
+            </div>
+          </div>
+          <div class="time-slot">11:00</div>
+          <div class="event-area">
+            <div class="appt-card type-consult">
+              <div class="appt-top"><span class="appt-name">Sarah Park</span><span class="appt-time">11:00 - 11:45</span></div>
+              <div class="appt-type">Post-op Follow-up</div>
+              <span class="appt-status status-scheduled">&#9679; Scheduled</span>
+            </div>
+          </div>
+          <div class="time-slot">11:30</div>
+          <div class="event-area"></div>
+          <div class="time-slot">12:00</div>
+          <div class="event-area" style="background:#faf8fd;opacity:0.6"><div style="text-align:center;padding:0.5rem;color:var(--text-light);font-size:0.82rem;font-style:italic">Lunch Break</div></div>
+          <div class="time-slot">12:30</div>
+          <div class="event-area" style="background:#faf8fd;opacity:0.6"></div>
+          <div class="time-slot">1:00</div>
+          <div class="event-area">
+            <div class="appt-card type-followup">
+              <div class="appt-top"><span class="appt-name">Linda Chen</span><span class="appt-time">1:00 - 1:30</span></div>
+              <div class="appt-type">Lab Review</div>
+              <span class="appt-status status-scheduled">&#9679; Scheduled</span>
+            </div>
+          </div>
+          <div class="time-slot">1:30</div>
+          <div class="event-area">
+            <div class="appt-card type-physical">
+              <div class="appt-top"><span class="appt-name">David Kim</span><span class="appt-time">1:30 - 2:00</span></div>
+              <div class="appt-type">Well Visit</div>
+              <span class="appt-status status-scheduled">&#9679; Scheduled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIEW B: PATIENT ============ -->
+<div id="view-patient" style="display:none;flex-direction:column">
+  <div class="content-tabs">
+    <div class="tab">&#128197; Calendar <span class="close-tab">&times;</span></div>
+    <div class="tab active">&#128101; Maria Johnson <span class="close-tab">&times;</span></div>
+    <div class="tab">&#128232; Message Center <span class="close-tab">&times;</span></div>
+  </div>
+  <div style="padding:1.25rem;max-width:1200px;margin:0 auto;width:100%">
+    <div class="patient-header">
+      <div class="patient-avatar-lg">MJ</div>
+      <div class="patient-details">
+        <h2>Maria Johnson</h2>
+        <div class="meta">
+          <span>&#128197; DOB: 03/15/1985 (41y)</span>
+          <span>&#9792; Female</span>
+          <span>&#128222; (555) 234-5678</span>
+          <span>&#128231; maria.johnson@email.com</span>
+        </div>
+      </div>
+      <div class="patient-actions">
+        <button class="btn-outline">&#128209; Chart</button>
+        <button class="btn-fill">+ New Encounter</button>
+      </div>
+    </div>
+
+    <div class="patient-grid">
+      <div class="info-card">
+        <h4>Vitals <span class="edit-link">View History</span></h4>
+        <div class="info-row"><span class="label">Blood Pressure</span><span class="value">120/80 mmHg</span></div>
+        <div class="info-row"><span class="label">Heart Rate</span><span class="value">72 bpm</span></div>
+        <div class="info-row"><span class="label">Temperature</span><span class="value">98.6 &deg;F</span></div>
+        <div class="info-row"><span class="label">Weight</span><span class="value">154 lbs</span></div>
+        <div class="info-row"><span class="label">BMI</span><span class="value">24.8</span></div>
+      </div>
+      <div class="info-card">
+        <h4>Allergies <span class="edit-link">Edit</span></h4>
+        <div class="info-row"><span class="label">Penicillin</span><span class="value" style="color:var(--danger)">Severe</span></div>
+        <div class="info-row"><span class="label">Sulfa Drugs</span><span class="value" style="color:var(--warning)">Moderate</span></div>
+        <div class="info-row"><span class="label">Latex</span><span class="value" style="color:var(--warning)">Moderate</span></div>
+      </div>
+      <div class="info-card">
+        <h4>Insurance <span class="edit-link">Edit</span></h4>
+        <div class="info-row"><span class="label">Primary</span><span class="value">Blue Cross PPO</span></div>
+        <div class="info-row"><span class="label">Group #</span><span class="value">BC-445521</span></div>
+        <div class="info-row"><span class="label">Copay</span><span class="value">$25.00</span></div>
+        <div class="info-row"><span class="label">Status</span><span class="value" style="color:var(--success)">Active</span></div>
+      </div>
+    </div>
+
+    <div class="clinical-grid">
+      <div>
+        <div class="clinical-card" style="margin-bottom:1rem">
+          <div class="clinical-card-head"><h3>Active Medications</h3><span class="badge-count">3 active</span></div>
+          <div class="clinical-card-body">
+            <div class="med-row"><div class="med-icon" style="background:var(--primary-bg)">&#128138;</div><div class="med-info"><div class="med-name">Metformin 500mg</div><div class="med-dose">Twice daily with meals</div></div><span class="med-status" style="background:#e8f0ea;color:var(--success)">Active</span></div>
+            <div class="med-row"><div class="med-icon" style="background:var(--primary-bg)">&#128138;</div><div class="med-info"><div class="med-name">Lisinopril 10mg</div><div class="med-dose">Once daily in morning</div></div><span class="med-status" style="background:#e8f0ea;color:var(--success)">Active</span></div>
+            <div class="med-row"><div class="med-icon" style="background:#fdf5e0">&#128138;</div><div class="med-info"><div class="med-name">Atorvastatin 20mg</div><div class="med-dose">Once daily at bedtime</div></div><span class="med-status" style="background:#fdf5e0;color:#8a6a1a">Refill needed</span></div>
+          </div>
+        </div>
+        <div class="clinical-card">
+          <div class="clinical-card-head"><h3>Active Problems</h3><span class="badge-count">4</span></div>
+          <div class="clinical-card-body">
+            <div class="info-row"><span class="label">Type 2 Diabetes Mellitus</span><span class="value" style="font-size:0.72rem;color:var(--text-muted)">Since 2019</span></div>
+            <div class="info-row"><span class="label">Essential Hypertension</span><span class="value" style="font-size:0.72rem;color:var(--text-muted)">Since 2020</span></div>
+            <div class="info-row"><span class="label">Hyperlipidemia</span><span class="value" style="font-size:0.72rem;color:var(--text-muted)">Since 2021</span></div>
+            <div class="info-row"><span class="label">Obesity, BMI 30-34.9</span><span class="value" style="font-size:0.72rem;color:var(--text-muted)">Since 2018</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="clinical-card" style="margin-bottom:1rem">
+          <div class="clinical-card-head"><h3>Recent Encounters</h3><span class="badge-count">View All</span></div>
+          <div class="clinical-card-body">
+            <div class="enc-row"><div class="enc-top"><span class="enc-date">Mar 15, 2026</span><span class="enc-badge" style="background:var(--primary-bg);color:var(--primary)">Follow-up</span></div><div class="enc-type">Diabetes management - A1C improved to 6.2%</div></div>
+            <div class="enc-row"><div class="enc-top"><span class="enc-date">Feb 10, 2026</span><span class="enc-badge" style="background:#e0eff6;color:var(--info)">Lab Review</span></div><div class="enc-type">Comprehensive metabolic panel review</div></div>
+            <div class="enc-row"><div class="enc-top"><span class="enc-date">Jan 5, 2026</span><span class="enc-badge" style="background:#e8f0ea;color:var(--success)">Annual</span></div><div class="enc-type">Annual physical examination - all normal</div></div>
+          </div>
+        </div>
+        <div class="clinical-card">
+          <div class="clinical-card-head"><h3>Upcoming</h3></div>
+          <div class="clinical-card-body">
+            <div class="enc-row"><div class="enc-top"><span class="enc-date">Apr 15, 2026</span><span class="enc-badge" style="background:var(--primary-bg);color:var(--primary)">Follow-up</span></div><div class="enc-type">Diabetes follow-up + A1C recheck</div></div>
+            <div class="enc-row"><div class="enc-top"><span class="enc-date">Jun 1, 2026</span><span class="enc-badge" style="background:#e0eff6;color:var(--info)">Lab</span></div><div class="enc-type">Comprehensive metabolic panel</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MOCKUP C: Patient Finder / Table ===== -->
+<div id="view-table" style="display:none;flex-direction:column;">
+  <!-- Top nav reuse -->
+  <div class="topnav">
+    <div class="brand"><div style="width:28px;height:28px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.7rem;">PP</div><div class="brand-text">Pacca PINE<small>Healthcare</small></div></div>
+    <div class="nav-items">
+      <a class="nav-item" href="#"><span class="icon">📅</span>Calendar</a>
+      <a class="nav-item active" href="#"><span class="icon">👥</span>Patient Finder</a>
+      <a class="nav-item" href="#"><span class="icon">💰</span>Billing</a>
+      <a class="nav-item" href="#"><span class="icon">📊</span>Reports</a>
+      <a class="nav-item" href="#"><span class="icon">💬</span>Messages</a>
+      <a class="nav-item" href="#"><span class="icon">⚙️</span>Admin</a>
+    </div>
+    <div class="nav-right">
+      <div class="search-bar"><span>🔍</span> Quick search…</div>
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.75rem;">AD</div>
+    </div>
+  </div>
+
+  <div style="padding:1.25rem 1.5rem;flex:1;">
+    <!-- Page header with stats -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <div>
+        <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:0.15rem;">Patient Finder</h2>
+        <span style="font-size:0.8rem;color:var(--text-muted);">2,847 patients · 143 seen this week</span>
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <button style="padding:0.5rem 1rem;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:#fff;color:var(--text);font-weight:500;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:0.35rem;">📥 Export</button>
+        <button style="padding:0.5rem 1rem;border-radius:var(--radius-sm);border:none;background:var(--primary);color:#fff;font-weight:600;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:0.35rem;">＋ New Patient</button>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div style="background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);padding:0.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:0.4rem;flex:1;min-width:200px;background:var(--bg);border-radius:var(--radius-sm);padding:0.45rem 0.75rem;border:1.5px solid var(--border);">
+        <span style="color:var(--text-muted);">🔍</span>
+        <span style="color:var(--text-muted);font-size:0.82rem;">Search by name, DOB, phone, MRN…</span>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <span style="font-size:0.75rem;color:var(--text-muted);font-weight:500;">Filters:</span>
+        <span style="padding:0.3rem 0.65rem;border-radius:20px;font-size:0.72rem;font-weight:500;background:var(--primary-bg);color:var(--primary);cursor:pointer;">Active ✕</span>
+        <span style="padding:0.3rem 0.65rem;border-radius:20px;font-size:0.72rem;font-weight:500;background:var(--bg);color:var(--text-muted);border:1px solid var(--border);cursor:pointer;">Provider ▾</span>
+        <span style="padding:0.3rem 0.65rem;border-radius:20px;font-size:0.72rem;font-weight:500;background:var(--bg);color:var(--text-muted);border:1px solid var(--border);cursor:pointer;">Insurance ▾</span>
+        <span style="padding:0.3rem 0.65rem;border-radius:20px;font-size:0.72rem;font-weight:500;background:var(--bg);color:var(--text-muted);border:1px solid var(--border);cursor:pointer;">Last Visit ▾</span>
+      </div>
+    </div>
+
+    <!-- Data table card -->
+    <div style="background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+        <thead>
+          <tr style="background:var(--bg);border-bottom:2px solid var(--border);">
+            <th style="padding:0.7rem 1rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;width:30px;"><input type="checkbox" style="accent-color:var(--primary);"></th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Patient</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">DOB / Age</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Phone</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Provider</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Insurance</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Last Visit</th>
+            <th style="padding:0.7rem 0.5rem;text-align:left;font-weight:600;color:var(--text-muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Status</th>
+            <th style="padding:0.7rem 0.5rem;width:40px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='#fff'">
+            <td style="padding:0.65rem 1rem;"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8b6cc1,#b8a4d8);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">SM</div><div><div style="font-weight:600;">Sarah Martinez</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100234</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;"><div>03/15/1985</div><div style="font-size:0.72rem;color:var(--text-muted);">41 yrs, F</div></td>
+            <td style="padding:0.65rem 0.5rem;">(555) 234-5678</td>
+            <td style="padding:0.65rem 0.5rem;">Dr. Johnson</td>
+            <td style="padding:0.65rem 0.5rem;">BlueCross PPO</td>
+            <td style="padding:0.65rem 0.5rem;">Mar 22, 2026</td>
+            <td style="padding:0.65rem 0.5rem;"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#e4f3e8;color:var(--success);">Active</span></td>
+            <td style="padding:0.65rem 0.5rem;color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='var(--bg)'">
+            <td style="padding:0.65rem 1rem;background:var(--bg);"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6aab7b,#8ec99a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">JW</div><div><div style="font-weight:600;">James Wilson</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100189</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div>11/02/1958</div><div style="font-size:0.72rem;color:var(--text-muted);">67 yrs, M</div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">(555) 876-1234</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Dr. Patel</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Medicare Part B</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Mar 20, 2026</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#e4f3e8;color:var(--success);">Active</span></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='#fff'">
+            <td style="padding:0.65rem 1rem;"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e09891,#f0b8b3);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">AT</div><div><div style="font-weight:600;">Aisha Thompson</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100312</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;"><div>07/28/1992</div><div style="font-size:0.72rem;color:var(--text-muted);">33 yrs, F</div></td>
+            <td style="padding:0.65rem 0.5rem;">(555) 345-9012</td>
+            <td style="padding:0.65rem 0.5rem;">Dr. Johnson</td>
+            <td style="padding:0.65rem 0.5rem;">Aetna HMO</td>
+            <td style="padding:0.65rem 0.5rem;">Mar 18, 2026</td>
+            <td style="padding:0.65rem 0.5rem;"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#e4f3e8;color:var(--success);">Active</span></td>
+            <td style="padding:0.65rem 0.5rem;color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='var(--bg)'">
+            <td style="padding:0.65rem 1rem;background:var(--bg);"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7eb8da,#a5d0e8);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">RC</div><div><div style="font-weight:600;">Robert Chen</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100278</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div>01/10/1974</div><div style="font-size:0.72rem;color:var(--text-muted);">52 yrs, M</div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">(555) 567-3456</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Dr. Rivera</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">UnitedHealth</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Mar 15, 2026</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#e4f3e8;color:var(--success);">Active</span></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='#fff'">
+            <td style="padding:0.65rem 1rem;"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f2c078,#f5d4a0);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">MP</div><div><div style="font-weight:600;">Maria Petrova</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100156</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;"><div>09/04/1948</div><div style="font-size:0.72rem;color:var(--text-muted);">77 yrs, F</div></td>
+            <td style="padding:0.65rem 0.5rem;">(555) 789-0123</td>
+            <td style="padding:0.65rem 0.5rem;">Dr. Patel</td>
+            <td style="padding:0.65rem 0.5rem;">Medicare Adv.</td>
+            <td style="padding:0.65rem 0.5rem;">Feb 28, 2026</td>
+            <td style="padding:0.65rem 0.5rem;"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#fef3e0;color:#c48a20;">Due for visit</span></td>
+            <td style="padding:0.65rem 0.5rem;color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='var(--bg)'">
+            <td style="padding:0.65rem 1rem;background:var(--bg);"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#999,#bbb);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">DL</div><div><div style="font-weight:600;color:var(--text-muted);">David Lee</div><div style="font-size:0.72rem;color:var(--text-light);">MRN: 100098</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><div>12/20/1990</div><div style="font-size:0.72rem;color:var(--text-muted);">35 yrs, M</div></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">(555) 432-8765</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Dr. Rivera</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">—</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);">Jan 05, 2025</td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#f0f0f0;color:#999;">Inactive</span></td>
+            <td style="padding:0.65rem 0.5rem;background:var(--bg);color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+          <tr style="cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='var(--hover)'" onmouseout="this.style.background='#fff'">
+            <td style="padding:0.65rem 1rem;"><input type="checkbox" style="accent-color:var(--primary);"></td>
+            <td style="padding:0.65rem 0.5rem;"><div style="display:flex;align-items:center;gap:0.6rem;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#d4615e,#e09891);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.7rem;flex-shrink:0;">EJ</div><div><div style="font-weight:600;">Emily Jackson</div><div style="font-size:0.72rem;color:var(--text-muted);">MRN: 100401</div></div></div></td>
+            <td style="padding:0.65rem 0.5rem;"><div>05/12/2018</div><div style="font-size:0.72rem;color:var(--text-muted);">7 yrs, F</div></td>
+            <td style="padding:0.65rem 0.5rem;">(555) 654-3210</td>
+            <td style="padding:0.65rem 0.5rem;">Dr. Johnson</td>
+            <td style="padding:0.65rem 0.5rem;">Medicaid</td>
+            <td style="padding:0.65rem 0.5rem;">Mar 25, 2026</td>
+            <td style="padding:0.65rem 0.5rem;"><span style="padding:0.2rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:600;background:#e4f3e8;color:var(--success);">Active</span></td>
+            <td style="padding:0.65rem 0.5rem;color:var(--text-muted);cursor:pointer;">⋯</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-top:1px solid var(--border);background:var(--bg);">
+        <span style="font-size:0.78rem;color:var(--text-muted);">Showing 1–7 of 2,847 patients</span>
+        <div style="display:flex;align-items:center;gap:0.25rem;">
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:#fff;">← Prev</span>
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:#fff;background:var(--primary);cursor:pointer;">1</span>
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:#fff;">2</span>
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:#fff;">3</span>
+          <span style="padding:0.35rem 0.5rem;font-size:0.78rem;color:var(--text-muted);">…</span>
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:#fff;">407</span>
+          <span style="padding:0.35rem 0.65rem;border-radius:var(--radius-xs);font-size:0.78rem;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:#fff;">Next →</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;color:var(--text-muted);">
+          <span>Per page:</span>
+          <span style="padding:0.25rem 0.5rem;border-radius:var(--radius-xs);border:1px solid var(--border);background:#fff;font-weight:600;color:var(--text);">7</span>
+          <span style="padding:0.25rem 0.5rem;border-radius:var(--radius-xs);cursor:pointer;">25</span>
+          <span style="padding:0.25rem 0.5rem;border-radius:var(--radius-xs);cursor:pointer;">50</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.getElementById('view-calendar').style.display = 'none';
+  document.getElementById('view-patient').style.display = 'none';
+  document.getElementById('view-table').style.display = 'none';
+  document.getElementById('view-'+view).style.display = 'flex';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

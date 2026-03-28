@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skin 3: Sage Garden - OpenEMR</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #5a8a6a;
+    --primary-light: #8ab89a;
+    --primary-dark: #3d6b4e;
+    --secondary: #c4956a;
+    --accent: #e4c76e;
+    --bg: #f5f3ee;
+    --bg-card: #ffffff;
+    --bg-sidebar: #eae7df;
+    --text: #2c3227;
+    --text-muted: #7a7b6f;
+    --border: #ddd9cf;
+    --hover: #f0ede5;
+    --success: #5a8a6a;
+    --danger: #c4645a;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(90,138,106,0.06);
+    --shadow-lg: 0 8px 28px rgba(90,138,106,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .login-page { display:flex; min-height:100vh; }
+  .login-left { flex:1.2; background:linear-gradient(150deg,#3d6b4e 0%,#5a8a6a 40%,#8ab89a 70%,#c4d9a8 100%); display:flex; align-items:center; justify-content:center; padding:3rem; position:relative; }
+  .login-left::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+  .login-left-content { text-align:center; color:#fff; z-index:1; }
+  .login-logo { width:80px; height:80px; background:rgba(255,255,255,0.15); backdrop-filter:blur(8px); border-radius:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2rem; font-weight:700; border:2px solid rgba(255,255,255,0.2); }
+  .login-left h1 { font-size:2.4rem; font-weight:700; margin-bottom:0.5rem; }
+  .login-left p { font-size:1.05rem; opacity:0.85; max-width:300px; margin:0 auto; }
+  .login-right { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem; }
+  .login-box { width:100%; max-width:380px; }
+  .login-box h2 { font-size:1.6rem; margin-bottom:0.3rem; }
+  .login-box .sub { color:var(--text-muted); margin-bottom:2rem; }
+  .form-group { margin-bottom:1.2rem; }
+  .form-group label { display:block; font-weight:600; font-size:0.82rem; margin-bottom:0.4rem; color:var(--text-muted); }
+  .form-group input { width:100%; padding:0.8rem 1rem; border:2px solid var(--border); border-radius:var(--radius-sm); font-size:0.95rem; font-family:inherit; background:var(--bg); transition:all 0.2s; }
+  .form-group input:focus { outline:none; border-color:var(--primary); background:var(--bg-card); }
+  .btn-primary { width:100%; padding:0.85rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:1rem; font-weight:600; font-family:inherit; cursor:pointer; transition:all 0.2s; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:var(--shadow-lg); }
+
+  .dashboard { display:none; min-height:100vh; flex-direction:column; }
+  .topbar { background:var(--primary-dark); padding:0 2rem; display:flex; align-items:center; height:56px; color:#fff; }
+  .topbar .brand { font-weight:700; font-size:1.1rem; margin-right:2rem; display:flex; align-items:center; gap:0.5rem; }
+  .topbar nav { display:flex; gap:0.25rem; flex:1; }
+  .topbar nav a { padding:0.4rem 0.85rem; border-radius:6px; font-size:0.85rem; font-weight:500; color:rgba(255,255,255,0.7); text-decoration:none; transition:all 0.15s; }
+  .topbar nav a:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  .topbar nav a.active { background:rgba(255,255,255,0.2); color:#fff; }
+  .topbar .right { display:flex; align-items:center; gap:0.75rem; }
+  .topbar .search { padding:0.45rem 0.85rem; border:1px solid rgba(255,255,255,0.2); border-radius:var(--radius-sm); font-size:0.85rem; font-family:inherit; width:220px; background:rgba(255,255,255,0.1); color:#fff; }
+  .topbar .search::placeholder { color:rgba(255,255,255,0.5); }
+  .topbar .search:focus { outline:none; background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.4); }
+  .avatar { width:34px; height:34px; border-radius:50%; background:var(--secondary); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.78rem; }
+  .body-wrap { display:flex; flex:1; }
+  .side-panel { width:220px; background:var(--bg-card); border-right:1px solid var(--border); padding:1.5rem 1rem; }
+  .side-panel h4 { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:0.75rem; }
+  .quick-action { display:flex; align-items:center; gap:0.6rem; padding:0.55rem 0.6rem; border-radius:var(--radius-sm); cursor:pointer; font-size:0.85rem; margin-bottom:0.25rem; transition:all 0.15s; }
+  .quick-action:hover { background:var(--hover); }
+  .quick-action .qa-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .content { flex:1; padding:2rem; }
+  .greeting { font-size:1.4rem; font-weight:700; margin-bottom:0.25rem; }
+  .greeting-sub { color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
+  .stat { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .stat .icon-wrap { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:0.75rem; font-size:1.2rem; }
+  .stat .label { font-size:0.78rem; color:var(--text-muted); }
+  .stat .value { font-size:1.6rem; font-weight:700; margin:0.15rem 0; }
+  .two-col { display:grid; grid-template-columns:1.6fr 1fr; gap:1.25rem; }
+  .card { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .card h3 { font-size:0.95rem; margin-bottom:1rem; }
+  .sched-item { display:flex; align-items:center; gap:0.75rem; padding:0.65rem 0; border-bottom:1px solid var(--border); }
+  .sched-item:last-child { border-bottom:none; }
+  .sched-time { font-weight:700; font-size:0.82rem; color:var(--primary); min-width:65px; }
+  .sched-info .name { font-weight:600; font-size:0.88rem; }
+  .sched-info .type { font-size:0.78rem; color:var(--text-muted); }
+  .sched-status { margin-left:auto; font-size:0.7rem; padding:0.2rem 0.55rem; border-radius:20px; font-weight:600; }
+  .s-green { background:#e8f0ea; color:var(--primary); }
+  .s-orange { background:#fdf0e0; color:#b87a3d; }
+  .s-red { background:#fce8e6; color:var(--danger); }
+  .alert-item { display:flex; align-items:flex-start; gap:0.75rem; padding:0.65rem 0; border-bottom:1px solid var(--border); }
+  .alert-item:last-child { border-bottom:none; }
+  .alert-icon { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; }
+  .alert-text { font-size:0.85rem; }
+  .alert-time { font-size:0.72rem; color:var(--text-muted); }
+
+  .portal { display:none; min-height:100vh; }
+  .portal-top { background:var(--primary-dark); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; color:#fff; }
+  .portal-top .brand { font-weight:700; font-size:1.1rem; }
+  .portal-banner { background:linear-gradient(135deg,var(--primary),var(--primary-light),#c4d9a8); padding:2.5rem 2rem; color:#fff; }
+  .portal-banner h1 { font-size:1.5rem; margin-bottom:0.3rem; }
+  .portal-body { max-width:850px; margin:0 auto; padding:2rem; }
+  .p-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+  .p-tile { background:var(--bg-card); border-radius:var(--radius); padding:1.25rem; box-shadow:var(--shadow); border:1px solid var(--border); text-align:center; cursor:pointer; transition:all 0.2s; }
+  .p-tile:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--primary-light); }
+  .p-tile .ic { font-size:1.8rem; margin-bottom:0.5rem; }
+  .p-tile h4 { font-size:0.9rem; margin-bottom:0.2rem; }
+  .p-tile p { font-size:0.78rem; color:var(--text-muted); }
+  .vitals { background:var(--bg-card); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .vitals h3 { margin-bottom:1rem; font-size:1rem; }
+  .v-row { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0; border-bottom:1px solid var(--border); }
+  .v-row:last-child { border-bottom:none; }
+  .v-row .val { font-weight:700; color:var(--primary); }
+  .v-bar { height:6px; border-radius:3px; background:var(--border); flex:1; margin:0 1rem; max-width:120px; }
+  .v-bar-fill { height:100%; border-radius:3px; background:var(--primary-light); }
+
+  .view-switcher { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; gap:0.5rem; background:var(--bg-card); padding:0.5rem; border-radius:var(--radius); box-shadow:var(--shadow-lg); border:1px solid var(--border); z-index:100; }
+  .view-btn { padding:0.5rem 1rem; border:none; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:600; background:transparent; color:var(--text-muted); transition:all 0.15s; }
+  .view-btn.active { background:var(--primary); color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="view-switcher">
+  <button class="view-btn active" onclick="showView('login')">Login</button>
+  <button class="view-btn" onclick="showView('dashboard')">Dashboard</button>
+  <button class="view-btn" onclick="showView('portal')">Patient Portal</button>
+</div>
+
+<div class="login-page" id="view-login" style="display:flex">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-logo">O</div>
+      <h1>OpenEMR</h1>
+      <p>Growing healthier communities together</p>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-box">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to your account</p>
+      <div class="form-group"><label>Username</label><input type="text" placeholder="Enter username"></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+      <button class="btn-primary" onclick="showView('dashboard')">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard" id="view-dashboard" style="flex-direction:column">
+  <div class="topbar">
+    <div class="brand">&#127793; OpenEMR</div>
+    <nav><a class="active">Dashboard</a><a>Calendar</a><a>Patients</a><a>Encounters</a><a>Billing</a><a>Reports</a></nav>
+    <div class="right"><input class="search" placeholder="Search..."><div class="avatar">DS</div></div>
+  </div>
+  <div class="body-wrap">
+    <div class="side-panel">
+      <h4>Quick Actions</h4>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--primary)"></div> New Patient</div>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--secondary)"></div> New Encounter</div>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--accent)"></div> New Appointment</div>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--danger)"></div> E-Prescribe</div>
+      <div class="quick-action"><div class="qa-dot" style="background:#7eb8da"></div> Lab Order</div>
+      <h4 style="margin-top:1.5rem">Favorites</h4>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--text-muted)"></div> Flowsheets</div>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--text-muted)"></div> Immunizations</div>
+      <div class="quick-action"><div class="qa-dot" style="background:var(--text-muted)"></div> Referrals</div>
+    </div>
+    <div class="content">
+      <div class="greeting">Good morning, Dr. Smith</div>
+      <div class="greeting-sub">Thursday, March 27 &mdash; 18 appointments today</div>
+      <div class="stats">
+        <div class="stat"><div class="icon-wrap" style="background:#e8f0ea">&#128101;</div><div class="label">Patients</div><div class="value">24</div></div>
+        <div class="stat"><div class="icon-wrap" style="background:#fdf0e0">&#128197;</div><div class="label">Appointments</div><div class="value">18</div></div>
+        <div class="stat"><div class="icon-wrap" style="background:#e3f2fd">&#128300;</div><div class="label">Pending Labs</div><div class="value">7</div></div>
+        <div class="stat"><div class="icon-wrap" style="background:#fce8e6">&#128172;</div><div class="label">Messages</div><div class="value">5</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <h3>Today's Schedule</h3>
+          <div class="sched-item"><div class="sched-time">9:00 AM</div><div class="sched-info"><div class="name">Maria Johnson</div><div class="type">Diabetes Follow-up</div></div><span class="sched-status s-green">Checked In</span></div>
+          <div class="sched-item"><div class="sched-time">9:45 AM</div><div class="sched-info"><div class="name">Robert Williams</div><div class="type">Annual Physical</div></div><span class="sched-status s-green">Scheduled</span></div>
+          <div class="sched-item"><div class="sched-time">10:30 AM</div><div class="sched-info"><div class="name">Sarah Park</div><div class="type">Post-op Check</div></div><span class="sched-status s-orange">Waiting</span></div>
+          <div class="sched-item"><div class="sched-time">11:15 AM</div><div class="sched-info"><div class="name">James Torres</div><div class="type">Cardiology Consult</div></div><span class="sched-status s-red">Urgent</span></div>
+          <div class="sched-item"><div class="sched-time">1:00 PM</div><div class="sched-info"><div class="name">Linda Chen</div><div class="type">Lab Review</div></div><span class="sched-status s-green">Scheduled</span></div>
+        </div>
+        <div class="card">
+          <h3>Alerts</h3>
+          <div class="alert-item"><div class="alert-icon" style="background:#fce8e6">&#9888;</div><div><div class="alert-text">Critical A1C result for James Torres</div><div class="alert-time">10 min ago</div></div></div>
+          <div class="alert-item"><div class="alert-icon" style="background:#fdf0e0">&#128338;</div><div><div class="alert-text">Rx refill request from Maria Johnson</div><div class="alert-time">25 min ago</div></div></div>
+          <div class="alert-item"><div class="alert-icon" style="background:#e8f0ea">&#9989;</div><div><div class="alert-text">Insurance pre-auth approved for Sarah Park</div><div class="alert-time">1 hour ago</div></div></div>
+          <div class="alert-item"><div class="alert-icon" style="background:#e3f2fd">&#128209;</div><div><div class="alert-text">New lab results available (3)</div><div class="alert-time">2 hours ago</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="portal" id="view-portal">
+  <div class="portal-top"><span class="brand">&#127793; OpenEMR Patient Portal</span><div class="avatar" style="background:var(--secondary)">MJ</div></div>
+  <div class="portal-banner"><h1>Hello, Maria</h1><p>Your health, at your fingertips</p></div>
+  <div class="portal-body">
+    <div class="p-grid">
+      <div class="p-tile"><div class="ic">&#128197;</div><h4>Appointments</h4><p>View & schedule</p></div>
+      <div class="p-tile"><div class="ic">&#128138;</div><h4>Medications</h4><p>Active prescriptions</p></div>
+      <div class="p-tile"><div class="ic">&#128209;</div><h4>Lab Results</h4><p>2 new results</p></div>
+      <div class="p-tile"><div class="ic">&#128172;</div><h4>Messages</h4><p>Contact provider</p></div>
+      <div class="p-tile"><div class="ic">&#128179;</div><h4>Billing</h4><p>Payments & claims</p></div>
+      <div class="p-tile"><div class="ic">&#129657;</div><h4>Records</h4><p>Download records</p></div>
+    </div>
+    <div class="vitals">
+      <h3>Recent Vitals</h3>
+      <div class="v-row"><span>Blood Pressure</span><div class="v-bar"><div class="v-bar-fill" style="width:65%"></div></div><span class="val">120/80</span></div>
+      <div class="v-row"><span>Heart Rate</span><div class="v-bar"><div class="v-bar-fill" style="width:72%"></div></div><span class="val">72 bpm</span></div>
+      <div class="v-row"><span>A1C</span><div class="v-bar"><div class="v-bar-fill" style="width:45%"></div></div><span class="val">6.2%</span></div>
+      <div class="v-row"><span>Weight</span><div class="v-bar"><div class="v-bar-fill" style="width:58%"></div></div><span class="val">154 lbs</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.querySelectorAll('.login-page,.dashboard,.portal').forEach(el => el.style.display='none');
+  document.getElementById('view-'+view).style.display = view==='login'?'flex': view==='dashboard'?'flex':'block';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
