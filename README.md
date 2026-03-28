@@ -1,60 +1,65 @@
-[![Syntax Status](https://github.com/openemr/openemr/actions/workflows/syntax.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/syntax.yml)
-[![Styling Status](https://github.com/openemr/openemr/actions/workflows/styling.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/styling.yml)
-[![Testing Status](https://github.com/openemr/openemr/actions/workflows/test.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/test.yml)
-[![JS Unit Testing Status](https://github.com/openemr/openemr/actions/workflows/js-test.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/js-test.yml)
-[![PHPStan](https://github.com/openemr/openemr/actions/workflows/phpstan.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/phpstan.yml)
-[![Rector](https://github.com/openemr/openemr/actions/workflows/rector.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/rector.yml)
-[![ShellCheck](https://github.com/openemr/openemr/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/shellcheck.yml)
-[![Docker Compose Linting](https://github.com/openemr/openemr/actions/workflows/docker-compose-lint.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/docker-compose-lint.yml)
-[![Dockerfile Linting](https://github.com/openemr/openemr/actions/workflows/hadolint.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/hadolint.yml)
-[![Isolated Tests](https://github.com/openemr/openemr/actions/workflows/isolated-tests.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/isolated-tests.yml)
-[![Inferno Certification Test](https://github.com/openemr/openemr/actions/workflows/inferno-test.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/inferno-test.yml)
-[![Composer Checks](https://github.com/openemr/openemr/actions/workflows/composer.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/composer.yml)
-[![Composer Require Checker](https://github.com/openemr/openemr/actions/workflows/composer-require-checker.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/composer-require-checker.yml)
-[![API Docs Freshness Checks](https://github.com/openemr/openemr/actions/workflows/api-docs.yml/badge.svg)](https://github.com/openemr/openemr/actions/workflows/api-docs.yml)
-[![codecov](https://codecov.io/gh/openemr/openemr/graph/badge.svg?token=7Eu3U1Ozdq)](https://codecov.io/gh/openemr/openemr)
+# Pacca PINE
 
-[![Backers on Open Collective](https://opencollective.com/openemr/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/openemr/sponsors/badge.svg)](#sponsors)
+**AI-powered clinical intelligence for modern healthcare.**
 
-# OpenEMR
+Pacca PINE brings agentic AI and next-best-action (NBA) recommendations to [OpenEMR](https://open-emr.org) — surfacing the right clinical action at the right time for providers, patients, and care teams.
 
-[OpenEMR](https://open-emr.org) is a Free and Open Source electronic health records and medical practice management application. It features fully integrated electronic health records, practice management, scheduling, electronic billing, internationalization, free support, a vibrant community, and a whole lot more. It runs on Windows, Linux, Mac OS X, and many other platforms.
+Every screen shows what to do next, not just what happened.
 
-### Contributing
+## Why
 
-OpenEMR is a leader in healthcare open source software and comprises a large and diverse community of software developers, medical providers and educators with a very healthy mix of both volunteers and professionals. [Join us and learn how to start contributing today!](https://open-emr.org/wiki/index.php/FAQ#How_do_I_begin_to_volunteer_for_the_OpenEMR_project.3F)
+Providers spend too much time navigating EHRs and not enough time with patients. Pacca PINE adds an AI layer that reads the chart, identifies gaps, and recommends actions — so clinicians can focus on care.
 
-> Already comfortable with git? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for quick setup instructions and requirements for contributing to OpenEMR by resolving a bug or adding an awesome feature 😊.
+## Capabilities
 
-### Support
+| Capability | Status |
+|---|---|
+| AI Patient Summary — auto-generated clinical briefing on the patient page | In Progress |
+| Next-Best-Action Engine — contextual recommendations for care gaps, screenings, and follow-ups | Planned |
+| Care Gap Agent — continuously scans patient populations for missed interventions | Planned |
+| Chart Summarizer Agent — pre-visit briefing from full patient history | Planned |
+| Coding Agent — ICD/CPT suggestions from visit notes | Planned |
+| Modern Clinical UI — lavender theme with contextual highlights | Active |
 
-Community and Professional support can be found [here](https://open-emr.org/wiki/index.php/OpenEMR_Support_Guide).
+## Architecture
 
-Extensive documentation and forums can be found on the [OpenEMR website](https://open-emr.org) that can help you to become more familiar about the project 📖.
+```
+┌─────────────────────────────────┐
+│         Pacca PINE UI           │
+│   (Bootstrap 4 + PINE Theme)   │
+├─────────────────────────────────┤
+│        OpenEMR (EHR)            │
+│  PHP · MySQL · FHIR · Billing  │
+├────────────┬────────────────────┤
+│            │  AI Sidecar        │
+│  REST API  │  FastAPI · Python  │
+│  FHIR R4   │  LLM Agents       │
+│            │  NBA Engine        │
+└────────────┴────────────────────┘
+```
 
-### Reporting Issues and Bugs
+- **EHR Layer:** OpenEMR — scheduling, billing, clinical workflows, FHIR R4
+- **AI Sidecar:** FastAPI service with LLM-powered agents for summarization, recommendations, and decision support
+- **Frontend:** Custom PINE theme with AI-aware components (summary cards, NBA widgets, inline suggestions)
 
-Report these on the [Issue Tracker](https://github.com/openemr/openemr/issues). If you are unsure if it is an issue/bug, then always feel free to use the [Forum](https://community.open-emr.org/) and [Chat](https://www.open-emr.org/chat/) to discuss about the issue 🪲.
+## Quick Start
 
-### Reporting Security Vulnerabilities
+```shell
+cd docker/development-easy
+docker compose up --detach --wait
+```
 
-Check out [SECURITY.md](.github/SECURITY.md)
+- **App:** http://localhost:8300/
+- **Login:** `admin` / `pass`
 
-### API
+### Building the Theme
 
-Check out [API_README.md](API_README.md)
+```shell
+npm install
+npm run gulp-build
+```
 
-### Docker
-
-Check out [DOCKER_README.md](DOCKER_README.md)
-
-### FHIR
-
-Check out [FHIR_README.md](FHIR_README.md)
-
-### For Developers
-
-If using OpenEMR directly from the code repository, then the following commands will build OpenEMR (Node.js version 22.* is required) :
+## For Developers
 
 ```shell
 composer install --no-dev
@@ -63,17 +68,18 @@ npm run build
 composer dump-autoload -o
 ```
 
-### Contributors
+Node.js 22.x required.
 
-This project exists thanks to all the people who have contributed. [[Contribute]](CONTRIBUTING.md).
-<a href="https://github.com/openemr/openemr/graphs/contributors"><img src="https://opencollective.com/openemr/contributors.svg?width=890" /></a>
+## API & Integration
 
+- [REST API](API_README.md)
+- [FHIR R4](FHIR_README.md)
+- [Docker](DOCKER_README.md)
 
-### Sponsors
+## License
 
-Thanks to our [ONC Certification Major Sponsors](https://www.open-emr.org/wiki/index.php/OpenEMR_Certification_Stage_III_Meaningful_Use#Major_sponsors)!
+[GNU GPL v3](LICENSE)
 
+---
 
-### License
-
-[GNU GPL](LICENSE)
+Built on [OpenEMR](https://open-emr.org) · Made by [Virtuosity AI](https://github.com/virtuousityai)
