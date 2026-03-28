@@ -1,8 +1,8 @@
-# OpenEMR REST API Documentation
+# Pacca on FHIR REST API Documentation
 
 > **📚 Complete documentation has moved to [Documentation/api/](Documentation/api/README.md)**
 
-This project provides comprehensive REST and FHIR APIs for OpenEMR, supporting:
+This project provides comprehensive REST and FHIR APIs for Pacca on FHIR, supporting:
 - **FHIR R4** - Full FHIR Release 4 implementation
 - **US Core 8.0** - US healthcare compliance
 - **SMART on FHIR v2.2.0** - Advanced app integration
@@ -13,8 +13,8 @@ This project provides comprehensive REST and FHIR APIs for OpenEMR, supporting:
 
 ### 1. Enable the API
 **Administration → Config → Connectors**
-- ☑ Enable OpenEMR Standard REST API
-- ☑ Enable OpenEMR Standard FHIR REST API
+- ☑ Enable Pacca on FHIR Standard REST API
+- ☑ Enable Pacca on FHIR Standard FHIR REST API
 
 ### 2. Configure SSL
 Set your base URL at:

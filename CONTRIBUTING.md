@@ -1,6 +1,6 @@
-Thank you for your contribution. OpenEMR (and global healthcare) continues to get better because of people like you!
+Thank you for your contribution. Pacca on FHIR (and global healthcare) continues to get better because of people like you!
 
-The maintainers of OpenEMR want to get your pull request in as seamlessly as possible, so please ensure your code is consistent with our [development policies](https://open-emr.org/wiki/index.php/Development_Policies).
+The maintainers of Pacca on FHIR want to get your pull request in as seamlessly as possible, so please ensure your code is consistent with our [development policies](https://open-emr.org/wiki/index.php/Development_Policies).
 
 ## Proposing Changes
 

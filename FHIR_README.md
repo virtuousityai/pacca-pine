@@ -1,14 +1,14 @@
-# OpenEMR FHIR API Documentation
+# Pacca on FHIR — FHIR API Documentation
 
 > **📚 Complete FHIR documentation has moved to [Documentation/api/FHIR_API.md](Documentation/api/FHIR_API.md)**
 
-OpenEMR provides a comprehensive **FHIR R4** implementation compliant with US Core 8.0 and SMART on FHIR v2.2.0.
+Pacca on FHIR provides a comprehensive **FHIR R4** implementation compliant with US Core 8.0 and SMART on FHIR v2.2.0.
 
 ## 🚀 Quick Start
 
 ### 1. Enable FHIR API
 **Administration → Config → Connectors**
-- ☑ Enable OpenEMR Standard FHIR REST API
+- ☑ Enable Pacca on FHIR Standard FHIR REST API
 
 ### 2. FHIR Base URL
 Replace `default` with your multi-site tenant if applicable see ([Multi-Tenancy Guide](Documentation/api/DEVELOPER_GUIDE.md#multisite-support)):
