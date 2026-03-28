@@ -29,6 +29,9 @@ require_once(__DIR__ . "/../../globals.php");
 require_once("$srcdir/encounter.inc.php");
 require_once("$srcdir/group.inc.php");
 require_once("$srcdir/patient.inc.php");
+
+use OpenEMR\Common\Uuid\UuidRegistry;
+use OpenEMR\Services\PatientService;
 require_once("$srcdir/amc.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->get('srcdir') . '/ESign/Api.php');
 require_once("$srcdir/../controllers/C_Document.class.php");
@@ -69,6 +72,11 @@ if ($is_group && !AclMain::aclCheckCore("groups", "glog", false, ['view', 'write
 $eventDispatcher = OEGlobalsBag::getInstance()->getKernel()->getEventDispatcher();
 // instantiate the locator at the beginning so our file caching can be reused.
 $formLocator = new FormLocator();
+
+// Get patient UUID for AI sidecar
+$pinePatientService = new PatientService();
+$pineUuidBin = $pinePatientService->getUuid($pid);
+$pinePatientUuid = $pineUuidBin ? UuidRegistry::uuidToString($pineUuidBin) : '';
 ?>
 <!DOCTYPE html>
 <html>
@@ -826,6 +834,396 @@ if (OEGlobalsBag::getInstance()->getBoolean('google_signin_enabled') && !empty(O
             </div>
 
         </div>
+
+        <!-- Pacca PINE: Pre-Visit Chart Briefing -->
+        <?php if ($pinePatientUuid) { ?>
+        <div class="card mt-2 mb-3 border-info" id="pine-chart-briefing">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center py-2">
+                <span><i class="fa fa-clipboard-list mr-1"></i> <?php echo xlt('Pre-Visit Chart Briefing'); ?></span>
+                <div>
+                    <span id="pine-brief-cache-status" class="small mr-2"></span>
+                    <button class="btn btn-sm btn-outline-light" onclick="pineLoadBriefing(true)" title="<?php echo xla('Refresh'); ?>">
+                        <i class="fa fa-sync-alt" id="pine-brief-refresh-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <div id="pine-brief-loading" class="text-center py-3">
+                    <i class="fa fa-spinner fa-spin"></i> <?php echo xlt('Generating chart briefing...'); ?>
+                </div>
+                <div id="pine-brief-content" style="display:none; white-space: pre-line; font-size: 0.9rem; line-height: 1.5;"></div>
+                <div id="pine-brief-error" class="text-danger" style="display:none;"></div>
+            </div>
+        </div>
+        <script>
+        (function() {
+            var patientUuid = <?php echo json_encode($pinePatientUuid); ?>;
+            var cacheKey = 'pine_chart_briefing_' + patientUuid;
+            var cacheTTL = 30 * 60 * 1000; // 30 minutes
+
+            function getCache() {
+                try {
+                    var raw = localStorage.getItem(cacheKey);
+                    if (!raw) return null;
+                    var c = JSON.parse(raw);
+                    if (Date.now() - c.timestamp < cacheTTL) return c;
+                    return null;
+                } catch(e) { return null; }
+            }
+
+            function setCache(data) {
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify({data: data, timestamp: Date.now()}));
+                } catch(e) {}
+            }
+
+            function updateCacheStatus(ts) {
+                var el = document.getElementById('pine-brief-cache-status');
+                if (!ts) { el.textContent = ''; return; }
+                var mins = Math.round((Date.now() - ts) / 60000);
+                el.textContent = mins < 1 ? 'just now' : mins + 'm ago';
+            }
+
+            function renderBriefing(data) {
+                var el = document.getElementById('pine-brief-content');
+                var text = data.narrative || '';
+                // Bold the section headings (match at start of line, with or without trailing content)
+                text = text.replace(/^(PROBLEM LIST|MEDICATION REVIEW|RECENT LAB TRENDS|VISIT HISTORY|OPEN ACTION ITEMS)(.*)/gm,
+                    '<strong class="text-info d-block mt-3 mb-1">$1</strong>$2');
+                el.innerHTML = text;
+            }
+
+            window.pineLoadBriefing = function(forceRefresh) {
+                var loading = document.getElementById('pine-brief-loading');
+                var content = document.getElementById('pine-brief-content');
+                var errorDiv = document.getElementById('pine-brief-error');
+                var refreshIcon = document.getElementById('pine-brief-refresh-icon');
+
+                if (!forceRefresh) {
+                    var cached = getCache();
+                    if (cached) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        errorDiv.style.display = 'none';
+                        renderBriefing(cached.data);
+                        updateCacheStatus(cached.timestamp);
+                        return;
+                    }
+                }
+
+                loading.style.display = '';
+                content.style.display = 'none';
+                errorDiv.style.display = 'none';
+                updateCacheStatus(null);
+                refreshIcon.classList.add('fa-spin');
+
+                fetch('http://localhost:8888/api/chart-summary/' + encodeURIComponent(patientUuid))
+                    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                    .then(function(data) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        refreshIcon.classList.remove('fa-spin');
+                        renderBriefing(data);
+                        setCache(data);
+                        updateCacheStatus(Date.now());
+                    })
+                    .catch(function(err) {
+                        loading.style.display = 'none';
+                        refreshIcon.classList.remove('fa-spin');
+                        try {
+                            var raw = localStorage.getItem(cacheKey);
+                            if (raw) {
+                                var stale = JSON.parse(raw);
+                                content.style.display = '';
+                                renderBriefing(stale.data);
+                                updateCacheStatus(stale.timestamp);
+                                return;
+                            }
+                        } catch(e) {}
+                        errorDiv.style.display = '';
+                        errorDiv.textContent = 'Chart briefing unavailable. (' + err.message + ')';
+                    });
+            };
+
+            pineLoadBriefing(false);
+        })();
+        </script>
+        <?php } ?>
+
+        <!-- Pacca PINE: Next-Best-Action (NBA) Engine -->
+        <?php if ($pinePatientUuid) { ?>
+        <div class="card mt-2 mb-3 border-success" id="pine-nba-panel">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center py-2">
+                <span><i class="fa fa-bolt mr-1"></i> <?php echo xlt('Next Best Actions'); ?></span>
+                <div>
+                    <span id="pine-nba-cache-status" class="small mr-2"></span>
+                    <button class="btn btn-sm btn-outline-light" onclick="pineLoadNBA(true)" title="<?php echo xla('Refresh'); ?>">
+                        <i class="fa fa-sync-alt" id="pine-nba-refresh-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-2">
+                <div id="pine-nba-loading" class="text-center py-3">
+                    <i class="fa fa-spinner fa-spin"></i> <?php echo xlt('Analyzing recommendations...'); ?>
+                </div>
+                <div id="pine-nba-content" style="display:none;"></div>
+                <div id="pine-nba-error" class="text-danger" style="display:none;"></div>
+            </div>
+        </div>
+        <script>
+        (function() {
+            var patientUuid = <?php echo json_encode($pinePatientUuid); ?>;
+            var cacheKey = 'pine_nba_' + patientUuid;
+            var cacheTTL = 30 * 60 * 1000;
+
+            function getCache() {
+                try {
+                    var raw = localStorage.getItem(cacheKey);
+                    if (!raw) return null;
+                    var c = JSON.parse(raw);
+                    if (Date.now() - c.timestamp < cacheTTL) return c;
+                    return null;
+                } catch(e) { return null; }
+            }
+
+            function setCache(data) {
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify({data: data, timestamp: Date.now()}));
+                } catch(e) {}
+            }
+
+            function updateCacheStatus(ts) {
+                var el = document.getElementById('pine-nba-cache-status');
+                if (!ts) { el.textContent = ''; return; }
+                var mins = Math.round((Date.now() - ts) / 60000);
+                el.textContent = mins < 1 ? 'just now' : mins + 'm ago';
+            }
+
+            var priorityBadge = {
+                high: '<span class="badge badge-danger mr-1">HIGH</span>',
+                medium: '<span class="badge badge-warning mr-1">MED</span>',
+                low: '<span class="badge badge-info mr-1">LOW</span>'
+            };
+            var categoryIcon = {
+                screening: '<i class="fa fa-search text-muted mr-1"></i>',
+                medication: '<i class="fa fa-pills text-muted mr-1"></i>',
+                referral: '<i class="fa fa-share-square text-muted mr-1"></i>',
+                'follow-up': '<i class="fa fa-calendar-check text-muted mr-1"></i>',
+                lab: '<i class="fa fa-flask text-muted mr-1"></i>',
+                vaccination: '<i class="fa fa-syringe text-muted mr-1"></i>'
+            };
+
+            function renderNBA(data) {
+                var el = document.getElementById('pine-nba-content');
+                var actions = data.actions || [];
+                if (!actions.length) {
+                    el.innerHTML = '<p class="text-muted mb-0">No recommendations at this time.</p>';
+                    return;
+                }
+                var html = '<div class="list-group list-group-flush">';
+                for (var i = 0; i < actions.length; i++) {
+                    var a = actions[i];
+                    var badge = priorityBadge[a.priority] || priorityBadge.medium;
+                    var icon = categoryIcon[a.category] || categoryIcon['follow-up'];
+                    html += '<div class="list-group-item px-2 py-2">';
+                    html += badge + icon;
+                    html += '<strong>' + a.action + '</strong>';
+                    html += '<br><small class="text-muted ml-4">' + a.rationale + '</small>';
+                    html += '</div>';
+                }
+                html += '</div>';
+                el.innerHTML = html;
+            }
+
+            window.pineLoadNBA = function(forceRefresh) {
+                var loading = document.getElementById('pine-nba-loading');
+                var content = document.getElementById('pine-nba-content');
+                var errorDiv = document.getElementById('pine-nba-error');
+                var refreshIcon = document.getElementById('pine-nba-refresh-icon');
+
+                if (!forceRefresh) {
+                    var cached = getCache();
+                    if (cached) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        errorDiv.style.display = 'none';
+                        renderNBA(cached.data);
+                        updateCacheStatus(cached.timestamp);
+                        return;
+                    }
+                }
+
+                loading.style.display = '';
+                content.style.display = 'none';
+                errorDiv.style.display = 'none';
+                updateCacheStatus(null);
+                refreshIcon.classList.add('fa-spin');
+
+                fetch('http://localhost:8888/api/nba/' + encodeURIComponent(patientUuid))
+                    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                    .then(function(data) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        refreshIcon.classList.remove('fa-spin');
+                        renderNBA(data);
+                        setCache(data);
+                        updateCacheStatus(Date.now());
+                    })
+                    .catch(function(err) {
+                        loading.style.display = 'none';
+                        refreshIcon.classList.remove('fa-spin');
+                        try {
+                            var raw = localStorage.getItem(cacheKey);
+                            if (raw) {
+                                var stale = JSON.parse(raw);
+                                content.style.display = '';
+                                renderNBA(stale.data);
+                                updateCacheStatus(stale.timestamp);
+                                return;
+                            }
+                        } catch(e) {}
+                        errorDiv.style.display = '';
+                        errorDiv.textContent = 'Recommendations unavailable. (' + err.message + ')';
+                    });
+            };
+
+            pineLoadNBA(false);
+        })();
+        </script>
+        <?php } ?>
+
+        <!-- Pacca PINE: Care Gap Agent -->
+        <?php if ($pinePatientUuid) { ?>
+        <div class="card mt-2 mb-3 border-danger" id="pine-care-gaps">
+            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center py-2">
+                <span><i class="fa fa-exclamation-triangle mr-1"></i> <?php echo xlt('Care Gaps'); ?></span>
+                <div>
+                    <span id="pine-gaps-cache-status" class="small mr-2"></span>
+                    <button class="btn btn-sm btn-outline-light" onclick="pineLoadCareGaps(true)" title="<?php echo xla('Refresh'); ?>">
+                        <i class="fa fa-sync-alt" id="pine-gaps-refresh-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-2">
+                <div id="pine-gaps-loading" class="text-center py-3">
+                    <i class="fa fa-spinner fa-spin"></i> <?php echo xlt('Scanning for care gaps...'); ?>
+                </div>
+                <div id="pine-gaps-content" style="display:none;"></div>
+                <div id="pine-gaps-error" class="text-danger" style="display:none;"></div>
+            </div>
+        </div>
+        <script>
+        (function() {
+            var patientUuid = <?php echo json_encode($pinePatientUuid); ?>;
+            var cacheKey = 'pine_care_gaps_' + patientUuid;
+            var cacheTTL = 30 * 60 * 1000;
+
+            function getCache() {
+                try {
+                    var raw = localStorage.getItem(cacheKey);
+                    if (!raw) return null;
+                    var c = JSON.parse(raw);
+                    if (Date.now() - c.timestamp < cacheTTL) return c;
+                    return null;
+                } catch(e) { return null; }
+            }
+
+            function setCache(data) {
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify({data: data, timestamp: Date.now()}));
+                } catch(e) {}
+            }
+
+            function updateCacheStatus(ts) {
+                var el = document.getElementById('pine-gaps-cache-status');
+                if (!ts) { el.textContent = ''; return; }
+                var mins = Math.round((Date.now() - ts) / 60000);
+                el.textContent = mins < 1 ? 'just now' : mins + 'm ago';
+            }
+
+            var severityBadge = {
+                critical: '<span class="badge badge-danger mr-1">CRITICAL</span>',
+                overdue: '<span class="badge badge-warning mr-1">OVERDUE</span>',
+                upcoming: '<span class="badge badge-secondary mr-1">UPCOMING</span>'
+            };
+
+            function renderCareGaps(data) {
+                var el = document.getElementById('pine-gaps-content');
+                var gaps = data.gaps || [];
+                if (!gaps.length) {
+                    el.innerHTML = '<p class="text-success mb-0"><i class="fa fa-check-circle mr-1"></i>No care gaps identified.</p>';
+                    return;
+                }
+                var html = '<div class="list-group list-group-flush">';
+                for (var i = 0; i < gaps.length; i++) {
+                    var g = gaps[i];
+                    var badge = severityBadge[g.severity] || severityBadge.upcoming;
+                    html += '<div class="list-group-item px-2 py-2">';
+                    html += badge + '<strong>' + g.gap + '</strong>';
+                    html += '<br><small class="text-muted ml-4"><i class="fa fa-book mr-1"></i>' + g.guideline + '</small>';
+                    html += '<br><small class="ml-4">' + g.recommendation + '</small>';
+                    html += '</div>';
+                }
+                html += '</div>';
+                el.innerHTML = html;
+            }
+
+            window.pineLoadCareGaps = function(forceRefresh) {
+                var loading = document.getElementById('pine-gaps-loading');
+                var content = document.getElementById('pine-gaps-content');
+                var errorDiv = document.getElementById('pine-gaps-error');
+                var refreshIcon = document.getElementById('pine-gaps-refresh-icon');
+
+                if (!forceRefresh) {
+                    var cached = getCache();
+                    if (cached) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        errorDiv.style.display = 'none';
+                        renderCareGaps(cached.data);
+                        updateCacheStatus(cached.timestamp);
+                        return;
+                    }
+                }
+
+                loading.style.display = '';
+                content.style.display = 'none';
+                errorDiv.style.display = 'none';
+                updateCacheStatus(null);
+                refreshIcon.classList.add('fa-spin');
+
+                fetch('http://localhost:8888/api/care-gaps/' + encodeURIComponent(patientUuid))
+                    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                    .then(function(data) {
+                        loading.style.display = 'none';
+                        content.style.display = '';
+                        refreshIcon.classList.remove('fa-spin');
+                        renderCareGaps(data);
+                        setCache(data);
+                        updateCacheStatus(Date.now());
+                    })
+                    .catch(function(err) {
+                        loading.style.display = 'none';
+                        refreshIcon.classList.remove('fa-spin');
+                        try {
+                            var raw = localStorage.getItem(cacheKey);
+                            if (raw) {
+                                var stale = JSON.parse(raw);
+                                content.style.display = '';
+                                renderCareGaps(stale.data);
+                                updateCacheStatus(stale.timestamp);
+                                return;
+                            }
+                        } catch(e) {}
+                        errorDiv.style.display = '';
+                        errorDiv.textContent = 'Care gap analysis unavailable. (' + err.message + ')';
+                    });
+            };
+
+            pineLoadCareGaps(false);
+        })();
+        </script>
+        <?php } ?>
 
         <!-- Get the documents tagged to this encounter and display the links and notes as the tooltip -->
         <?php

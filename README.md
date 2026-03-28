@@ -14,11 +14,11 @@ Providers spend too much time navigating EHRs and not enough time with patients.
 
 | Capability | Status |
 |---|---|
-| AI Patient Summary — auto-generated clinical briefing on the patient page | In Progress |
-| Next-Best-Action Engine — contextual recommendations for care gaps, screenings, and follow-ups | Planned |
-| Care Gap Agent — continuously scans patient populations for missed interventions | Planned |
-| Chart Summarizer Agent — pre-visit briefing from full patient history | Planned |
-| Coding Agent — ICD/CPT suggestions from visit notes | Planned |
+| AI Patient Summary — auto-generated clinical briefing on the patient page | Done |
+| Next-Best-Action Engine — contextual recommendations for care gaps, screenings, and follow-ups | Done |
+| Care Gap Agent — continuously scans patient populations for missed interventions | Done |
+| Chart Summarizer Agent — pre-visit briefing from full patient history | Done |
+| Coding Agent — ICD/CPT suggestions from visit notes | Done |
 | Modern Clinical UI — lavender theme with contextual highlights | Active |
 
 ## Architecture

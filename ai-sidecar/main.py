@@ -308,6 +308,266 @@ async def get_patient_summary(patient_uuid: str):
     return SummaryResponse(**summary)
 
 
+# --- Chart Summary (Pre-Visit Briefing) ------------------------------------
+
+class ChartSummaryResponse(BaseModel):
+    narrative: str
+    generated_at: str
+    patient_name: str
+
+
+CHART_SUMMARY_PROMPT = """\
+You are a clinical documentation assistant. Given a patient's FHIR data, write a structured pre-visit briefing for the provider.
+
+Use these section headings in ALL CAPS, each on its own line:
+
+PROBLEM LIST
+List each active condition with status and onset if available.
+
+MEDICATION REVIEW
+List each medication with dose. Flag any concerns (interactions, missing refills).
+
+RECENT LAB TRENDS
+Summarize recent observations grouped by type. Note trends (improving, worsening, stable).
+
+VISIT HISTORY
+Summarize last 5 encounters: date, type, and reason.
+
+OPEN ACTION ITEMS
+List care gaps, overdue screenings, and recommended next steps.
+
+Write in third-person clinical prose. Target 300-500 words. Do not fabricate data not present in the input.\
+"""
+
+
+async def call_llm_narrative(patient_context: dict) -> str:
+    """Generate a pre-visit narrative from patient context."""
+    user_message = f"Patient FHIR data:\n{_summarize_context(patient_context)}"
+
+    content = ""
+    for attempt in range(3):
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            resp = await client.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": OPENROUTER_MODEL,
+                    "messages": [
+                        {"role": "system", "content": CHART_SUMMARY_PROMPT},
+                        {"role": "user", "content": user_message},
+                    ],
+                    "temperature": 0.3,
+                    "max_tokens": 2048,
+                },
+            )
+
+        if resp.status_code != 200:
+            if attempt < 2:
+                await asyncio.sleep(2)
+                continue
+            raise HTTPException(502, f"LLM request failed: {resp.status_code}")
+
+        content = resp.json().get("choices", [{}])[0].get("message", {}).get("content", "")
+        if content:
+            break
+        if attempt < 2:
+            await asyncio.sleep(2)
+
+    if not content:
+        raise HTTPException(502, "LLM returned empty content after retries")
+
+    # Strip markdown fences
+    text = content.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    return text.strip()
+
+
+@app.get("/api/chart-summary/{patient_uuid}", response_model=ChartSummaryResponse)
+async def get_chart_summary(patient_uuid: str):
+    """Generate a detailed pre-visit briefing for a patient."""
+    from datetime import datetime
+
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        token = await get_fhir_token(client)
+        context = await fetch_patient_context(client, token, patient_uuid)
+
+    if not context.get("patient"):
+        raise HTTPException(404, "Patient not found")
+
+    # Extract patient name
+    p = context["patient"]
+    name = ""
+    names = p.get("name", [])
+    if names:
+        n = names[0]
+        name = f"{' '.join(n.get('given', []))} {n.get('family', '')}"
+
+    narrative = await call_llm_narrative(context)
+
+    return ChartSummaryResponse(
+        narrative=narrative,
+        generated_at=datetime.utcnow().isoformat() + "Z",
+        patient_name=name.strip(),
+    )
+
+
+# --- Next-Best-Action (NBA) Engine -----------------------------------------
+
+class NBAItem(BaseModel):
+    priority: str  # "high", "medium", "low"
+    category: str  # "screening", "medication", "referral", "follow-up", "lab", "vaccination"
+    action: str
+    rationale: str
+
+
+class NBAResponse(BaseModel):
+    actions: list[NBAItem]
+    generated_at: str
+    patient_name: str
+
+
+NBA_PROMPT = """\
+You are a clinical decision support engine. Given a patient's FHIR data, identify the most important \
+next-best-actions for the provider to consider during this visit.
+
+Return a JSON array of action objects. Each object must have exactly these keys:
+- "priority": one of "high", "medium", or "low"
+- "category": one of "screening", "medication", "referral", "follow-up", "lab", "vaccination"
+- "action": a concise imperative statement (e.g., "Order HbA1c lab test")
+- "rationale": one sentence explaining why this action matters now
+
+Guidelines:
+- Return 5-8 actions, sorted by priority (high first). Keep rationale under 20 words.
+- Base recommendations only on the data provided. Do not fabricate.
+- Flag overdue screenings, medication concerns, missing labs, and care gaps.
+- Consider age, gender, and active conditions for preventive care recommendations.
+- Be specific and actionable — avoid vague advice.
+
+Return ONLY a valid JSON array, no markdown fences or extra text.\
+"""
+
+
+async def call_llm_nba(patient_context: dict) -> list[dict]:
+    """Generate next-best-action recommendations from patient context."""
+    user_message = f"Patient FHIR data:\n{_summarize_context(patient_context)}"
+
+    content = ""
+    for attempt in range(3):
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            resp = await client.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": OPENROUTER_MODEL,
+                    "messages": [
+                        {"role": "system", "content": NBA_PROMPT},
+                        {"role": "user", "content": user_message},
+                    ],
+                    "temperature": 0.3,
+                    "max_tokens": 4096,
+                },
+            )
+
+        if resp.status_code != 200:
+            if attempt < 2:
+                await asyncio.sleep(2)
+                continue
+            raise HTTPException(502, f"LLM request failed: {resp.status_code}")
+
+        content = resp.json().get("choices", [{}])[0].get("message", {}).get("content", "")
+        if content:
+            break
+        if attempt < 2:
+            await asyncio.sleep(2)
+
+    if not content:
+        raise HTTPException(502, "LLM returned empty content after retries")
+
+    # Extract JSON array from response (handle reasoning tokens, markdown, etc.)
+    import json as json_mod
+    import re as re_mod
+    text = content.strip()
+    # Remove markdown fences
+    text = re_mod.sub(r'```(?:json)?\s*', '', text)
+    # Find the JSON array in the text
+    match = re_mod.search(r'\[.*\]', text, re_mod.DOTALL)
+    if not match:
+        raise HTTPException(502, "LLM returned no JSON array for NBA actions")
+    text = match.group(0)
+
+    try:
+        actions = json_mod.loads(text)
+    except json_mod.JSONDecodeError:
+        # Try to recover truncated JSON by finding last complete object
+        last_brace = text.rfind('}')
+        if last_brace > 0:
+            truncated = text[:last_brace + 1] + ']'
+            try:
+                actions = json_mod.loads(truncated)
+            except json_mod.JSONDecodeError:
+                raise HTTPException(502, "LLM returned invalid JSON for NBA actions")
+        else:
+            raise HTTPException(502, "LLM returned invalid JSON for NBA actions")
+
+    if not isinstance(actions, list):
+        raise HTTPException(502, "LLM did not return a JSON array")
+
+    # Validate and normalize
+    valid_priorities = {"high", "medium", "low"}
+    valid_categories = {"screening", "medication", "referral", "follow-up", "lab", "vaccination"}
+    result = []
+    for item in actions[:10]:
+        if not isinstance(item, dict):
+            continue
+        priority = str(item.get("priority", "medium")).lower()
+        category = str(item.get("category", "follow-up")).lower()
+        result.append({
+            "priority": priority if priority in valid_priorities else "medium",
+            "category": category if category in valid_categories else "follow-up",
+            "action": str(item.get("action", "")),
+            "rationale": str(item.get("rationale", "")),
+        })
+
+    return result
+
+
+@app.get("/api/nba/{patient_uuid}", response_model=NBAResponse)
+async def get_nba(patient_uuid: str):
+    """Generate next-best-action recommendations for a patient."""
+    from datetime import datetime
+
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        token = await get_fhir_token(client)
+        context = await fetch_patient_context(client, token, patient_uuid)
+
+    if not context.get("patient"):
+        raise HTTPException(404, "Patient not found")
+
+    p = context["patient"]
+    name = ""
+    names = p.get("name", [])
+    if names:
+        n = names[0]
+        name = f"{' '.join(n.get('given', []))} {n.get('family', '')}"
+
+    actions = await call_llm_nba(context)
+
+    return NBAResponse(
+        actions=[NBAItem(**a) for a in actions],
+        generated_at=datetime.utcnow().isoformat() + "Z",
+        patient_name=name.strip(),
+    )
+
+
 class CodingSuggestion(BaseModel):
     code: str
     code_type: str  # "ICD10" or "CPT4"
@@ -469,6 +729,150 @@ async def suggest_codes(req: CodingRequest):
         soap_note=soap,
         suggested_icd10=icd10_suggestions,
         suggested_cpt=cpt_suggestions,
+    )
+
+
+# --- Care Gap Agent ---------------------------------------------------------
+
+class CareGapItem(BaseModel):
+    gap: str
+    severity: str  # "critical", "overdue", "upcoming"
+    guideline: str
+    recommendation: str
+
+
+class CareGapResponse(BaseModel):
+    gaps: list[CareGapItem]
+    generated_at: str
+    patient_name: str
+    total_gaps: int
+
+
+CARE_GAP_PROMPT = """\
+You are a preventive care and quality measures analyst. Given a patient's FHIR data, identify \
+care gaps based on evidence-based guidelines (USPSTF, ADA, AHA, HEDIS).
+
+Return a JSON array of gap objects. Each object must have exactly these keys:
+- "gap": name of the care gap (e.g., "Diabetic eye exam overdue")
+- "severity": one of "critical" (safety risk), "overdue" (past due), or "upcoming" (due soon)
+- "guideline": the source guideline (e.g., "ADA Standards of Care 2025")
+- "recommendation": specific action to close the gap, under 20 words
+
+Guidelines to check:
+- Diabetes: HbA1c q3-6mo, annual eye exam, annual foot exam, nephropathy screening
+- Hypertension: BP monitoring, annual metabolic panel
+- Cancer screening: colonoscopy (45+), mammogram (40+ female), cervical (21-65 female), lung (50-80 smoking hx)
+- Vaccinations: flu (annual), pneumococcal (65+), shingles (50+), COVID booster
+- Preventive: lipid panel, BMI counseling, depression screening, fall risk (65+)
+- Chronic pain: opioid risk assessment, pain management plan review
+
+Return 4-8 gaps sorted by severity (critical first). Base on data provided only. \
+Return ONLY a valid JSON array.\
+"""
+
+
+async def call_llm_care_gaps(patient_context: dict) -> list[dict]:
+    """Generate care gap analysis from patient context."""
+    user_message = f"Patient FHIR data:\n{_summarize_context(patient_context)}"
+
+    content = ""
+    for attempt in range(3):
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            resp = await client.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": OPENROUTER_MODEL,
+                    "messages": [
+                        {"role": "system", "content": CARE_GAP_PROMPT},
+                        {"role": "user", "content": user_message},
+                    ],
+                    "temperature": 0.3,
+                    "max_tokens": 4096,
+                },
+            )
+
+        if resp.status_code != 200:
+            if attempt < 2:
+                await asyncio.sleep(2)
+                continue
+            raise HTTPException(502, f"LLM request failed: {resp.status_code}")
+
+        content = resp.json().get("choices", [{}])[0].get("message", {}).get("content", "")
+        if content:
+            break
+        if attempt < 2:
+            await asyncio.sleep(2)
+
+    if not content:
+        raise HTTPException(502, "LLM returned empty content after retries")
+
+    import json as json_mod
+    import re as re_mod
+    text = content.strip()
+    text = re_mod.sub(r'```(?:json)?\s*', '', text)
+    match = re_mod.search(r'\[.*\]', text, re_mod.DOTALL)
+    if not match:
+        raise HTTPException(502, "LLM returned no JSON array for care gaps")
+    text = match.group(0)
+
+    try:
+        gaps = json_mod.loads(text)
+    except json_mod.JSONDecodeError:
+        last_brace = text.rfind('}')
+        if last_brace > 0:
+            try:
+                gaps = json_mod.loads(text[:last_brace + 1] + ']')
+            except json_mod.JSONDecodeError:
+                raise HTTPException(502, "LLM returned invalid JSON for care gaps")
+        else:
+            raise HTTPException(502, "LLM returned invalid JSON for care gaps")
+
+    valid_severities = {"critical", "overdue", "upcoming"}
+    result = []
+    for item in gaps[:8]:
+        if not isinstance(item, dict):
+            continue
+        severity = str(item.get("severity", "upcoming")).lower()
+        result.append({
+            "gap": str(item.get("gap", "")),
+            "severity": severity if severity in valid_severities else "upcoming",
+            "guideline": str(item.get("guideline", "")),
+            "recommendation": str(item.get("recommendation", "")),
+        })
+
+    return result
+
+
+@app.get("/api/care-gaps/{patient_uuid}", response_model=CareGapResponse)
+async def get_care_gaps(patient_uuid: str):
+    """Identify care gaps for a patient based on clinical guidelines."""
+    from datetime import datetime
+
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        token = await get_fhir_token(client)
+        context = await fetch_patient_context(client, token, patient_uuid)
+
+    if not context.get("patient"):
+        raise HTTPException(404, "Patient not found")
+
+    p = context["patient"]
+    name = ""
+    names = p.get("name", [])
+    if names:
+        n = names[0]
+        name = f"{' '.join(n.get('given', []))} {n.get('family', '')}"
+
+    gaps = await call_llm_care_gaps(context)
+
+    return CareGapResponse(
+        gaps=[CareGapItem(**g) for g in gaps],
+        generated_at=datetime.utcnow().isoformat() + "Z",
+        patient_name=name.strip(),
+        total_gaps=len(gaps),
     )
 
 
