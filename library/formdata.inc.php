@@ -136,16 +136,22 @@ function escape_sql_column_name($s, $tables, $long = false, $throwException = fa
 
     // Collect all the possible sql columns from the tables
     $columns_options = [];
-    foreach ($tables_escaped as $table_escaped) {
-        $res = sqlStatementNoLog("SHOW COLUMNS FROM " . $table_escaped);
+    for ($i = 0; $i < count($tables_escaped); $i++) {
+        $res = sqlStatementNoLog("SHOW COLUMNS FROM " . $tables_escaped[$i]);
         while ($row = sqlFetchArray($res)) {
-            $columns_options[] = $long ? $table_escaped . "." . $row['Field'] : $row['Field'];
+            // When $long, use raw table names (matching input format "table.column")
+            $columns_options[] = $long ? $tables[$i] . "." . $row['Field'] : $row['Field'];
         }
     }
 
     // Whitelist against actual columns, then backtick-quote to keep in identifier context
     $dieIfNoMatch = !$throwException;
     $column = escape_identifier($s, $columns_options, $dieIfNoMatch, true, $throwException);
+    // When $long, backtick-quote table and column separately for valid SQL
+    if ($long && str_contains($column, '.')) {
+        [$tbl, $col] = explode('.', $column, 2);
+        return sprintf('`%s`.`%s`', $tbl, $col);
+    }
     return sprintf('`%s`', $column);
 }
 
