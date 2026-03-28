@@ -473,15 +473,24 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
         <nav class="navbar navbar-expand-xl navbar-light bg-light py-0">
             <?php if (OEGlobalsBag::getInstance()->getBoolean('display_main_menu_logo')) {
                 $bag = OEGlobalsBag::getInstance();
-                $logoLinkDefault = 'https://www.open-emr.org/';
-                $logoTitleDefault = xl('OpenEMR Website');
-                $logoLink = trim($bag->getString('main_menu_logo_link', $logoLinkDefault));
-                $logoTitle = trim($bag->getString('main_menu_logo_title', $logoTitleDefault));
-                $logoImg = '<img src="' . attr($menuLogo) . '" class="d-inline-block align-middle" height="16" alt="' . xla('Main Menu Logo') . '">';
-                if ($logoLink !== '') {
-                    echo '<a class="navbar-brand" href="' . attr($logoLink) . '" title="' . attr($logoTitle) . '" rel="noopener" target="_blank">' . $logoImg . '</a>' . "\n";
+                $cssHeader = $bag->getString('css_header');
+                if (str_contains($cssHeader, 'pacca_pine')) {
+                    // Pacca PINE theme — use Pacca logo linking to project repo
+                    $paccaLogo = $GLOBALS['webroot'] . '/public/images/logos/pacca-pine-logo.png';
+                    echo '<a class="navbar-brand" href="https://github.com/virtuousityai/pacca-pine" title="Pacca PINE" rel="noopener" target="_blank">'
+                        . '<img src="' . attr($paccaLogo) . '" class="d-inline-block align-middle" height="22" alt="Pacca PINE">'
+                        . '</a>' . "\n";
                 } else {
-                    echo '<span class="navbar-brand">' . $logoImg . '</span>' . "\n";
+                    $logoLinkDefault = 'https://www.open-emr.org/';
+                    $logoTitleDefault = xl('OpenEMR Website');
+                    $logoLink = trim($bag->getString('main_menu_logo_link', $logoLinkDefault));
+                    $logoTitle = trim($bag->getString('main_menu_logo_title', $logoTitleDefault));
+                    $logoImg = '<img src="' . attr($menuLogo) . '" class="d-inline-block align-middle" height="16" alt="' . xla('Main Menu Logo') . '">';
+                    if ($logoLink !== '') {
+                        echo '<a class="navbar-brand" href="' . attr($logoLink) . '" title="' . attr($logoTitle) . '" rel="noopener" target="_blank">' . $logoImg . '</a>' . "\n";
+                    } else {
+                        echo '<span class="navbar-brand">' . $logoImg . '</span>' . "\n";
+                    }
                 }
             } ?>
             <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
