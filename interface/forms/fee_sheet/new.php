@@ -1192,7 +1192,7 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
                                         conditions: truncate(soapData.conditions, 300)
                                     });
 
-                                    return fetch('http://localhost:8888/api/coding', {
+                                    return fetch('/ai-sidecar/api/coding', {
                                         method: 'POST',
                                         headers: {'Content-Type': 'application/json'},
                                         body: body

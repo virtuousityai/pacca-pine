@@ -1236,7 +1236,7 @@ $oemr_ui = new OemrUI($arrOeUiSettings);
             pineUpdateCacheStatus(null);
             refreshIcon.classList.add('fa-spin');
 
-            fetch('http://localhost:8888/api/summary/' + encodeURIComponent(pinePatientUuid))
+            fetch('/ai-sidecar/api/summary/' + encodeURIComponent(pinePatientUuid))
                 .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                 .then(function(data) {
                     loading.style.display = 'none';

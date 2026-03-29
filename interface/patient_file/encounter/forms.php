@@ -917,7 +917,7 @@ if (OEGlobalsBag::getInstance()->getBoolean('google_signin_enabled') && !empty(O
                 updateCacheStatus(null);
                 refreshIcon.classList.add('fa-spin');
 
-                fetch('http://localhost:8888/api/chart-summary/' + encodeURIComponent(patientUuid))
+                fetch('/ai-sidecar/api/chart-summary/' + encodeURIComponent(patientUuid))
                     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                     .then(function(data) {
                         loading.style.display = 'none';
@@ -1059,7 +1059,7 @@ if (OEGlobalsBag::getInstance()->getBoolean('google_signin_enabled') && !empty(O
                 updateCacheStatus(null);
                 refreshIcon.classList.add('fa-spin');
 
-                fetch('http://localhost:8888/api/nba/' + encodeURIComponent(patientUuid))
+                fetch('/ai-sidecar/api/nba/' + encodeURIComponent(patientUuid))
                     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                     .then(function(data) {
                         loading.style.display = 'none';
@@ -1192,7 +1192,7 @@ if (OEGlobalsBag::getInstance()->getBoolean('google_signin_enabled') && !empty(O
                 updateCacheStatus(null);
                 refreshIcon.classList.add('fa-spin');
 
-                fetch('http://localhost:8888/api/care-gaps/' + encodeURIComponent(patientUuid))
+                fetch('/ai-sidecar/api/care-gaps/' + encodeURIComponent(patientUuid))
                     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                     .then(function(data) {
                         loading.style.display = 'none';
